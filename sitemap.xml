@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+  <loc>https://akhilgeorge.com/</loc>
+  <lastmod>2020-06-08T17:18:13+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://akhilgeorge.com/index.html</loc>
+  <lastmod>2020-06-08T17:18:13+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://akhilgeorge.com/gallery.html</loc>
+  <lastmod>2020-06-08T17:18:13+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://akhilgeorge.com/about</loc>
+  <lastmod>2020-06-08T17:18:13+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://akhilgeorge.com/contact</loc>
+  <lastmod>2020-06-08T17:18:13+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://akhilgeorge.com/mobile/android/oneplus/2020/06/08/Oneplus-Z-price-in-india-leaked.html</loc>
+  <lastmod>2020-06-08T17:18:13+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://akhilgeorge.com/python/github/2020/06/02/combine-multiple-excels-using-python.html</loc>
+  <lastmod>2020-06-08T17:18:13+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://akhilgeorge.com/gallery</loc>
+  <lastmod>2020-06-08T17:18:13+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+
+
+</urlset>
