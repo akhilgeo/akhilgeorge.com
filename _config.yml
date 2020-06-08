@@ -1,0 +1,36 @@
+# Site
+name: "Akhil Abraham George"
+title: "Akhil Abraham George | akhilgeorge.com"
+description: "Hello, my name is Akhil. I am a blogger living in Kerala. This is my space on Interwebs. Never miss out on new stuff."
+meta_description: "Hello, my name is Akhil. I am a blogger living in Kerala. This is my space on Interwebs. Never miss out on new stuff."
+logo: 'assets/images/logo.png'
+favicon: 'assets/images/favicon.ico'
+paginate: 12
+baseurl: 
+email: 'geoakhil@gmail.com'
+google_analytics: 'UA-46278016-1'
+disqus: 'techeditionblog'
+sharethis: '<script async src="https://platform-api.sharethis.com/js/sharethis.js#property=5ed541cc2978280013bc9e6b&product=sticky-share-buttons"></script>'
+
+# Authors
+
+
+# Plugins
+plugins: 
+  - jekyll-paginate
+  - jekyll-sitemap
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-archives
+        
+# Archives
+jekyll-archives:
+  enabled:
+    - categories
+  layout: archive
+  permalinks:
+    category: '/category/:name/'
+    
+# Other
+markdown: kramdown
+highlighter: rouge
