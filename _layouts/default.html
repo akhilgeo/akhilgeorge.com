@@ -126,16 +126,16 @@
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <h3>If you have any queries for me, tell 'em through the push button below!</h3>
-                    <a class="btn btn-primary btn-lg" href="#">Connect with me</a>
+                    <a class="btn btn-primary btn-lg" href="contact">Connect with me</a>
                 </div>
-                <div class="col-md-4 text-right footersocial">
-                    <h5>Connect with Us</h5>
-                    <a target="_blank" href="https://www.facebook.com/akhilgeo"><i class="fa fa-facebook"></i></a>
-                    <a target="_blank" href="https://www.linkedin.com/in/akhilgeo/"><i class="fa fa-linkedin"></i></a>
-                    <a target="_blank" href="https://www.instagram.com/akhilgeo/"><i class="fa fa-instagram"></i></a>
-					<a target="_blank" href="https://www.instagram.com/akhilgeo/"><i class="fa fa-github"></i></a>
-                      <a target="_blank" href="https://www.instagram.com/akhilgeo/"><i class="fa fa-steam"></i></a>
-                </div>
+					<div class="col-md-4 text-right footersocial">
+						<h5>Connect with Me</h5>
+						<a target="_blank" href="https://www.facebook.com/akhilgeo"><i class="fa fa-facebook"></i></a>
+						<a target="_blank" href="https://www.linkedin.com/in/akhilgeo/"><i class="fa fa-linkedin"></i></a>
+						<a target="_blank" href="https://www.instagram.com/akhilgeo/"><i class="fa fa-instagram"></i></a>
+						<a target="_blank" href="https://www.instagram.com/akhilgeo/"><i class="fa fa-github"></i></a>
+						  <a target="_blank" href="https://www.instagram.com/akhilgeo/"><i class="fa fa-steam"></i></a>
+					</div>
             </div>
         </div>
     </div>
@@ -158,6 +158,20 @@
                 <div class="col-sm-3">
                 <div class="footer-widget">
                 <h5 class="title">Categories</h5>
+					<ul>
+						{% assign categories_list = site.categories %}
+						  {% if categories_list.first[0] == null %}
+							{% for category in categories_list %}
+							  <li><a href="#{{ category }}">{{ category | capitalize }} ({{ site.tags[category].size }})</a></li>
+							{% endfor %}
+						  {% else %}
+							{% for category in categories_list %}
+							  <li><a href="#{{ tag[0] }}">{{ category[0] | capitalize }} ({{ category[1].size }})</a></li>
+							{% endfor %}
+						  {% endif %}
+						{% assign categories_list = nil %}
+					</ul>
+
 				<!--
                 <ul>
                 <li><a target="_blank" href="https://m.do.co/c/84c9b45d0c47">Digital Ocean</a></li>
