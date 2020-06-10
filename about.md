@@ -12,7 +12,7 @@ I am a blogger living in kerala. I work as an SAP SD Consultant at Infosys. My o
 
 
 
-<div class="col-md-4 text-right footersocial">
+<div class="footersocial">
     <h5>Connect with Me</h5>
         <a target="_blank" href="https://www.facebook.com/akhilgeo"><i class="fa fa-facebook"></i></a>
         <a target="_blank" href="https://www.linkedin.com/in/akhilgeo/"><i class="fa fa-linkedin"></i></a>
