@@ -58,7 +58,7 @@ In command filed type `nosetests <path of your python code>`
 
 Once it is completed, click on build now. The build will start and once it is completed you can view the result for console correposning to each version.
 
-![alt text]({{site.baseurl}}/assets/images/post/jenkins-5.png)
+![alt text]({{site.baseurl}}/assets/images/post/jenkins-6.png)
 
 
 If you want a sample python code for unit test, please clone it from my [Github][jekyll-github] repository. 
