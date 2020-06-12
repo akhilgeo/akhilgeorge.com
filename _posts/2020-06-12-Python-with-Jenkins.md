@@ -1,6 +1,6 @@
 ---
 layout: post-right-sidebar
-title:  "How to use Jenkins for Python unit testing?"
+title:  "How to setup Jenkins for Python unit testing?"
 categories: [ Python, Jenkins ]
 image: assets/images/post/python-jenkins.png
 featured: false
@@ -44,7 +44,7 @@ Now you need to install [nose][jekyll-nose] package on your local machine. nose 
 
 `pip install nose`
 
-<b>Set up new project in jenkins</b>
+<b>Set up new project in Jenkins</b>
 
 Go back to Jenkins Dashboard and select 'New Item'. Enter your project name and choose freestyle project.
 

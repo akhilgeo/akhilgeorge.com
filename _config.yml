@@ -11,6 +11,7 @@ email: 'geoakhil@gmail.com'
 google_analytics: 'UA-46278016-1'
 disqus: 'techeditionblog'
 sharethis: '<script async src="https://platform-api.sharethis.com/js/sharethis.js#property=5ed541cc2978280013bc9e6b&product=sticky-share-buttons"></script>'
+permalink: /:title
 
 # Authors
 

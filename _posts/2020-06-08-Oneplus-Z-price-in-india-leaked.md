@@ -1,7 +1,7 @@
 ---
 layout: post-right-sidebar
 title:  "Oneplus Z - Specs and price in India leaked?"
-categories: [ Mobile, Android, Oneplus ]
+categories: [ Mobile, Android]
 image: assets/images/oneplus_z.jpg
 featured: true
 ---
