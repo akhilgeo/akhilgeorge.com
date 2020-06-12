@@ -10,7 +10,7 @@ In this post, I will explain you how to configure Jenkins to do unit testing wit
 
 <b>Download and Install Jenkins</b>
 
-Jenkins is cross platform and can be used on windows, Linux, Mac OS and Solaris enviornments.  Download Jenkins from [Official Site][jekyll-jenkins] and install the version corresponing to yur operating system.
+Jenkins is cross platform and can be used on windows, Linux, Mac OS and Solaris enviornments.  Download Jenkins from [Official Site][jekyll-jenkins] and install the version corresponing to your operating system.
 Once the installation is completed, the jenkins will run automatically on http://localhost:8080/, the page will open in your default browser.
 
 
