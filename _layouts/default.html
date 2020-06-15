@@ -162,11 +162,11 @@
 						{% assign categories_list = site.categories %}
 						  {% if categories_list.first[0] == null %}
 							{% for category in categories_list %}
-							  <li><a href="{{ site.baseurl }}category/{{ category[0] }}">{{ category | capitalize }} </a></li>
+							  <li><a href="#">{{ category | capitalize }} </a></li>
 							{% endfor %}
 						  {% else %}
 							{% for category in categories_list %}
-							  <li><a href="{{ site.baseurl }}category/{{ category[0] }}">{{ category[0] | capitalize }} </a></li>
+							  <li><a href="#">{{ category[0] | capitalize }} </a></li>
 							{% endfor %}
 						  {% endif %}
 						{% assign categories_list = nil %}
