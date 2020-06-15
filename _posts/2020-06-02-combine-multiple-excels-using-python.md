@@ -4,6 +4,7 @@ title:  "Combine Multiple Excel into one - Python GUI Tool"
 author: Akhil
 categories: [ Python, GitHub ]
 image: assets/images/excel.jpg
+featured : true
 ---
 
 `Excel Merger` is an open tool developed on Python which allows users to merge multiple excel files into a single file.

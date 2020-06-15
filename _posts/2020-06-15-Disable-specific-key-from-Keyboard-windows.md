@@ -1,10 +1,12 @@
 ---
 layout: post-right-sidebar
-title:  "How to disable single or specific keys from laptop keyboard"
+title:  "How to disable single or specific keys from laptop keyboard?"
 categories: [ Windows ]
 image: assets/images/post/disable-keyboard.jpg
 featured: false
 ---
+
+<b>[Alt: Fix laptop keyboard keys pressed automatically]</b>
 
 Built in keyboard keys malfunction is one problem which most of the laptop users face at some point of time and it is quite annoying. In some cases, one or more keys gets automatically pressed. There are different reasons for it - Driver issue or dirt under the keys being the most common.
 

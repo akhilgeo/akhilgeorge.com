@@ -3,7 +3,7 @@ layout: post-right-sidebar
 title:  "Oneplus Z - Specs and price in India leaked?"
 categories: [ Mobile, Android]
 image: assets/images/oneplus_z.jpg
-featured: true
+featured: false
 ---
 Oneplus Z is one of the most anticipated mid range phone this year from Oneplus. The phone was expected to launch on July 2020 in India. 
 And now, there is a posibility that the price and specifications of the phone are leaked much earlier than its launch.
