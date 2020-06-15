@@ -6,7 +6,7 @@ image: assets/images/post/disable-keyboard.jpg
 featured: false
 ---
 
-<b>[Alt: Fix laptop keyboard keys pressed automatically]</b>
+
 
 Built in keyboard keys malfunction is one problem which most of the laptop users face at some point of time and it is quite annoying. In some cases, one or more keys gets automatically pressed. There are different reasons for it - Driver issue or dirt under the keys being the most common.
 
@@ -45,13 +45,6 @@ If options 1 and 2 didn't solve your issue, this is the work around. Using this 
 The Key is disabled. Now, you can minimize or exit the tool. To make sure that the program runs on start up, select  `Option > Run on Startup` .
 
 You can also Enable all the disabled keys by `Tools > Enable all keys`.
-
-
-
-
-
-
-
 
 
 
