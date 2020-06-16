@@ -12,7 +12,7 @@ SAP Cloud platform (SCP) is a Platform as a service offered by SAP. It provides 
 
 So as you might already know most of the SAP services are not free, how do you get to try the SCP.
 
-You can opt for a '90 days free trail' on SAP Cloud Platfom.
+You can opt for a '30 days free trail' on SAP Cloud Platfom.
 
 <h2>How to activate SAP Cloud Platform Free Trail?</h2>
 
