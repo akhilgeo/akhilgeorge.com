@@ -34,6 +34,9 @@ GEM
       sinatra-contrib (~> 1.4)
     jekyll-archives (2.1.1)
       jekyll (>= 2.4)
+    jekyll-category-pages (1.0.1)
+      jekyll (~> 3.5)
+      jekyll-paginate (~> 1.1, >= 1.0.0)
     jekyll-feed (0.11.0)
       jekyll (~> 3.3)
     jekyll-paginate (1.1.0)
@@ -92,6 +95,7 @@ PLATFORMS
 DEPENDENCIES
   jekyll-admin
   jekyll-archives
+  jekyll-category-pages
   jekyll-feed
   jekyll-paginate
   jekyll-seo-tag
