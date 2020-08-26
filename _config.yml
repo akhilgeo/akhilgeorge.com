@@ -24,7 +24,10 @@ plugins:
   - jekyll-seo-tag
   - jekyll-archives
   - jekyll-admin
-  - jekyll-category-pages
+
+category_archive:
+  type: jekyll-archives
+  path: /categories/
         
 # Archives
 jekyll-archives:
