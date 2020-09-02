@@ -1062,3 +1062,8 @@ iframe {
 
 
 /*end social anmation icons*/
+$size: 150px;
+.hexagon { 
+  position: relative;
+  font-size:360%;
+}
