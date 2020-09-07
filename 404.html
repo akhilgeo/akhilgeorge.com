@@ -5,54 +5,51 @@ title: Page not found
 comments: false
 
 ---
-<link href="assets/css/404.css" rel="stylesheet" /> 
+<link href="/assets/css/404.css" rel="stylesheet" />
 
 <section class="page_404">
 	<div class="container">
-		<div class="row">	
-		<div class="col-sm-12 ">
-		<div class="col-sm-10 col-sm-offset-1  text-center">
-		<div class="four_zero_four_bg">
-			<h1 class="text-center ">404</h1>
-		
-		
-		</div>
-		
-		<div class="contant_box_404">
-		<h3 class="h2">
-		Look like you're lost
-		</h3>
-		
-		<p>the page you are looking for not avaible!</p>
-		
-		<a href="{{ site.url }}" class="link_404">Go to Home</a>
-	</div>
-		</div>
-		</div>
+		<div class="row">
+			<div class="col-sm-12 ">
+				<div class="col-sm-10 col-sm-offset-1  text-center">
+					<div class="four_zero_four_bg">
+						<h1 class="text-center ">404</h1>
+
+
+					</div>
+
+					<div class="contant_box_404">
+						<h3 class="h2">
+							Look like you're lost
+						</h3>
+
+
+
+
+						<p>the page you are looking for not avaible!</p>
+
+						<a href="{{ site.url }}" class="link_404">Go to Home</a>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </section>
 
 <h3>You can check from the below:</h3>
 
-<h2>Categories</h2>
-
-
 {% for tag in site.categories %}
-  <h3 id="{{ tag[0] }}">{{ tag[0] | capitalize }}</h3>
-  <ul>
-    {% assign pages_list = tag[1] %}
-    {% for post in pages_list %}
-      {% if post.title != null %}
-      {% if group == null or group == post.group %}
-      <li><a href="{{ site.url }}{{ post.url }}">{{ post.title }}<span class="entry-date"><time datetime="{{ post.date | date_to_xmlschema }}" itemprop="datePublished">{{ post.date | date: "%B %d, %Y" }}</time></span></a></li>
-      {% endif %}
-      {% endif %}
-    {% endfor %}
-    {% assign pages_list = nil %}
-    {% assign group = nil %}
-  </ul>
+<h3 id="{{ tag[0] }}">{{ tag[0] | capitalize }}</h3>
+<ul>
+	{% assign pages_list = tag[1] %}
+	{% for post in pages_list %}
+	{% if post.title != null %}
+	{% if group == null or group == post.group %}
+	<li><a href="{{ site.url }}{{ post.url }}">{{ post.title }}</a></li>
+	{% endif %}
+	{% endif %}
+	{% endfor %}
+	{% assign pages_list = nil %}
+	{% assign group = nil %}
+</ul>
 {% endfor %}
-
-
-
