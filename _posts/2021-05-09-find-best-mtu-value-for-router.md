@@ -1,7 +1,9 @@
 ---
-title: Find best MTU value for Router
+title: How to find the best MTU value for Router?
 layout: post-right-sidebar
-categories: []
+categories:
+- Windows
+- Network
 image: assets/images/post/MTU.png
 featured: false
 ---
