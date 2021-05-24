@@ -1,7 +1,6 @@
 ---
 layout: post-right-sidebar
 title:  "Combine Multiple Excel into one - Python GUI Tool"
-author: Akhil
 categories: [ Python, GitHub ]
 image: assets/images/excel.jpg
 featured : true
