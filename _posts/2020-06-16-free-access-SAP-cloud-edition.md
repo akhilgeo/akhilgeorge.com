@@ -34,5 +34,5 @@ You will be asked to verify your phone number. Enter the verification code recie
 Click on the Trial box container and you will be presented with the SAP Cloud platform cockpit.
 ![SCP5]({{site.baseurl}}/assets/images/post/sap-scp-7.png)
 
-[SAP]:https://simple-disable-key.en.uptodown.com/windows
+[SAP]:https://accounts.sap.com/
 [SAP-trial]:https://accounts.sap.com/saml2/idp/sso
