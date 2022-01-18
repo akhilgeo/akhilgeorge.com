@@ -6,11 +6,11 @@ categories:
 image: assets/images/post/Godmode_h.png
 ---
 
-A heads up first - This is not like the other GodModes you have seen.  It doesnot unwind any new superpowers or secret feature.
+A heads up first - This is not like the other GodModes you have seen.  It doesn't unwind any new superpowers or secret features.
 
-One problem many usually face is to find something in control panel, even the search in the Control Panel doesnot help sometime. Godmode is a feature which could save your time in this matter.
+One problem many usually face is to find something in the control panel, even the search in the Control Panel does not help sometime. Godmode is a feature that could save your time in this matter.
 
-GodMode is a feature you can unlock in windows, which gives you the ability to manage all the settings in a single folder. Gives you a hazzle free experience.
+GodMode is a feature you can unlock in windows, which gives you the ability to manage all the settings in a single folder. Gives you a hassle free experience.
 
 **How to Unlock Gode Mode in Windows?**
 
@@ -22,9 +22,9 @@ GodMode is a feature you can unlock in windows, which gives you the ability to m
 
 		GodMode.{ED7BA470-8E54-465E-825C-99712043E01C}
 
-Once you rename, the folder icon will change to one that of Control Panel.
+Once you rename it, the folder icon will change to one that of Control Panel.
 Double click and open the folder. 
 
 ![]({{ 'assets/images/post/Godmode.png' | relative_url }})
 
-The folder will have all the accessable commands in windows and are organised by each caterogry. You can go to each  category or make use of the search in windows explorer to find the desired command.
+The folder will have all the accessible commands in windows and are organized  by each caterogry. You can go to each category or make use of the search in windows explorer to find the desired command.
