@@ -6,28 +6,28 @@ image: assets/images/post/kloudtise.jpg
 featured: false
 ---
 
-This was done as part of our Bachelors Technology project in 2014. The Project was named as Kloudtise - Cloud and Advertise.
+This was done as part of our Bachelors's Technology project in 2014. The Project was named Kloudtise - Cloud, and Advertise.
 # Introduction 
-A simple platform for the advertiser to display advertisements in any location where these advertisement terminals are setup.
+A simple platform for the advertiser to display advertisements in any location where these advertisement terminals are set up.
 
-Advertisements  are displayed anywhere without any direct link between the advertiser and the advertisement !
+Advertisements are displayed anywhere without any direct link between the advertiser and the advertisement!
 A cloud server is built which directs advertisements from the advertiser to the desired display using the internet. 
 
-This project consists of a website that can be used by both admins and advertisers. Admins have elevated permissions on the website. They can accept advertisements submitted by advertisers, process payments and check advertisement content. If the advertisement violates any advertisement terms or conditions, admins can reject ad’s or else they can forward the ad to the cloud server. 
+This project consists of a website that can be used by both admins and advertisers. Admins have elevated permissions on the website. They can accept advertisements submitted by advertisers, process payments, and check advertisement content. If the advertisement violates any advertisement terms or conditions, admins can reject ad’s or else they can forward the ad to the cloud server. 
 
-Advertisers can signup for an account in the website using which they can upload advertisements and purchase advertising space on the corresponding terminal.
+Advertisers can signup for an account on the website using which they can upload advertisements and purchase advertising space on the corresponding terminal.
 
 ![]({{ 'assets/images/kloudtise-flow.jpg' | relative_url }})
 
-Each advertising terminal consists of a large display and a single board microcomputer (Raspberry Pi). A server program runs in the Pi which is connected to the cloud server via the internet. Advertisements pushed by the cloud server are accepted by the server program running on the Pi and is displayed in the large screen. Each advertisement is displayed in the screen for a predetermined period of time after which the next ad is displayed. Also if display terminal is moving, then location of display terminal is identified using GPS satellites and advertisements corresponding to the particular location are displayed.
+Each advertising terminal consists of a large display and a single board microcomputer (Raspberry Pi). A server program runs in the Pi which is connected to the cloud server via the internet. Advertisements pushed by the cloud server are accepted by the server program running on the Pi and are displayed on the large screen. Each advertisement is displayed on the screen for a predetermined period after which the next ad is displayed. Also if the display terminal is moving, the location of the display terminal is identified using GPS satellites, and advertisements corresponding to the particular location are displayed.
 # Existing System
 
-In our cities we can see advertisement display boards on top of buildings and other structures.
-These systems consists of a display terminal which is already preloaded with a set of advertisements that are displayed repeatedly. 
-The time and duration for which the advertisements is to be displayed is manually controlled at this location.
-Loading of advertisements in the terminal  is also done at this location itself.
+In our cities, we can see advertisement display boards on top of buildings and other structures.
+These systems consist of a display terminal that is already preloaded with a set of advertisements that are displayed repeatedly. 
+The time and duration for which the advertisements are to be displayed are manually controlled at this location.
+Loading of advertisements in the terminal is also done at this location itself.
 # Kloudtise Model
-Our system consists of a display terminal which is remotely controlled by administrator.
+Our system consists of a display terminal that is remotely controlled by the administrator.
 An Interface is provided for interaction between stakeholders and the server.
 
 Our system is divided into three modules namely
@@ -53,17 +53,17 @@ Our project mainly consists of two servers:
 * Cloud server
 * FTP server
 FTP server mainly deals with uploaded advertisements.
-Users upload advertisements to FTP server.
-Cloud server is deployed with the help of Redhat’s OpenShift Engine
-Once the advertisement is approved by the Admin ,the Cloud server helps in redirecting it to the respective display terminals.
+Users upload advertisements to the FTP server.
+A cloud server is deployed with the help of Redhat’s OpenShift Engine
+Once the advertisement is approved by the Admin, the Cloud server helps in redirecting it to the respective display terminals.
 Advertisements are filtered based on terminal location.
 
 **Terminal**
 
-The terminal consist of a display screen or a panel which is connected to a Raspberry Pi board.
+The terminal consists of a display screen or a panel that is connected to a Raspberry Pi board.
 The Raspberry Pi board controls displaying of advertisements.
-Advertisements are downloaded  from ftp server to raspberry pi using an internet connection based on terminal location. 
-Raspberry pi executes functions such as looping of advertisements, duration for which the advertisements is to be displayed etc.
+Advertisements are downloaded from the FTP server to raspberry pi using an internet connection based on terminal location. 
+Raspberry pi executes functions such as looping of advertisements, the duration for which the advertisements are to be displayed, etc.
 
 ![]({{ 'assets/images/kloudtise-ss2.jpg' | relative_url }})
 **Requirnments**

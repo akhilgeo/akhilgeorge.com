@@ -1,0 +1,40 @@
+I"�<p>MTU (Maximum Transmission Unit) size is the maximum packet size that is permitted on your network. When the MTU value is more than the permitted there will be packet loss.
+So it is recommended to maintain the ideal MTU value in your router configuration to increase the network perfomance.</p>
+
+<p>You can set the optimal MTU value in the Router configuration page</p>
+
+<p><strong>But how to find the optimal MTU value?</strong></p>
+
+<p>To find the optimal MTU value in Windows</p>
+
+<ol>
+  <li>
+    <p>Open Command prompt</p>
+  </li>
+  <li>
+    <p>Enter the following command</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ping www.google.com -f -l 1500
+</code></pre></div>    </div>
+    <p><img src="/assets/images/post/MTU02.png" alt="" /></p>
+  </li>
+  <li>
+    <p>If you are getting the message as “Packet needs to be fragmented but DF set” and Loss of 100%.</p>
+  </li>
+  <li>
+    <p>Then, reduce the MTU value by 10 as 1490 and re-execute the command.</p>
+  </li>
+  <li>
+    <p>Repeat the steps until you get Loss = 0%.</p>
+
+    <p><img src="/assets/images/post/MTU03.png" alt="" /></p>
+  </li>
+  <li>
+    <p>From the current MTU value, increase the count by 1 and find out the maximum value with 0 % Loss.</p>
+  </li>
+</ol>
+
+<p>Add 28 to the maximum value you have found out and update it in the router configuration.</p>
+
+<p><img src="/assets/images/post/MTU-01.png" alt="" /></p>
+:ET

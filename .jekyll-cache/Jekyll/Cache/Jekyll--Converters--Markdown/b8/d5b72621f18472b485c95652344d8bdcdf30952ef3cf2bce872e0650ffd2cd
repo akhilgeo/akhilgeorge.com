@@ -1,0 +1,31 @@
+I"³	<p><code class="language-plaintext highlighter-rouge">Excel Merger</code> is an open tool developed in Python which allows users to merge multiple excel files into a single file.</p>
+
+<p>The tool is powered by a Graphical user interface, which makes life easy for the ones using the same. The GUI is quite simple with only 2 options.</p>
+
+<ol>
+  <li>
+    <p>Source Folder of the excels to be Merged.</p>
+  </li>
+  <li>
+    <p>Destination and name of the newly merged excel.</p>
+  </li>
+</ol>
+
+<p>The source code of the tool has been uploaded to Github. Anyone can access the code and make necessary changes as per their requirements.</p>
+
+<p>Excel Merger GUI
+The major packages used in the code are <code class="language-plaintext highlighter-rouge">Pandas</code> (for extracting the excel sheets as data frames) and <code class="language-plaintext highlighter-rouge">tkinter</code> (for the GUI for the tool).</p>
+
+<p>Code snippets:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby">      <span class="c1">#read the excel files</span>
+      <span class="n">excels</span> <span class="o">=</span> <span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="no">ExcelFile</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span> <span class="k">for</span> <span class="nb">name</span> <span class="k">in</span> <span class="n">excel_names</span><span class="p">]</span>
+
+      <span class="c1">#turn them into dataframes</span>
+      <span class="n">frames</span> <span class="o">=</span> <span class="p">[</span><span class="n">pd</span><span class="p">.</span><span class="nf">read_excel</span><span class="p">(</span><span class="n">excel_name</span><span class="p">,</span> <span class="p">)</span> <span class="k">for</span> <span class="n">excel_name</span> <span class="k">in</span> <span class="n">excel_names</span><span class="p">]</span>
+
+      <span class="n">combined</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="nf">concat</span><span class="p">(</span><span class="n">frames</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="no">False</span><span class="p">)</span></code></pre></figure>
+
+<p>Check out the <a href="https://github.com/akhilgeo/ExcelMerger/blob/master/excelmerger.py">GitHub</a> for the full code. You can clone the repository and modify the code as per your requirement.</p>
+
+:ET

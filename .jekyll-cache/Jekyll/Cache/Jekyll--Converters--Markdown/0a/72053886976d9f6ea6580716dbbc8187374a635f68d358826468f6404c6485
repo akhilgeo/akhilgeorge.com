@@ -1,0 +1,3 @@
+I")<p>MTU (Maximum Transmission Unit) size is the maximum packet size that is permitted on your network. When the MTU value is more than the permitted there will be packet loss.
+So it is recommended to maintain the ideal MTU value in your router configuration to increase the network perfomance.</p>
+:ET
