@@ -1,0 +1,34 @@
+I"<p>SAP Cloud platform (SCP) is a Platform as a service offered by SAP. It provides a development and runtime enviornment, which lets you build, extend, and integrate business applications in the cloud. You can also use SAP Cloud Platform to extend and integrate with existing on-premise systems or other cloud products.</p>
+
+<p>So as you might already know most of the SAP services are not free, how do you get to try the SCP.</p>
+
+<p>You can opt for a ‘30 days free trail’ on SAP Cloud Platfom.</p>
+
+<h2>How to activate SAP Cloud Platform Free Trail?</h2>
+
+<ol>
+  <li>
+    <p>Head on to <a href="https://accounts.sap.com/">SAP Official site</a> and create an account.
+<img src="/assets/images/post/sap-scp-1.jpg" alt="SCP1" />
+Once the email verification is completed, your sap account will be activated. Login to your SAP account.</p>
+  </li>
+  <li>
+    <p>Visit <a href="https://accounts.sap.com/saml2/idp/sso">SAP Cloud Platform</a> Trial page	and accept the legal disclaimers.
+<img src="/assets/images/post/sap-scp-2.png" alt="SCP2" />
+Once it is accpeted you will be redirected to SAP cloud platform cockpit.</p>
+  </li>
+  <li>
+    <p>In SCP cockpit click on the <code class="language-plaintext highlighter-rouge">Enter your free trial</code> button.
+<img src="/assets/images/post/sap-scp-3.png" alt="SCP3" />
+You will be asked to verify your phone number. Enter the verification code recieved on your phone and press continue.
+<img src="/assets/images/post/sap-scp-4.png" alt="SCP4" /></p>
+  </li>
+  <li>
+    <p>Select the region and your global account will be created.
+<img src="/assets/images/post/sap-scp-5.png" alt="SCP5" />
+Click on the Trial box container and you will be presented with the SAP Cloud platform cockpit.
+<img src="/assets/images/post/sap-scp-7.png" alt="SCP5" /></p>
+  </li>
+</ol>
+
+:ET
