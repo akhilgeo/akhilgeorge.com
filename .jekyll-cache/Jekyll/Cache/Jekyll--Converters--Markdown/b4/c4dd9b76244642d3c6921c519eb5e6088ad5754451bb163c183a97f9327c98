@@ -1,0 +1,10 @@
+I"‹<ol>
+  <li>Download <a href="https://sourceforge.net/projects/mingw/">MinGW - Minimalist GNU for Windows</a> from Sourceforge.</li>
+  <li>After downloading run <code class="language-plaintext highlighter-rouge">mingw-get-setup.exe</code>.</li>
+  <li>In MinGW installation manager, Select <code class="language-plaintext highlighter-rouge">mingw32-gcc-g++</code> under Basic Setup. <img src="/assets/images/post/gcc%20select.png" alt="" /></li>
+  <li>From the menu select Installation &gt; Apply changes.</li>
+  <li>The program will download and install the components.<img src="/assets/images/post/gcc%20install.png" alt="" /></li>
+  <li>Once installation is completed you need to set up enviornment variables</li>
+  <li>From Windows start, search <code class="language-plaintext highlighter-rouge">Enviornment Variables</code>. <img src="/assets/images/post/gcc%20env%20variables.jpg" alt="" /></li>
+</ol>
+:ET
