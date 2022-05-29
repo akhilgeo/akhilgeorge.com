@@ -1,8 +1,0 @@
-I"G<ol>
-  <li>Download <a href="https://sourceforge.net/projects/mingw/">MinGW - Minimalist GNU for Windows</a> from Sourceforge.</li>
-  <li>After downloading run ` mingw-get-setup.exe`.</li>
-  <li>In MinGW installation manager, Select <code class="language-plaintext highlighter-rouge">mingw32-gcc-g++</code> under Basic Setup. <img src="/assets/images/post/gcc%20select.png" alt="" /></li>
-  <li>From the menu select Installation &gt; Apply changes.</li>
-  <li>The program will download and install the components.<img src="/assets/images/post/gcc%20install.png" alt="" /></li>
-</ol>
-:ET
