@@ -6,9 +6,7 @@ categories:
 image: assets/images/post/qrcode_builder.jpg
 ---
 
-Barcodes are getting replaced by QR code!
-
-In every product you buy, there is a QR code. Ever wondered how you can create a QR code yourself?
+Barcodes are getting replaced by QR code! In every product you buy, there is a QR code. Ever wondered how you can create a QR code yourself?
 
 If you go by google, there will be many online services which will help you to create on online. But I will explain you few simple lines of python code which would get the job done.
 
