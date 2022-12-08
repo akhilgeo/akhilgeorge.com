@@ -1,5 +1,9 @@
 ---
 title: QR code Builder using Python
+layout: post-right-sidebar
+categories:
+- Python
+image: assets/images/post/qrcode_builder.jpg
 ---
 
 Barcodes are getting replaced by QR code!
@@ -12,7 +16,7 @@ The first step is installing the package using pip command.
 
 > pip install qrcode
 
-If you want to understand more on the library - Read here : https://pypi.org/project/qrcode/.
+If you want to understand more on the library - Read here : [https://pypi.org/project/qrcode/](https://pypi.org/project/qrcode/).
 
 Create a new python file (.py file) and enter the below code and Run.
 
@@ -26,6 +30,6 @@ Thats it, you have created a QR code with the custom text required.
 
 Additional content: 
 
-I have created a GUI version of the same functionality using tkinter. If you want to see that code, please go to https://github.com/akhilgeo/QR-code-Builder-
+I have created a GUI version of the same functionality using tkinter. If you want to see that code, please go to [https://github.com/akhilgeo/QR-code-Builder-](https://github.com/akhilgeo/QR-code-Builder-)
 
 ![](https://github.com/akhilgeo/QR-code-Builder-/raw/main/img/Demo.gif)
