@@ -21,9 +21,9 @@ Midjourney is a discord based community that specializes in AI art, enabling art
 4. Type "/imagine" and then your prompt for the art you wish to create. For example, "/imagine Harry potter in india".
 ![]({{ 'assets/images/post/Midjourney_4.jpg' | relative_url }})
 
-5. Wait for the AI to generate four images based on your prompt. You can click image to enlarge it or open it in a new webbrowser window.
+5. Wait for the AI to generate four images based on your prompt. You can click image to enlarge it or open it in a new web-browser window.
 ![]({{ 'assets/images/post/Midjourney_5.jpg' | relative_url }})
 
-6. Use the buttons below your generated image to guide the AI toward what you want. The buttons labeled U are to upscale the corresponding image, R are to re-generate the image, and S are to save the image.
+6. Use the buttons below your generated image to guide the AI toward what you want. The buttons labeled U are to upscale the corresponding image, V are to get different variants of the image.
 
 7. Download your image as a PNG file or copy its URL. Easy!
