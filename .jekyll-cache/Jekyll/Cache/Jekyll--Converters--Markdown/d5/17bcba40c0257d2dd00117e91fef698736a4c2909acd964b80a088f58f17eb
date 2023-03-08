@@ -1,0 +1,42 @@
+I"9<p>Jekyll is known for building static blogs to be hosted on Github.  What makes it special is its minimalist design and fast page load speeds.</p>
+
+<p>Unlike WordPress, Jekyll does not have any database in the backend, which is one of the main reasons which makes the blogs built on Jekyll faster.</p>
+
+<p>Also, Jekyll blogs can be hosted on Github free of cost which makes it economical when compared to WordPress.</p>
+
+<p>But setting up a Jekyll blog/website for the first time is a bit of a difficult task. In this post, I will explain to you how to set up a Jekyll blog on your localhost using the command line. Before executing the below steps please make sure Ruby is installed in your system.</p>
+
+<ol>
+  <li>Open the Command prompt and navigate to your directory where you want to create the Jekyll files.</li>
+  <li>
+    <p>Type the below command and press enter.</p>
+
+    <p><code class="language-plaintext highlighter-rouge">gem install bundler jekyll</code></p>
+
+    <p><img src="/assets/images/post/jekyll-1.png" alt="" /></p>
+
+    <p>This will install the Jekyll bundler to your machine.</p>
+  </li>
+  <li>
+    <p>Now to create a new blog, type in the below commands. Replace ‘<blog-name>' with the name of your blog</blog-name></p>
+
+    <p>`	jekyll new <blog-name>`</blog-name></p>
+
+    <p><img src="/assets/images/post/jekyll-2.png" alt="" />
+ <img src="/assets/images/post/jeykll-2-1.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Navigate to the blog directory in the command prompt and type in the below command to start the localhost server.</p>
+
+    <p><code class="language-plaintext highlighter-rouge">cd &lt;blog-name&gt;</code></p>
+
+    <p><code class="language-plaintext highlighter-rouge">bundle exec jekyll serve</code></p>
+
+    <p><img src="/assets/images/post/jekyll-3.png" alt="" /></p>
+
+    <p>Now the blog will start running on the localhost. Open any web browser and go to http://localhost:4000/ or http://127.0.0.1:4000 to view the Jekyll blog you have created through the command prompt.</p>
+
+    <p><img src="/assets/images/post/jekyll-4.png" alt="" /></p>
+  </li>
+</ol>
+:ET

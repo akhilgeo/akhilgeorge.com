@@ -1,0 +1,26 @@
+I"W<p>A sitemap is an important component of any website or blog, including a Jekyll blog.  Sitemap is a valuable tool for improving the visibility, usability, and maintenance of your Jekyll blog. It can help you attract more visitors, keep them engaged, and ensure your blog is running smoothly.</p>
+
+<p>Creating a sitemap for a Jekyll blog is relatively easy. You can follow these steps:</p>
+
+<p>Create a new file called sitemap.xml in the root directory of your Jekyll blog.</p>
+
+<p>Open the file and add the following code:</p>
+
+<p><img src="/assets/images/post/sitemap.png" alt="" /></p>
+
+<blockquote>
+  <p>Here I have added the code as png since the blog is already running on Jekyll platform and the code would function and generate the response for my blog. You can download the file from <a href="http://akhilgeorge.com/assets/Files/sitemap_code.txt">here</a>.</p>
+</blockquote>
+
+<p>This code generates a sitemap with all the posts on your blog.</p>
+
+<p>Save the file and push it to your blog’s repository.</p>
+
+<p>Submit your sitemap to search engines. You can do this by adding the following line to your robots.txt file:</p>
+
+<p><img src="/assets/images/post/robots.png" alt="" /></p>
+
+<p>This tells search engines where to find your sitemap.</p>
+
+<p>Test your sitemap using a tool like Google’s Search Console to make sure it’s working correctly.</p>
+:ET

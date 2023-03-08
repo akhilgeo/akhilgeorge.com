@@ -1,0 +1,52 @@
+I"s	<p>One major problem users face with the Jekyll blog is adding new posts. While writing a new post using markdown language, adding a new image or formatting the blog post could be difficult.</p>
+
+<p>Admin dashboard was one standout feature for WordPress which made life simple. Especially the bloggers who migrate from wordpress to Jekyll find this as a disadvantage.</p>
+
+<p>But there is an option to add an admin dashboard to your Jekyll blog.</p>
+
+<ol>
+  <li>Open Jekyll directory</li>
+  <li>
+    <p>Open  config.yml file in any text editor and add the below command under plugins and save it.</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> `- jekyll-admin`
+</code></pre></div>    </div>
+
+    <p><img src="/assets/images/post/jekyll-admin-1.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Open ‘GemFile’ in any text editor and add the below command under ‘group :jekyll_plugins do’.</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>     `gem "jekyll-admin"`
+</code></pre></div>    </div>
+
+    <p><img src="/assets/images/post/jekyll-admin-2.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Open the command prompt and navigate to your jekyll blog directory and execute the below command.</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> `bundle exec jekyll serve`
+</code></pre></div>    </div>
+
+    <p><img src="/assets/images/post/jekyll-admin-3.png" alt="" /></p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> Now this will deploy your blog in localhost.
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Open any web browser and navigate to http://localhost:4000/admin or http://127.0.0.1:4000/admin to view the admin dashboard.</p>
+
+    <p><img src="/assets/images/post/jekyll-admin-4.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Click on Posts in the left sidebar to create a new post. Input all the necessary details and click on create.</p>
+
+    <p><img src="/assets/images/post/jekyll-admin-5.png" alt="" /></p>
+  </li>
+  <li>
+    <p>Now navigate to http://localhost:4000/ or http://127.0.0.1:4000 to view your blog and the post you have created will be visible in the blog.</p>
+
+    <p><img src="/assets/images/post/jekyll-admin-7.png" alt="" /></p>
+  </li>
+</ol>
+:ET

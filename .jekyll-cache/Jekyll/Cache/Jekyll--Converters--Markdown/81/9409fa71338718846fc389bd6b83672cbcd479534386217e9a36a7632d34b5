@@ -1,0 +1,88 @@
+I"�<p>This was done as part of our Bachelors’s Technology project in 2014. The Project was named Kloudtise - Cloud, and Advertise.</p>
+<h1 id="introduction">Introduction</h1>
+<p>A simple platform for the advertiser to display advertisements in any location where these advertisement terminals are set up.</p>
+
+<p>Advertisements are displayed anywhere without any direct link between the advertiser and the advertisement!
+A cloud server is built which directs advertisements from the advertiser to the desired display using the internet.</p>
+
+<p>This project consists of a website that can be used by both admins and advertisers. Admins have elevated permissions on the website. They can accept advertisements submitted by advertisers, process payments, and check advertisement content. If the advertisement violates any advertisement terms or conditions, admins can reject ad’s or else they can forward the ad to the cloud server.</p>
+
+<p>Advertisers can signup for an account on the website using which they can upload advertisements and purchase advertising space on the corresponding terminal.</p>
+
+<p><img src="/assets/images/kloudtise-flow.jpg" alt="" /></p>
+
+<p>Each advertising terminal consists of a large display and a single board microcomputer (Raspberry Pi). A server program runs in the Pi which is connected to the cloud server via the internet. Advertisements pushed by the cloud server are accepted by the server program running on the Pi and are displayed on the large screen. Each advertisement is displayed on the screen for a predetermined period after which the next ad is displayed. Also if the display terminal is moving, the location of the display terminal is identified using GPS satellites, and advertisements corresponding to the particular location are displayed.</p>
+<h1 id="existing-system">Existing System</h1>
+
+<p>In our cities, we can see advertisement display boards on top of buildings and other structures.
+These systems consist of a display terminal that is already preloaded with a set of advertisements that are displayed repeatedly. 
+The time and duration for which the advertisements are to be displayed are manually controlled at this location.
+Loading of advertisements in the terminal is also done at this location itself.</p>
+<h1 id="kloudtise-model">Kloudtise Model</h1>
+<p>Our system consists of a display terminal that is remotely controlled by the administrator.
+An Interface is provided for interaction between stakeholders and the server.</p>
+
+<p>Our system is divided into three modules namely
+Interface
+Servers
+Terminal</p>
+
+<p><strong>Interface</strong></p>
+
+<p>Users can :</p>
+<ul>
+  <li>Create Account</li>
+  <li>Login</li>
+  <li>Upload advertisements</li>
+</ul>
+
+<p>Admin can</p>
+<ul>
+  <li>Admin login</li>
+  <li>Approve uploaded advertisements</li>
+  <li>View registered user details</li>
+</ul>
+
+<p><strong>Server</strong></p>
+
+<p>Our project mainly consists of two servers:</p>
+<ul>
+  <li>Cloud server</li>
+  <li>FTP server
+FTP server mainly deals with uploaded advertisements.
+Users upload advertisements to the FTP server.
+A cloud server is deployed with the help of Redhat’s OpenShift Engine
+Once the advertisement is approved by the Admin, the Cloud server helps in redirecting it to the respective display terminals.
+Advertisements are filtered based on terminal location.</li>
+</ul>
+
+<p><strong>Terminal</strong></p>
+
+<p>The terminal consists of a display screen or a panel that is connected to a Raspberry Pi board.
+The Raspberry Pi board controls displaying of advertisements.
+Advertisements are downloaded from the FTP server to raspberry pi using an internet connection based on terminal location. 
+Raspberry pi executes functions such as looping of advertisements, the duration for which the advertisements are to be displayed, etc.</p>
+
+<p><img src="/assets/images/kloudtise-ss2.jpg" alt="" />
+<strong>Requirnments</strong></p>
+
+<ul>
+  <li>Software Requirements
+    <ol>
+      <li>Eclipse</li>
+      <li>JDK</li>
+      <li>Openshift</li>
+      <li>Filezilla</li>
+      <li>Omx player</li>
+    </ol>
+  </li>
+  <li>Hardware Requirements
+    <ol>
+      <li>Raspberry pi board</li>
+      <li>Display Monitors</li>
+      <li>Power Source</li>
+      <li>GPS module</li>
+    </ol>
+  </li>
+</ul>
+:ET
