@@ -33,10 +33,10 @@ If your device doesn't allow you to disable bloatware, you can use the Android D
 ![]({{ 'assets/images/post/bloatware-1.jpg' | relative_url }})
 7. Run the command `adb shell` to go inside shell to write commands
 8. To uninstall a bloatware app, run the command `pm uninstall -k --user 0 <package_name>` , replacing <package_name> with the package name of the app you want to remove. 
-
+ 
 ![]({{ 'assets/images/post/bloatware-3.jpg' | relative_url }})
-You can find the package name of an app in the URL of its Google Play Store page or by using the command `pm list packages --user 0`.
 
+You can find the package name of an app in the URL of its Google Play Store page or by using the command `pm list packages --user 0`.
 ![]({{ 'assets/images/post/bloatware-2.jpg' | relative_url }})
 
 **Step 3: Use Third-Party Apps**
