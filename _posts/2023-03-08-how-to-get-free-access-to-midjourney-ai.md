@@ -3,7 +3,6 @@ title: How to get free access to MidJourney AI?
 layout: post-right-sidebar
 categories:
 - Network
-- AI
 image: assets/images/post/Midjourney_3.jpg
 ---
 
