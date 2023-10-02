@@ -4,6 +4,7 @@ layout: post-right-sidebar
 categories:
 - Python
 image: assets/images/post/qrcode_builder.jpg
+featured: true
 ---
 
 Barcodes are getting replaced by QR code! In every product you buy, there is a QR code. Ever wondered how you can create a QR code yourself?
