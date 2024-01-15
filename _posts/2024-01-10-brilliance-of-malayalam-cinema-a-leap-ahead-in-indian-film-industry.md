@@ -1,5 +1,5 @@
 ---
-title: 'Brilliance of Malayalam Cinema: A Leap Ahead in Indian Film Industry'
+title: 'Beyond Borders: Nammude Malayalam Cinema - A Pinnacle of Storytelling Brilliance'
 layout: post-right-sidebar
 categories: []
 description: For Malayalee viewers, Malayalam cinema is more than just a form of entertainment;
