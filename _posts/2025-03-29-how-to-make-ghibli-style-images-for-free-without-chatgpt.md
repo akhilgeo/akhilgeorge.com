@@ -6,6 +6,7 @@ description: One of the most popular ways people have been generating Ghibli-sty
   available only to premium users, OpenAI has started rolling it out to free users
   too. However, there is one major problem—server overload.
 image: assets/images/post/Ghilbi.jpeg
+categories: []
 ---
 
 If you've been on social media recently, you've probably seen the latest trend: Ghiblify. The trend is transforming your photos into beautiful Studio Ghibli-inspired paintings—a Japanese animation style that's renowned for its watercolor texture, pastel color palette, and warm, cozy environments.
