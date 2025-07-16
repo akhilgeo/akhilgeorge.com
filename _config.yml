@@ -24,6 +24,8 @@ plugins:
   - jekyll-seo-tag
   - jekyll-archives
   - jekyll-admin
+  - jekyll-loading-lazy
+
 
 category_archive:
   type: jekyll-archives
