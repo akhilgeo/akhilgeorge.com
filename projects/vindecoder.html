@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>VIN Decoder — India</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <style>
+    :root{--bg:#f7f8fb;--card:#fff;--muted:#6b7280;--accent:#0b63d6}
+    [data-theme='dark']{--bg:#0b1220;--card:#071028;--muted:#9aa4b2;--accent:#58a6ff;color:#dbeafe}
+    *{box-sizing:border-box}
+    body{font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,Arial;margin:28px;background:var(--bg);color:inherit}
+    .wrap{max-width:980px;margin:0 auto}
+    header{display:flex;gap:12px;align-items:center;justify-content:space-between}
+    h1{font-size:20px;margin:0}
+    .card{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 10px 30px rgba(2,6,23,0.06);margin-top:14px}
+    label{display:block;margin-top:12px;font-weight:600}
+    select,input{width:100%;padding:10px;border-radius:8px;border:1px solid #e6edf3;margin-top:6px}
+    .row{display:grid;grid-template-columns:1fr 160px;gap:10px}
+    button{padding:10px 12px;border-radius:8px;border:0;background:var(--accent);color:#fff;font-weight:700;cursor:pointer}
+    .muted{color:var(--muted);font-size:13px}
+    pre{background:rgba(15,23,42,0.03);padding:12px;border-radius:8px;overflow:auto}
+    .controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .chip{padding:6px 10px;border-radius:999px;background:rgba(11,99,214,0.08);font-weight:600}
+    .flex{display:flex;gap:8px;align-items:center}
+    .result{margin-top:12px}
+    .warn{color:#b45309}
+    .ok{color:#066f3b}
+    .small{font-size:13px;color:var(--muted)}
+    .top-actions{display:flex;gap:8px}
+    .wmi-hint{font-size:13px;color:var(--muted);margin-top:6px}
+    .progress{height:8px;background:#e6edf3;border-radius:6px;margin-top:8px;overflow:hidden}
+    .progress > i{display:block;height:100%;background:linear-gradient(90deg,#7cc2ff,#0b63d6);width:0%}
+    .fade{transition:all .22s ease}
+    .brand-grid{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .brand{padding:8px 10px;border-radius:8px;background:rgba(0,0,0,0.03);font-size:13px}
+    footer{margin-top:18px;font-size:13px;color:var(--muted)}
+    .controls > button.secondary{background:#e9eef9;color:var(--accent);font-weight:600}
+    .switch{display:flex;align-items:center;gap:8px}
+  </style>
+  <!-- External libs for PDF + file save -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</head>
+<body data-theme="light">
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>VIN Decoder — India @akhilgeorge.com</h1>
+        <div class="small muted">Auto WMI detection • Live validation • JSON/HTML/PDF export</div>
+      </div>
+      <div class="top-actions">
+        <div class="switch">
+          <label class="small">Dark</label>
+          <input id="darkToggle" type="checkbox" />
+        </div>
+      </div>
+    </header>
+
+    <div class="card">
+      <label for="manufacturer">Manufacturer</label>
+      <select id="manufacturer">
+        <option>Tata Motors</option>
+        <option>Chevrolet</option>
+        <option>Honda</option>
+        <option>Mahindra</option>
+        <option>Mitsubishi</option>
+        <option>Hyundai</option>
+        <option>Fiat</option>
+        <option>Skoda</option>
+        <option>Volkswagen</option>
+        <option>Toyota</option>
+        <option>Maruti Suzuki</option>
+        <option>Ford</option>
+        <option>Nissan</option>
+        <option>Renault</option>
+        <option>Kia</option>
+        <option>Jeep</option>
+        <option>MG Motor</option>
+      </select>
+
+      <label for="vin">VIN / Chassis Number</label>
+      <input id="vin" placeholder="Enter VIN (e.g. MBJUYML1SSL192611)" autocomplete="off" />
+      <div class="wmi-hint muted" id="wmiHint">WMI: —</div>
+      <div class="progress" title="VIN completeness"><i id="progressBar"></i></div>
+
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <div style="flex:1"><button id="decodeBtn">Decode</button></div>
+        <div style="width:160px"><button class="secondary" id="clearBtn">Clear</button></div>
+      </div>
+
+      <div class="brand-grid" id="brandGrid"></div>
+
+      <div class="controls">
+        <button id="copyBtn">Copy Result</button>
+        <button id="jsonBtn" class="secondary">Download JSON</button>
+        <button id="htmlBtn" class="secondary">Download HTML Report</button>
+        <button id="pdfBtn">Download PDF</button>
+      </div>
+
+      <div id="result" class="result"></div>
+    </div>
+
+    <footer class="small muted">Reference: Decoding heuristics derived from Team-BHP style VIN guides. Use as a helper, not definitive OEM verification.</footer>
+  </div>
+
+  <script>
+    // --- Rules & maps (same as original, expanded) ---
+    const rules = {
+      "Tata Motors": { yearPos: 10, monthPos: 12, yearLen:1, monthLen:1 },
+      "Chevrolet": { yearPos: 10, monthPos: 9, yearLen:1, monthLen:1 },
+      "Honda": { yearPos: 10, monthPos: 9, yearLen:1, monthLen:1 },
+      "Mahindra": { yearPos: 10, monthPos: 12, yearLen:1, monthLen:1 },
+      "Mitsubishi": { yearPos: 10, monthPos: 11, yearLen:1, monthLen:1 },
+      "Hyundai": { yearPos: 10, monthPos: 19, yearLen:1, monthLen:1, expectLen:19 },
+      "Fiat": { yearPos: 19, monthPos: 18, yearLen:2, monthLen:1, expectLen:20 },
+      "Skoda": { yearPos: 10, monthPos: 6, yearLen:1, monthLen:1 },
+      "Volkswagen": { yearPos: 5, yearLen:2, monthPos:4, monthLen:1, modelYearPos:10 },
+      "Toyota": { yearPos: 21, yearLen:2, monthPos:19, monthLen:2, expectLen:22 },
+      "Maruti Suzuki": { yearPos: 10, monthPos: 11, yearLen:1, monthLen:1 },
+      "Ford": { yearPos: 11, monthPos: 12, yearLen:1, monthLen:1 },
+      "Nissan": { yearPos: 10, monthPos: 11, yearLen:1, monthLen:1 },
+      "Renault": { yearPos: 10, monthPos: 11, yearLen:1, monthLen:1 },
+      "Kia": { yearPos: 10, monthPos: 19, yearLen:1, monthLen:1, expectLen:19 },
+      "Jeep": { yearPos: 20, monthPos: 19, yearLen:1, monthLen:1, expectLen:20 },
+      "MG Motor": { yearPos: 10, monthPos: 9, yearLen:1, monthLen:1 }
+    };
+
+    const monthAlpha = { A:'January', B:'February', C:'March', D:'April', E:'May', F:'June', G:'July', H:'August', J:'September', K:'October', L:'November', M:'December', N:'November', P:'December' };
+    const monthNumeric = { '1':'January','2':'February','3':'March','4':'April','5':'May','6':'June','7':'July','8':'August','9':'September','0':'Invalid' };
+    const yearMapAlpha = { A:2010,B:2011,C:2012,D:2013,E:2014,F:2015,G:2016,H:2017,J:2018,K:2019,L:2020,M:2021,N:2022,P:2023,R:2024,S:2025,T:2026,V:2027,W:2028,X:2029,Y:2030 };
+
+    // Small WMI map for auto-detection (extend as needed)
+    const wmiMap = {
+      'MA': 'Tata Motors', 'MAT': 'Tata Motors', 'MAL':'Hyundai', 'MHI':'Mitsubishi', 'MBJ':'Toyota', 'MZB':'Maruti Suzuki', 'MEX':'Fiat', 'MHR':'Mahindra', 'M2Y':'Mahindra', 'WVW':'Volkswagen', 'SAL':'Land Rover', 'SK':'Skoda', 'KNA':'Kia', 'KND':'Kia', 'JM1':'Mazda', '1FT':'Ford', 'JS3':'Mazda', '3N1':'Nissan', 'MRH':'Honda', 'VSS':'Seat', 'VF1':'Renault'
+    };
+
+    // Helpers
+    const vinInput = document.getElementById('vin');
+    const manuSelect = document.getElementById('manufacturer');
+    const wmiHint = document.getElementById('wmiHint');
+    const progressBar = document.getElementById('progressBar');
+    const resultBox = document.getElementById('result');
+
+    function setTheme(dark){ document.body.setAttribute('data-theme', dark? 'dark':'light'); }
+    document.getElementById('darkToggle').addEventListener('change', e=> setTheme(e.target.checked));
+
+    function sanitizeVin(v){ return v.replace(/\s+/g,'').toUpperCase(); }
+
+    function detectWMI(vin){ if(!vin || vin.length < 3) return null; const p3 = vin.slice(0,3); const p2 = vin.slice(0,2); return wmiMap[p3] || wmiMap[p2] || null; }
+
+    function updateProgress(vin){ const len = vin.length; const pct = Math.min(100, Math.round((len/17)*100)); progressBar.style.width = pct + '%'; }
+
+    function validateVinChars(vin){ const bad = /[IOQ]/i.test(vin); const okLen = (vin.length === 17) || (vin.length>=19 && (vin.startsWith('TOY')||vin.length>17)); return {badChars:bad, okLen}; }
+
+    function readAt(vin,pos,len=1){ if(!pos) return null; return vin.substr(pos-1,len) || null; }
+
+    function decode(manufacturer, vinRaw){ const vin = sanitizeVin(vinRaw); const rule = rules[manufacturer]; let details = {manufacturer, vinRaw:vin, detectedWMI:detectWMI(vin)};
+      if(!rule) { details.note = 'No rule for manufacturer'; return details; }
+      if(rule.expectLen && vin.length < rule.expectLen) details.note = `Warning: ${manufacturer} VINs may be ${rule.expectLen} chars; input ${vin.length}.`;
+
+      // read codes
+      const yearCode = readAt(vin, rule.yearPos, rule.yearLen||1);
+      const monthCode = readAt(vin, rule.monthPos, rule.monthLen||1);
+      let year=null, month=null;
+      if(yearCode){ if(rule.yearLen===2 && /^\d{2}$/.test(yearCode)){ const yy=parseInt(yearCode,10); year = (yy<=30)?2000+yy:1900+yy; } else { const c=yearCode.toUpperCase(); if(yearMapAlpha[c]) year=yearMapAlpha[c]; else if(/^[0-9]$/.test(c)){ const n=parseInt(c,10); if(manufacturer==='MG Motor') year = 2017+n; else year = 2000+n; } } }
+      if(monthCode){ const m=monthCode.toUpperCase(); if(monthAlpha[m]) month=monthAlpha[m]; else if(monthNumeric[m]) month=monthNumeric[m]; else if(/^[0-9]{2}$/.test(m)){ const mm=parseInt(m,10); if(mm>=1 && mm<=12) month=['January','February','March','April','May','June','July','August','September','October','November','December'][mm-1]; } }
+
+      details.rawCodes = {yearCode: yearCode||null, monthCode: monthCode||null};
+      details.decoded = {year: year||null, month: month||null};
+      details.friendly = friendlyString(details.decoded);
+      return details;
+    }
+
+    function friendlyString(decoded){ if(!decoded) return 'Unknown'; const y = decoded.year? decoded.year : 'Unknown'; const m = decoded.month? decoded.month : 'Unknown'; if(decoded.month && decoded.year) return `${m} ${y}`; if(decoded.year) return `Year ${y}`; return 'Unknown'; }
+
+    function renderResult(obj){ if(!obj) return; let html = '<pre>';
+      html += `Manufacturer: ${obj.manufacturer}\n`;
+      html += `VIN (raw): ${obj.vinRaw}\n`;
+      if(obj.detectedWMI) html += `WMI looks like: ${obj.detectedWMI} (auto-detected)\n`;
+      if(obj.note) html += `\n${obj.note}\n`;
+      html += `\nRaw codes -> year: ${obj.rawCodes?.yearCode||'N/A'}, month: ${obj.rawCodes?.monthCode||'N/A'}\n`;
+      html += `Decoded -> ${obj.friendly}\n`;
+      html += '</pre>';
+      resultBox.innerHTML = html + `<div class="small muted">Tip: Use the copy/download buttons to save the result.</div>`;
+    }
+
+    // --- Event handlers ---
+    vinInput.addEventListener('input', e=>{
+      const v = sanitizeVin(e.target.value);
+      updateProgress(v);
+      const detected = detectWMI(v);
+      document.getElementById('wmiHint').textContent = 'WMI: ' + (v.slice(0,3) || '—');
+      if(detected){ document.getElementById('wmiHint').textContent += ` — looks like ${detected}`; }
+
+      const val = validateVinChars(v);
+      if(val.badChars) { resultBox.innerHTML = `<div class="warn">VIN contains invalid letters I, O or Q — these are not used in VINs.</div>`; }
+      else resultBox.innerHTML = '';
+
+      // suggest manufacturer if mismatch
+      if(detected && manuSelect.value !== detected){ // show gentle suggestion
+        resultBox.innerHTML = `<div class="small muted">Suggestion: VIN WMI suggests <strong>${detected}</strong>. <button id="applyWmi">Switch</button></div>`;
+        document.getElementById('applyWmi').addEventListener('click', ()=>{ for(const opt of manuSelect.options){ if(opt.text===detected){ manuSelect.value = detected; break; } } resultBox.innerHTML = ''; });
+      }
+    });
+
+    vinInput.addEventListener('paste', e=>{ setTimeout(()=>{ document.getElementById('decodeBtn').click(); }, 50); });
+    vinInput.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); document.getElementById('decodeBtn').click(); } });
+
+    document.getElementById('decodeBtn').addEventListener('click', ()=>{
+      const vin = vinInput.value; if(!vin){ resultBox.innerHTML = '<div class="warn">Please enter a VIN</div>'; return; }
+      const v = sanitizeVin(vin);
+      updateProgress(v);
+      const val = validateVinChars(v);
+      if(val.badChars) { resultBox.innerHTML = '<div class="warn">VIN contains invalid letters (I, O, Q). Remove them and retry.</div>'; return; }
+
+      const manu = manuSelect.value;
+      const decoded = decode(manu, v);
+      renderResult(decoded);
+      // store last result on window for export
+      window._lastVIN = decoded;
+    });
+
+    document.getElementById('clearBtn').addEventListener('click', ()=>{ vinInput.value=''; resultBox.innerHTML=''; progressBar.style.width='0%'; document.getElementById('wmiHint').textContent='WMI: —'; window._lastVIN = null; });
+
+    // copy
+    document.getElementById('copyBtn').addEventListener('click', ()=>{
+      if(!window._lastVIN){ alert('No decoded result to copy'); return; }
+      const txt = JSON.stringify(window._lastVIN, null, 2);
+      navigator.clipboard.writeText(txt).then(()=> alert('Copied to clipboard')); });
+
+    // download JSON
+    document.getElementById('jsonBtn').addEventListener('click', ()=>{
+      if(!window._lastVIN){ alert('No result to download'); return; }
+      const blob = new Blob([JSON.stringify(window._lastVIN, null, 2)], {type:'application/json'});
+      saveAs(blob, (window._lastVIN.vinRaw || 'vin') + '.json');
+    });
+
+    // download HTML report
+    document.getElementById('htmlBtn').addEventListener('click', ()=>{
+      if(!window._lastVIN){ alert('No result to download'); return; }
+      const html = `<!doctype html><html><head><meta charset="utf-8"><title>VIN Report</title></head><body><pre>${escapeHtml(JSON.stringify(window._lastVIN,null,2))}</pre></body></html>`;
+      const blob = new Blob([html],{type:'text/html'});
+      saveAs(blob, (window._lastVIN.vinRaw || 'vin') + '-report.html');
+    });
+
+    // download PDF
+    document.getElementById('pdfBtn').addEventListener('click', async ()=>{
+      if(!window._lastVIN){ alert('No result to download'); return; }
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const text = JSON.stringify(window._lastVIN, null, 2);
+      const lines = doc.splitTextToSize(text, 170);
+      doc.setFontSize(11);
+      doc.text(lines, 10, 10);
+      doc.save((window._lastVIN.vinRaw || 'vin') + '-report.pdf');
+    });
+
+    function escapeHtml(str){ return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+    // populate brand grid for quick picks
+    (function populateBrands(){ const grid = document.getElementById('brandGrid'); const brands = Array.from(manufacturerList()); brands.forEach(b=>{ const el = document.createElement('div'); el.className='brand fade'; el.textContent = b; el.addEventListener('click', ()=>{ manuSelect.value=b; }); grid.appendChild(el); });
+    })();
+
+    function manufacturerList(){ return new Set(Array.from(document.getElementById('manufacturer').options).map(o=>o.text)); }
+
+    // keep last decode if user reloads on same session
+    window.addEventListener('load', ()=>{ if(window._lastVIN) renderResult(window._lastVIN); });
+  </script>
+</body>
+</html>
