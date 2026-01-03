@@ -147,28 +147,96 @@ description: "A page to showcase all the projects which is either sourced out of
     
     <div id="github-repos" class="tz-gallery">
         <div class="row" id="repos-container">
-            <div class="col-12 text-center" style="padding: 40px;">
-                <p>Loading repositories...</p>
+            <div class="col-12 text-center loading-spinner" style="padding: 40px;">
+                <svg width="50" height="50" viewBox="0 0 50 50" style="animation: spin 1s linear infinite;">
+                    <circle cx="25" cy="25" r="20" fill="none" stroke="#0366d6" stroke-width="3" stroke-dasharray="80, 200" stroke-linecap="round"/>
+                </svg>
+                <p style="margin-top: 15px; color: #586069;">Loading repositories...</p>
             </div>
         </div>
     </div>
 </div>
 
 <style>
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
 .repo-card {
     border: 1px solid #e1e4e8;
-    border-radius: 6px;
-    padding: 20px;
-    margin-bottom: 20px;
-    transition: box-shadow 0.3s ease;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 30px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     background: #fff;
     height: 100%;
     display: flex;
     flex-direction: column;
+    opacity: 0;
+    animation: fadeInUp 0.6s ease forwards;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    position: relative;
+    overflow: hidden;
 }
 
+.row {
+    margin-bottom: 20px;
+}
+
+.col-sm-6, .col-md-4 {
+    margin-bottom: 20px;
+}
+
+.repo-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #0366d6, #00d4ff);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+}
+
+.repo-card:hover::before {
+    transform: scaleX(1);
+}
+
+.repo-card:nth-child(1) { animation-delay: 0.1s; }
+.repo-card:nth-child(2) { animation-delay: 0.2s; }
+.repo-card:nth-child(3) { animation-delay: 0.3s; }
+.repo-card:nth-child(4) { animation-delay: 0.4s; }
+.repo-card:nth-child(5) { animation-delay: 0.5s; }
+.repo-card:nth-child(6) { animation-delay: 0.6s; }
+.repo-card:nth-child(7) { animation-delay: 0.7s; }
+.repo-card:nth-child(8) { animation-delay: 0.8s; }
+.repo-card:nth-child(9) { animation-delay: 0.9s; }
+.repo-card:nth-child(10) { animation-delay: 1s; }
+.repo-card:nth-child(11) { animation-delay: 1.1s; }
+.repo-card:nth-child(12) { animation-delay: 1.2s; }
+
 .repo-card:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 12px 24px rgba(3,102,214,0.15);
+    border-color: #0366d6;
 }
 
 .repo-header {
@@ -180,6 +248,12 @@ description: "A page to showcase all the projects which is either sourced out of
 .repo-icon {
     margin-right: 8px;
     color: #586069;
+    transition: all 0.3s ease;
+}
+
+.repo-card:hover .repo-icon {
+    color: #0366d6;
+    transform: rotate(360deg) scale(1.2);
 }
 
 .repo-name {
@@ -188,10 +262,12 @@ description: "A page to showcase all the projects which is either sourced out of
     color: #0366d6;
     text-decoration: none;
     word-break: break-word;
+    transition: color 0.3s ease;
+    position: relative;
 }
 
 .repo-name:hover {
-    text-decoration: underline;
+    color: #00d4ff;
 }
 
 .repo-description {
@@ -199,12 +275,14 @@ description: "A page to showcase all the projects which is either sourced out of
     font-size: 14px;
     margin-bottom: 12px;
     flex-grow: 1;
+    line-height: 1.6;
 }
 
 .repo-stats {
     display: flex;
     align-items: center;
-    gap: 16px;
+    flex-wrap: wrap;
+    gap: 12px;
     font-size: 13px;
     color: #586069;
     margin-top: auto;
@@ -214,15 +292,106 @@ description: "A page to showcase all the projects which is either sourced out of
     display: flex;
     align-items: center;
     gap: 4px;
+    transition: all 0.3s ease;
+}
+
+.repo-stat:hover {
+    color: #0366d6;
+    transform: scale(1.1);
+}
+
+.repo-stat svg {
+    transition: transform 0.3s ease;
+}
+
+.repo-stat:hover svg {
+    transform: scale(1.2);
 }
 
 .repo-language {
     display: inline-block;
-    padding: 2px 8px;
-    border-radius: 12px;
+    padding: 4px 12px;
+    border-radius: 16px;
     font-size: 12px;
-    background: #f1f8ff;
+    font-weight: 500;
+    background: linear-gradient(135deg, #f1f8ff, #e1f0ff);
     color: #0366d6;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.repo-language:hover {
+    background: linear-gradient(135deg, #0366d6, #00d4ff);
+    color: white;
+    transform: scale(1.05);
+}
+
+.loading-spinner {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+    .repo-card {
+        padding: 20px;
+        margin-bottom: 16px;
+    }
+    
+    .repo-name {
+        font-size: 16px;
+    }
+    
+    .repo-description {
+        font-size: 13px;
+    }
+    
+    .repo-stats {
+        gap: 10px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 576px) {
+    .repo-card {
+        padding: 16px;
+    }
+    
+    .repo-stats {
+        gap: 8px;
+    }
+    
+    .repo-language {
+        padding: 3px 10px;
+        font-size: 11px;
+    }
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Container animation */
+#github-repos {
+    position: relative;
+}
+
+#github-repos::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, #0366d6, #00d4ff);
+    border-radius: 2px;
+}
+
+/* Loading spinner animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 </style>
 
@@ -252,23 +421,31 @@ async function fetchGithubRepos() {
                         <svg class="repo-icon" height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
                             <path fill-rule="evenodd" d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z"></path>
                         </svg>
-                        <a href="${repo.html_url}" target="_blank" class="repo-name">${repo.name}</a>
+                        <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" class="repo-name">${repo.name}</a>
                     </div>
                     <p class="repo-description">${repo.description || 'No description available'}</p>
                     <div class="repo-stats">
                         ${repo.language ? `<span class="repo-language">${repo.language}</span>` : ''}
-                        <span class="repo-stat">
+                        <span class="repo-stat" title="Stars">
                             <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
                                 <path fill-rule="evenodd" d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25zm0 2.445L6.615 5.5a.75.75 0 01-.564.41l-3.097.45 2.24 2.184a.75.75 0 01.216.664l-.528 3.084 2.769-1.456a.75.75 0 01.698 0l2.77 1.456-.53-3.084a.75.75 0 01.216-.664l2.24-2.183-3.096-.45a.75.75 0 01-.564-.41L8 2.694v.001z"></path>
                             </svg>
                             ${repo.stargazers_count}
                         </span>
-                        <span class="repo-stat">
+                        <span class="repo-stat" title="Forks">
                             <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
                                 <path fill-rule="evenodd" d="M5 3.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.122a2.25 2.25 0 10-1.5 0v.878A2.25 2.25 0 005.75 8.5h1.5v2.128a2.251 2.251 0 101.5 0V8.5h1.5a2.25 2.25 0 002.25-2.25v-.878a2.25 2.25 0 10-1.5 0v.878a.75.75 0 01-.75.75h-4.5A.75.75 0 015 6.25v-.878zm3.75 7.378a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm3-8.75a.75.75 0 100-1.5.75.75 0 000 1.5z"></path>
                             </svg>
                             ${repo.forks_count}
                         </span>
+                        ${repo.updated_at ? `
+                        <span class="repo-stat" title="Last updated" style="margin-left: auto; font-size: 11px;">
+                            <svg height="14" width="14" viewBox="0 0 16 16" fill="currentColor">
+                                <path fill-rule="evenodd" d="M1.5 8a6.5 6.5 0 1113 0 6.5 6.5 0 01-13 0zM8 0a8 8 0 100 16A8 8 0 008 0zm.5 4.75a.75.75 0 00-1.5 0v3.5a.75.75 0 00.471.696l2.5 1a.75.75 0 00.557-1.392L8.5 7.742V4.75z"></path>
+                            </svg>
+                            ${new Date(repo.updated_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                        </span>
+                        ` : ''}
                     </div>
                 </div>
             `;
