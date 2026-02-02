@@ -13,7 +13,7 @@ description: "Here, you’ll find more insights about who I am, what I do, and t
   body {
     font: 20px Montserrat, sans-serif;
     line-height: 1.8;
-    color: black;
+    color: white;
   }
 
   p {
@@ -25,19 +25,19 @@ description: "Here, you’ll find more insights about who I am, what I do, and t
   }
 
   .bg-1 {
-    background-color: #ffffff;
+    background-color: #151515;
     /* Green */
-    color: #ffffff;
+    color: #151515;
   }
 
   .bg-2 {
     background-color: #171e27;
     /* Dark Blue */
-    color: #ffffff;
+    color: #151515;
   }
 
   .bg-3 {
-    background-color: #ffffff;
+    background-color: #151515;
     /* White */
     color: #555555;
   }
@@ -66,24 +66,89 @@ description: "Here, you’ll find more insights about who I am, what I do, and t
   .navbar-nav li a:hover {
     color: #1abc9c !important;
   }
+  
+  /* SKILLS GRID */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 30px;
+}
+
+/* CARD */
+.skill-card {
+  background: #111;
+  border-radius: 16px;
+  padding: 25px 20px;
+  text-align: center;
+  transition: all 0.4s ease;
+  box-shadow: 0 0 0 rgba(0,0,0,0);
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+/* CARD HOVER */
+.skill-card:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0 0 25px rgba(26, 188, 156, 0.3);
+}
+
+/* TITLE */
+.skill-card h4 {
+  color: #1abc9c;
+  margin-bottom: 15px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/* ICONS */
+.skill-icons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px;
+}
+
+.skill-icons i,
+.skill-icons img {
+  font-size: 42px;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.skill-icons i:hover,
+.skill-icons img:hover {
+  transform: scale(1.25) rotate(5deg);
+  filter: drop-shadow(0 0 8px #1abc9c);
+}
+
+/* SAP ICON */
+.sap-icon {
+  width: 55px;
+}
+
+/* ANIMATION ACTIVE */
+.skill-card.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 </style>
 
 <!-- First Container -->
 <div class="container-fluid bg-1 text-center">
-  <h3 class="margin" style="color:black">Who Am I?</h3>
+  <h3 class="margin" style="color:grey">Who Am I?</h3>
   <img src="{{ site.baseurl }}/assets/images/akhil.jpg" class="img-responsive img-circle margin" style="display:inline" alt="Bird" width="350" height="350">
   <h3 style="color:grey">I'm Akhil Abraham George</h3>
 </div>
 
 <!-- Second Container -->
 <div class="container-fluid bg-2 text-center">
-  <h3 class="margin">In Short</h3>
+  <h3 class="margin" style="color:grey">In Short</h3>
 
- <p>Hi there! My name is Akhil Abraham George and I'm an SAP Consultant at Infosys. In my free time, I enjoy writing about technology on my blog. I have a passion for coding and all things tech-related, which led me to study computer science and engineering. Originally from Kerala, India, I currently reside at Kottayam.</p>
+ <p style="color:white">Hi there! My name is Akhil Abraham George and I'm an SAP Consultant at Infosys. In my free time, I enjoy writing about technology on my blog. I have a passion for coding and all things tech-related, which led me to study computer science and engineering. Originally from Kerala, India, I currently reside at Kottayam.</p>
 
-<p>Throughout my career, I've gained extensive experience in SAP Sales and Distribution, ABAP and Vistex. I'm constantly seeking to expand my knowledge and stay up-to-date with the latest industry trends, which is why I started my blog. I believe that technology has the power to transform businesses and improve people's lives, and I'm excited to be a part of that journey.</p>
+<p style="color:white">Throughout my career, I've gained extensive experience in SAP Sales and Distribution, ABAP and Vistex. I'm constantly seeking to expand my knowledge and stay up-to-date with the latest industry trends, which is why I started my blog. I believe that technology has the power to transform businesses and improve people's lives, and I'm excited to be a part of that journey.</p>
 
-<p>When I'm not working or writing, you can usually find me tinkering with new software or exploring the latest tech gadgets. I also enjoy spending time with family and friends, trying new foods, and traveling to new places. Thanks for stopping by my blog and feel free to reach out if you have any questions or just want to say hi!	</p>
+<p style="color:white">When I'm not working or writing, you can usually find me tinkering with new software or exploring the latest tech gadgets. I also enjoy spending time with family and friends, trying new foods, and traveling to new places. Thanks for stopping by my blog and feel free to reach out if you have any questions or just want to say hi!	</p>
 
   <div class="footersocial">
 
@@ -125,82 +190,85 @@ description: "Here, you’ll find more insights about who I am, what I do, and t
 
 <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="skills">
   <div class="w-100">
-    <h2 class="mb-5">Skills</h2>
+    <h2 class="mb-5 text-center">Skills</h2>
 
+    <div class="skills-grid">
 
-    <hr>
-    <div class="container">
-      <div class="row">
-        <div class="col">
-          <div class="subheading mb-3">Web</div>
-
-          <i class="devicons devicon-html5-plain colored fa-fw fa-3x"></i>
-
-          <i class="devicons devicon-css3-plain colored fa-fw fa-3x"></i>
-
-          <i class="devicons devicon-react-plain colored fa-fw fa-3x"></i>
-
-          <i class="devicons devicon-javascript-plain colored fa-fw fa-3x"></i>
-
-          <i class="devicons devicon-php-plain colored fa-fw fa-3x"></i>
-
-          <i class="devicons devicon-bootstrap-plain colored fa-fw fa-3x"></i>
-        </div>
-
-
-        <div class="col">
-          <div class="subheading mb-3">Programming Languages &amp; Tools</div>
-
-          <i class="devicons devicon-python-plain colored fa-fw fa-3x"></i>
-
-          <i class="devicons devicon-java-plain colored fa-fw fa-3x"></i>
-
-          <i class="devicons devicon-cplusplus-plain colored fa-fw fa-3x"></i>
-
-          <i class="devicons devicon-ruby-plain colored fa-fw fa-3x"></i>
+      <!-- Web -->
+      <div class="skill-card">
+        <h4>Web</h4>
+        <div class="skill-icons">
+          <i class="devicon-html5-plain colored"></i>
+          <i class="devicon-css3-plain colored"></i>
+          <i class="devicon-javascript-plain colored"></i>
+          <i class="devicon-react-original colored"></i>
+          <i class="devicon-bootstrap-plain colored"></i>
+          <i class="devicon-php-plain colored"></i>
         </div>
       </div>
+
+      <!-- Programming -->
+      <div class="skill-card">
+        <h4>Programming</h4>
+        <div class="skill-icons">
+          <i class="devicon-python-plain colored"></i>
+          <i class="devicon-java-plain colored"></i>
+          <i class="devicon-cplusplus-plain colored"></i>
+          <i class="devicon-ruby-plain colored"></i>
+        </div>
+      </div>
+
+      <!-- Databases -->
+      <div class="skill-card">
+        <h4>Databases</h4>
+        <div class="skill-icons">
+          <i class="devicon-mysql-plain colored"></i>
+          <i class="devicon-microsoftsqlserver-plain colored"></i>
+        </div>
+      </div>
+
+      <!-- Tools -->
+      <div class="skill-card">
+        <h4>Tools</h4>
+        <div class="skill-icons">
+          <i class="devicon-visualstudio-plain colored"></i>
+          <i class="devicon-atom-original colored"></i>
+          <i class="devicon-github-plain colored"></i>
+          <i class="devicons devicons-terminal"></i>
+        </div>
+      </div>
+
+      <!-- Services -->
+      <div class="skill-card">
+        <h4>Services</h4>
+        <div class="skill-icons">
+          <i class="devicon-amazonwebservices-original colored"></i>
+          <img src="{{ site.baseurl }}/assets/images/sap.png" class="sap-icon">
+        </div>
+      </div>
+
     </div>
+  </div>
+</section>
 
 
-    <hr>
-
-    <div class="container">
-      <div class="row">
-
-        <div class="col">
-          <div class="subheading mb-3">Databases</div>
-          <i class="devicons devicon-msql_server-plain colored fa-fw fa-3x"></i>
-
-          <i class="devicons devicon-mysql-plain colored fa-fw fa-3x"></i>
-
-        </div>
-        <div class="col">
-          <div class="subheading mb-3">Tools</div>
-          <i class="devicons devicon-visualstudio-plain colored fa-fw fa-3x"></i>
-
-          <i class="devicons devicon-atom-plain colored fa-fw fa-3x"></i>
-
-          <i class="devicons devicons-terminal fa-fw fa-3x"></i>
-
-        </div>
-
-        <div class="col">
-
-          <div class="subheading mb-3">Dev</div>
-          <i class="devicons devicon-github-plain colored fa-fw fa-3x"></i>
-
-          <i class="devicons devicons-codepen fa-fw fa-3x"></i>
-
-        </div>
-        <div class="col">
-          <div class="subheading mb-3">Services</div>
-
-          <i class="devicons devicon-amazonwebservices-plain-wordmark colored fa-fw fa-4x"></i>
-          <img src="{{ site.baseurl }}/assets/images/sap.png" width="70px" style="display:inline" align="top"></a>
-        </div>
 
 
+
+
+<script>
+  const cards = document.querySelectorAll('.skill-card');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('show');
+      }
+    });
+  }, { threshold: 0.2 });
+
+  cards.forEach(card => observer.observe(card));
+</script>
 
 
 
