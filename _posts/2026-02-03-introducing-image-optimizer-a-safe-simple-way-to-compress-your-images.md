@@ -19,6 +19,7 @@ This is our core principle. Image Optimizer runs entirely in your browser using 
 You can verify this yourself by opening your browser's developer tools and checking the network tab while using the tool. You'll see no image data being transmitted anywhere.
 
 **Dead Simple to Use**
+
 I believe powerful tools should be easy to use. Here's how it works:
 
 1. Drag and drop your images (or click to browse)
@@ -30,14 +31,17 @@ I believe powerful tools should be easy to use. Here's how it works:
 That's it. No account creation. No sign-ups. No learning curve.
 
 **Fast and Efficient**
+
 Processing happens directly on your device, which means:
 
 * No waiting for uploads or downloads
 * No server queues or processing delays
 * Works offline once the page loads
 * Handle multiple images at once
-* 
+
+
 **See the Results**
+
 The tool shows you exactly how much space you're saving with clear before-and-after statistics. Watch your multi-megabyte PNGs shrink to kilobytes while maintaining excellent visual quality.
 Key Features
 
@@ -61,5 +65,6 @@ For users with heightened security needs, you can download the HTML file and run
 Technical Excellence
 
 **Try It Now** [https://akhilgeo.github.io/ImageOptimizer---WebP/](https://akhilgeo.github.io/ImageOptimizer---WebP/)
+
 Image Optimizer is completely free to use. No registration, no limits, no catches.
 Whether you're a professional developer or someone who just wants to email photos without hitting attachment limits, Image Optimizer makes it easy.
