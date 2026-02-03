@@ -7,7 +7,6 @@ image: assets/images/post/ImageOptimizer.jpg
 ---
 
 I'm excited to announce the launch of Image Optimizer, a free web-based tool that makes image compression simple, fast, and completely private.
-
 ### Why I Built This
 In today's web, image optimization is crucial. Large image files slow down websites, increase loading times, and frustrate users. But many existing tools require uploading your images to unknown servers, raising privacy concerns especially when dealing with personal photos, client work, or sensitive materials.
 I wanted to create something different: a tool that's powerful yet respects your privacy completely.
