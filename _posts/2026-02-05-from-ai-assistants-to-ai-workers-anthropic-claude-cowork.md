@@ -6,8 +6,6 @@ categories:
 image: assets/images/post/cowork.jpg
 ---
 
-### What Claude Cowork Actually Is?
-
 Anthropic, the US AI startup behind the AI model Claude, recently unveiled Claude Cowork, a powerful AI tool that goes beyond traditional chatbot help. Instead of just generating text from prompts, Claude Cowork can carry out business tasks, workflows, and decision-making processes in areas like legal analysis, sales support, marketing, data review, finance operations, and more.
 
 **What makes Cowork unique:**
