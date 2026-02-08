@@ -5,7 +5,7 @@ permalink: /about/
 image: '/images/Akhil.jpg'
 ---
 
-Hi there! My name is **Akhil Abraham George**, and I'm an **SAP Consultant** at **Infosys**.
+Hi there! My name is **Akhil Abraham George**, and I'm an **SAP Consultant** at **TCS**.
 
 I’m part Consultant, part digital explorer, and a full-time lover of all things tech. My journey into the world of technology began with a simple curiosity for how things work, which eventually led me to pursue a degree in **Computer Science and Engineering**. Originally from the beautiful state of **Kerala, India**, I currently reside in **Kottayam**, where I balance my professional career with my passion for coding and continuous learning.
 

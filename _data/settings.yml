@@ -53,7 +53,7 @@ hero:
   enable: true
   hero_avatar: /images/akhil_avatar.jpg
   hero_title: Hi! I’m Akhil 👋
-  hero_subtitle: Akhil, a digital explorer.
+  hero_subtitle: Akhil Abraham George, a digital explorer.
   hero_description: |
     I’m an SAP Consultant, coder, and tech enthusiast. This blog is my personal knowledge base on enterprise solutions, programming, and digital innovation.
 
@@ -147,7 +147,7 @@ mailchimp:
 
 #-------------------------------
 # Footer Settings
-footer_description: Here, I share ideas, tools, and methods that help me balance productivity with creativity while keeping control over my digital world. Dive in, get inspired, and feel free to share your thoughts!
+footer_description: I created this space to share the workflows and tools that keep me productive without losing my creative spark. Have a look around, find some inspiration, and I’d love to hear your thoughts!
 
 
 #-------------------------------
