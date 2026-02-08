@@ -70,13 +70,13 @@ logos:
   logos_title: Stuff I like
   logo_image:
     - alt: "Code & Coffee"
-      image: "/images/code_coffee_icon.png"
+      image: "/images/code_coffee_icon.jpg"
     - alt: "Linux"
-      image: "/images/tux_icon.png"
+      image: "/images/tux_icon.jpg"
     - alt: "Enterprise Tech"
-      image: "/images/enterprise_icon.png"
+      image: "/images/enterprise_icon.jpg"
     - alt: "Gaming"
-      image: "/images/gaming_icon.png"
+      image: "/images/gaming_icon.jpg"
 
 
 #-------------------------------
