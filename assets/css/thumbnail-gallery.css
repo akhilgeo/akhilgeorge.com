@@ -1,63 +1,132 @@
-body {
-    background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
-    min-height: 100vh;
-    font: normal 16px sans-serif;
+/* Projects Gallery Styles */
+.gallery-container {
+    padding-top: 40px;
+    padding-bottom: 40px;
 }
 
 .gallery-container h1 {
     text-align: center;
-    margin-top: 70px;
-    font-family: 'Droid Sans', sans-serif;
-    font-weight: bold;
-    color: #58595a;
+    margin-bottom: 50px;
+    font-weight: 700;
+    font-size: 3rem;
 }
 
-.gallery-container p.page-description {
+.page-description {
     text-align: center;
-    margin: 30px auto;
-    font-size: 18px;
-    color: #85878c;
+    margin: 0 auto 60px;
+    max-width: 700px;
+    color: var(--text-alt-color);
+    font-size: 1.1rem;
+    line-height: 1.6;
 }
 
-.tz-gallery {
-    padding: 40px;
+/* Card Styles */
+.project-card {
+    background: var(--background-color);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
 }
 
-.tz-gallery .thumbnail {
-    padding: 0;
-    margin-bottom: 30px;
-    background-color: #fff;
-    border-radius: 4px;
-    border: none;
-    transition: 0.15s ease-in-out;
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.06);
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.2);
 }
 
-.tz-gallery .thumbnail:hover {
-    transform: translateY(-10px) scale(1.02);
+.project-card .lightbox {
+    display: block;
+    position: relative;
+    padding-top: 60%;
+    /* Aspect ratio */
+    overflow: hidden;
 }
 
-.tz-gallery .lightbox img {
-    border-radius: 4px 4px 0 0;
+.project-card .lightbox img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
 }
 
-.tz-gallery .caption{
-    padding: 26px 30px;
-    text-align: center;
+.project-card:hover .lightbox img {
+    transform: scale(1.05);
 }
 
-.tz-gallery .caption h3 {
-    font-size: 14px;
-    font-weight: bold;
-    margin-top: 0;
+.project-card .caption {
+    padding: 24px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
-.tz-gallery .caption p {
-    font-size: 12px;
-    color: #7b7d7d;
-    margin: 0;
+.project-card .caption h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--text-color);
 }
 
-.baguetteBox-button {
-    background-color: transparent !important;
+.project-card .caption p {
+    font-size: 0.95rem;
+    color: var(--text-alt-color);
+    line-height: 1.6;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+/* Tech Stack Icons */
+.project-card .tech-stack {
+    display: flex;
+    gap: 15px;
+    margin-top: auto;
+    border-top: 1px solid var(--border-color);
+    padding-top: 15px;
+}
+
+.project-card .tech-stack i {
+    font-size: 1.5rem;
+    color: var(--text-color);
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.project-card .tech-stack i span {
+    font-size: 0.8rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+.project-card .tech-stack i:hover {
+    color: var(--link-color);
+}
+
+/* Dark Mode Adjustments */
+[data-theme="dark"] .project-card {
+    background: var(--background-alt-color);
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .project-card {
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .gallery-container {
+        padding: 20px 0;
+    }
+
+    .project-card .caption {
+        padding: 20px;
+    }
 }

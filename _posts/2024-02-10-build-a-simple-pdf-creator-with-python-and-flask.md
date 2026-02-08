@@ -1,10 +1,11 @@
 ---
 title: Build a simple PDF creator with Python and Flask
-layout: post-right-sidebar
+layout: post
 categories:
 - Python
 - GitHub
 image: assets/images/post/PDFcreator.jpg
+tags: [Python,GitHub]
 description: In this blog post, I've demonstrated how to create a simple web application
   using Python and Flask for converting files to PDF. This solution provides a user-friendly
   interface for uploading files and seamlessly converting them into PDF format. By

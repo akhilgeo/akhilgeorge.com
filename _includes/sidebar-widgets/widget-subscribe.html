@@ -1,0 +1,18 @@
+{% if site.data.settings.mailchimp.enable == true %}
+<div class="widget widget-subscribe">
+  <div class="widget-subscribe__content">
+    {% if site.data.settings.mailchimp.mailchimp_title %}
+    <h2 class="widget-subscribe__title">{{ site.data.settings.mailchimp.mailchimp_title }}</h2>
+    {% endif %}
+    {% if site.data.settings.mailchimp.mailchimp_description %}
+    <p class="widget-subscribe__description">{{ site.data.settings.mailchimp.mailchimp_description }}</p>
+    {% endif %}
+  </div>
+  <form class="widget-subscribe__form validate"
+    action="{% if site.data.settings.mailchimp.mailchimp_identifier %}//{{site.data.settings.mailchimp.mailchimp_identifier}}{% else %}#{% endif %}" method="POST" id="membedded-subscribe-form" name="membedded-subscribe-form" target="_blank" novalidate>
+    <label class="screen-reader-text" for="mce-EMAIL">Email address</label>
+    <input class="widget-subscribe__email required email" id="mce-EMAIL" type="text" name="EMAIL" placeholder="{% if site.data.settings.mailchimp.mailchimp_input_text %}{{ site.data.settings.mailchimp.mailchimp_input_text }}{% else %}Email address{% endif %}">
+    <button class="button button--secondary button--big widget-subscribe__button" id="membedded-subscribe" type="submit" name="subscribe">{{ site.data.settings.mailchimp.mailchimp_button_text }}</button>
+  </form>
+</div>
+{% endif %}

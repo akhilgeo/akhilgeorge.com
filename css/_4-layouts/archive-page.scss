@@ -1,0 +1,144 @@
+/* Archive Page */
+.archive-page {
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.archive-page__head {
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--border-color);
+
+  .archive-page__title {
+    font-size: 48px;
+  }
+
+  .archive-page__description {
+    font-size: 18px;
+  }
+
+  @media (max-width: $mobile) {
+    .archive-page__description {
+      font-size: 16px;
+    }
+  }
+}
+
+.archive-page__group {
+  margin-bottom: 60px;
+
+  &:last-child {
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border-bottom: none;
+  }
+
+  .archive-page__list {
+    display: grid;
+    grid-template-columns: auto auto;
+
+    @media (max-width: $desktop) {
+      grid-template-columns: auto;
+    }
+  }
+
+  .archive-page__year,
+  .archive-page__month {
+    sup {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-alt-color);
+    }
+  }
+
+  .archive-page__month {
+    margin-right: 32px;
+    font-size: 20px;
+    font-weight: 600;
+
+    @media (max-width: $desktop) {
+      margin-bottom: 24px;
+    }
+  }
+}
+
+.archive-page__collection {
+  margin-bottom: 48px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: $mobile) {
+    margin-bottom: 32px;
+  }
+}
+
+.archive-article {
+  display: flex;
+  margin-bottom: 8px;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+
+  .archive-article__title {
+    margin-right: auto;
+    margin-bottom: 0;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.6;
+
+    a {
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      text-decoration-thickness: 1.4px;
+      text-underline-offset: 2px;
+
+      &:hover {
+        text-decoration-color: var(--heading-font-color);
+        color: var(--heading-font-color);
+      }
+    }
+  }
+
+  .archive-article__meta {
+    flex: 0 0 auto;
+    margin-left: 32px;
+    line-height: 1;
+
+    .archive-article__date,
+    .archive-article__minutes {
+      font-family: $heading-font-family;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: var(--text-alt-color);
+    }
+
+    .archive-article__date {
+      font-size: 14px;
+    }
+
+    .archive-article__minutes {
+      margin-top: 8px;
+      font-size: 12px;
+    }
+  }
+
+  @media (max-width: $desktop) {
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+  }
+
+  @media (max-width: $mobile) {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .archive-article__title {
+      font-size: 16px;
+    }
+
+    .archive-article__meta {
+      margin-top: 4px;
+      margin-left: 0;
+    }
+  }
+}

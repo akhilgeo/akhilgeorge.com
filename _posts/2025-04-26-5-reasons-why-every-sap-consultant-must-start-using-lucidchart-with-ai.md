@@ -1,12 +1,13 @@
 ---
 title: 5 reasons why every SAP consultant must start using Lucidchart with AI
-layout: post-right-sidebar
+layout: post
 description: |-
   It has been widely recognized for being an effortless tool for developing process diagrams, flowcharts, and system architecture.
   Now that there is AI integrated, it auto-generates flowcharts from document inputs or simple text prompts. Rather than dragging boxes and arrows by hand, you write out your process — and Lucidchart constructs the draft for you in seconds!
 categories:
 - SAP
 image: assets/images/post/lucidchart.jpg
+tags: [SAP]
 ---
 
 With today’s fast-paced SAP environment, time and clarity are of the essence. Whether you are documenting the Order-to-Cash (O2C) process for a customer or crafting a custom enhancement, precise visual communications are essential.

@@ -1,0 +1,27 @@
+{% if site.tags.size > 0 %}
+<div class="widget widget-tags">
+  <div class="widget-sidebar-head">
+    <h2 class="widget-sidebar-title">Topics</h2>
+  </div>
+
+  <div class="tag-cloud">
+    {% for tag in site.tags %}
+      {% assign tag_name = tag[0] %}
+      {% assign tag_posts = tag[1] %}
+      {% assign tag_color = 'var(--dark-gray)' %}
+
+      {% for post in tag_posts %}
+        {% if tag_color == 'var(--dark-gray)' %}
+          {% assign tag_color = post.tags_color | default: tag_color %}
+        {% endif %}
+      {% endfor %}
+
+      <a href="{{ site.baseurl }}/tags/?tag={{ tag_name | downcase | url_encode }}"
+         class="tag-cloud__item"
+         style="background: {{ tag_color }};">
+        {{ tag_name }}
+      </a>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}

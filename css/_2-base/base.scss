@@ -1,0 +1,276 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: $base-font-family;
+  font-size: $base-font-size;
+  line-height: $base-line-height;
+  letter-spacing: $base-letter-spacing;
+  overflow-x: hidden;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  &.search-is-visible {
+    overflow: hidden;
+    -webkit-overflow-scrolling: auto;
+  }
+
+  &.disable-animation {
+    *, *::after, *::before {
+      transition: none !important;
+    }
+  }
+
+  @media (max-width: $mobile) {
+    font-size: 16px;
+  }
+}
+
+.global-wrap {
+  &.is-active {
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-bottom: 16px;
+  font-family: $heading-font-family;
+  font-weight: $heading-font-weight;
+  line-height: $heading-line-height;
+  letter-spacing: $heading-letter-spacing;
+  color: var(--heading-font-color);
+}
+
+h1 {
+  font-size: $font-size-h1;
+}
+
+h2 {
+  font-size: $font-size-h2;
+}
+
+h3 {
+  font-size: $font-size-h3;
+}
+
+h4 {
+  font-size: $font-size-h4;
+}
+
+h5 {
+  font-size: $font-size-h5;
+}
+
+h6 {
+  font-size: $font-size-h6;
+}
+
+blockquote {
+  position: relative;
+  margin: 68px 0 40px;
+  font-family: $heading-font-family;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 600;
+  text-align: center;
+  color: var(--heading-font-color);
+
+  &::before {
+    font-size: 300%;
+    line-height: .3;
+    display: block;
+    content: "\201C";
+    color: var(--primary-color);
+  }
+
+  &.q-left {
+    padding: 0 24px;
+    margin: 40px 0;
+    font-size: 24px;
+    text-align: left;
+    border-left: 4px solid var(--primary-color);
+
+    &::before {
+      content: none;
+    }
+  }
+
+  p {
+    margin-bottom: 0;
+  }
+
+  cite {
+    display: inline-block;
+    margin-top: 12px;
+    font-family: $base-font-family;
+    font-size: 14px;
+    font-weight: 500;
+    font-style: normal;
+    color: var(--heading-font-color);
+  }
+
+  @media (max-width: $tablet) {
+    padding: 0 16px;
+  }
+
+  @media (max-width: $mobile) {
+    font-size: 24px;
+
+    &.q-left {
+      font-size: 21px;
+    }
+  }
+}
+
+pre {
+  overflow: auto;
+  padding: 15px;
+  margin-bottom: 0;
+  font-size: 14px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: break-all;
+  color: var(--heading-font-color);
+
+  &.highlight {
+    &:hover {
+      button {
+        opacity: 1;
+      }
+    }
+  }
+
+  &.highlight>button {
+    opacity: 0;
+
+    &:hover {
+      opacity: 1;
+      color: var(--white);
+      background: var(--primary-color);
+    }
+  }
+
+  &.highlight>button:active,
+  &.highlight>button:focus {
+    opacity: 1;
+  }
+
+  button {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    padding: 8px 12px;
+    border-radius: 30px;
+    font-family: $heading-font-family;
+    font-size: 14px;
+    line-height: 1;
+    font-weight: 500;
+    outline: none;
+    border: none;
+    color: var(--background-color);
+    background: var(--heading-font-color);
+    opacity: 0;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+img,
+.gallery {
+  &+em {
+    display: block;
+    margin-top: 12px;
+    font-family: $heading-font-family;
+    font-size: 14px;
+    line-height: 1.4;
+    font-style: normal;
+    font-weight: normal;
+    text-align: center;
+    color: var(--text-alt-color);
+  }
+}
+
+a {
+  text-decoration: none;
+  color: var(--link-color);
+  transition: $global-transition;
+}
+
+hr {
+  width: 100%;
+  height: 1px;
+  margin: 64px 0;
+  border: 0;
+  background: var(--border-color);
+
+  @media (max-width: $mobile) {
+    margin: 48px 0;
+  }
+}
+
+.table-container {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  font-size: 12px;
+  color: var(--heading-font-color);
+  width: 100%;
+  border-width: 1px;
+  border-color: var(--border-alt-color);
+  border-collapse: collapse;
+  color: var(--heading-font-color);
+}
+
+table th {
+  padding: 10px;
+  font-size: 16px;
+  text-align: left;
+  border: 1px solid var(--th-color);
+  color: var(--heading-font-color);
+  font-weight: 700;
+}
+
+table tr {
+  background: var(--tr-color);
+
+  &:nth-child(even) {
+    background: transparent;
+  }
+}
+
+table td {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid var(--th-color);
+}
+
+.lazy {
+  opacity: 0;
+  filter: blur(10px);
+  transition: filter .4s ease-in-out;
+}
+
+.lazy.loaded {
+  opacity: 1;
+  filter: blur(0);
+}

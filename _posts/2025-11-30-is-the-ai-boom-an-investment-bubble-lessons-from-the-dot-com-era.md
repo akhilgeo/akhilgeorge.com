@@ -1,12 +1,13 @@
 ---
 title: Is the AI Boom an Investment Bubble? Lessons From the Dot-Com Era
-layout: post-right-sidebar
+layout: post
 categories:
 - AI
 description: In recent years, Artificial Intelligence has become a hot topic in technology
   and investment. Companies are eager to integrate AI into their operations, startups
   are raising millions based on prototypes, and stock prices of A
-image: assets/images/post/ai vs com.png
+image: assets/images/post/ai vs com.jpg
+tags: [AI]
 ---
 
 In recent years, Artificial Intelligence has become a hot topic in technology and investment. Companies are eager to integrate AI into their operations, startups are raising millions based on prototypes, and stock prices of AI-focused firms have surged. This surge in enthusiasm raises an important question:

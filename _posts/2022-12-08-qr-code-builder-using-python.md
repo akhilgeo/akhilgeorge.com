@@ -1,9 +1,10 @@
 ---
 title: QR code Builder using Python
-layout: post-right-sidebar
+layout: post
 categories:
 - Python
 image: assets/images/post/qrcode_builder.jpg
+tags: [Python]
 featured: true
 ---
 

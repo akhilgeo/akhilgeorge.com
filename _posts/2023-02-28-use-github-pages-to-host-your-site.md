@@ -1,9 +1,10 @@
 ---
 title: Use Github pages to host your site
-layout: post-right-sidebar
+layout: post
 categories:
 - GitHub
 image: assets/images/post/github.png
+tags: [GitHub]
 ---
 
 If you're building a website, you might be wondering where to host it. While there are plenty of hosting options out there, one option you might want to consider is using GitHub Pages.

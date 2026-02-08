@@ -1,0 +1,215 @@
+/* Article */
+.article {
+  margin-bottom: 32px;
+  will-change: transform;
+}
+
+.article__head {
+  position: relative;
+
+  &:hover {
+    .video-icon {
+      transform: translate(-50%, -50%) scale(1.14);
+    }
+  }
+}
+
+.article__content {
+  font-size: 0;
+}
+
+.article__image {
+  position: relative;
+  transform: scale3d(1, 1, 1);
+  display: block;
+  margin-bottom: 24px;
+  aspect-ratio: 4/3;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--background-alt-color);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  will-change: transform;
+
+  &:hover {
+    transform: scale3d(1.04, 1.04, 1);
+    box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.6)
+  }
+
+  img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    user-select: none;
+  }
+
+  @supports not (aspect-ratio: 4/3) {
+    padding-bottom: 75%;
+  }
+}
+
+.video-icon {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 68px;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid var(--white);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.4) 100%);
+  box-shadow: 0px 100px 80px rgba(0, 0, 0, 0.07), 0px 41.7776px 33.4221px rgba(0, 0, 0, 0.0503198), 0px 22.3363px 17.869px rgba(0, 0, 0, 0.0417275);
+  overflow: hidden;
+  pointer-events: none;
+  transition: transform .2s;
+  will-change: transform;
+
+  @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    backdrop-filter: saturate(180%) blur(12px);
+    background: transparent;
+  }
+
+  svg {
+    width: 44px;
+    fill: var(--white);
+    stroke: var(--white);
+    stroke-linejoin: round;
+    stroke-width: 8;
+  }
+}
+
+.article__tags {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+  line-height: 1;
+
+  .article__tag {
+    padding: 4px 8px;
+    font-family: $heading-font-family;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.2;
+    border-radius: 4px;
+    color: var(--white);
+
+    &:hover {
+      opacity: .9;
+    }
+  }
+}
+
+.article__title {
+  margin-bottom: 12px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.6;
+
+  a {
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 1.6px;
+    text-underline-offset: 2px;
+
+    &:hover {
+      text-decoration-color: var(--heading-font-color);
+      color: var(--heading-font-color);
+    }
+  }
+}
+
+.article__excerpt {
+  display: -webkit-box;
+  margin-bottom: 0;
+  font-size: 16px;
+  color: var(--text-color);
+  overflow-y: hidden;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.article__meta {
+  margin-top: 20px;
+  line-height: 1;
+
+  .article__date,
+  .article__minutes {
+    font-family: $heading-font-family;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: var(--text-alt-color);
+  }
+
+  .article__date {
+    font-size: 14px;
+  }
+
+  .article__minutes {
+    margin-top: 8px;
+    font-size: 12px;
+  }
+}
+
+/* View List */
+.view-list {
+  .article--flexible {
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border-color);
+
+    &.col {
+      width: 100%;
+    }
+
+    .article__inner {
+      display: flex;
+      align-items: flex-start;
+      gap: 32px;
+
+      .article__head {
+        flex-shrink: 0;
+        width: 100%;
+        max-width: 180px;
+
+        .video-icon {
+          width: 56px;
+          height: 56px;
+        }
+
+        .article__image {
+          margin-bottom: 0;
+          border-radius: 8px;
+        }
+      }
+    }
+
+    @media (max-width: $mobile) {
+      padding-bottom: 0;
+      border-bottom: none;
+
+      .article__inner {
+        flex-direction: column;
+        gap: 20px;
+
+        .article__head {
+          max-width: 100%;
+
+          .video-icon {
+            width: 68px;
+            height: 68px;
+          }
+
+          .article__image {
+            border-radius: 16px;
+          }
+        }
+      }
+    }
+  }
+}

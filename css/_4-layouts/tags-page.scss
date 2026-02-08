@@ -1,0 +1,39 @@
+/* Tags */
+.tags__inner {
+
+  &.is-hidden {
+    display: none;
+  }
+
+  .tag__info {
+    padding: 32px;
+    margin-bottom: 32px;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    background: var(--background-alt-color-2);
+  }
+
+  .tag__title {
+    margin-bottom: 4px;
+    font-size: 48px;
+  }
+
+  .tag__description {
+    margin: 0;
+
+    span {
+      font-weight: 600;
+      color: var(--heading-font-color);
+    }
+  }
+
+  @media (max-width: $mobile) {
+    .tag__title {
+      font-size: 32px;
+    }
+
+    .tag__description {
+      font-size: 16px;
+    }
+  }
+}

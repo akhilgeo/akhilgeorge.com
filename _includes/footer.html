@@ -1,0 +1,108 @@
+<!-- begin footer -->
+<footer class="footer">
+
+  <div class="footer__inner">
+    <div class="container">
+      <div class="row">
+
+        <div class="col col-4 col-d-12">
+          <h3 class="footer__info__title">About Me</h3>
+          {% if site.data.settings.footer_description %}
+          <p class="footer__info__description">{{ site.data.settings.footer_description }}</p>
+          {% endif %}
+          {% if site.data.settings.social %}
+          <div class="footer__social">
+            <ul class="footer__social__list list-reset">
+              {% for social in site.data.settings.social %}
+              <li class="footer__social__item">
+                <a class="footer__social__link" href="{{ social.link }}" target="_blank" rel="noopener"
+                  aria-label="{{ social.name }} link"><i class="{{ social.icon }}"></i></a>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="col col-4 col-d-12">
+          <h3 class="footer__title">Recent Posts</h3>
+          <div class="footer__recent-posts">
+            {% for post in site.posts limit:3 %}
+            <div class="footer__recent-content">
+              {% if post.image %}
+              <a href="{{ post.url | relative_url }}" class="footer__recent-image">
+                {% if post.video_embed %}
+                <div class="video-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                    <polygon points="40,30 70,50 40,70"></polygon>
+                  </svg>
+                </div>
+                {% endif %}
+                <img class="lazy" data-src="{{ post.image | relative_url }}" alt="{{ post.title }}">
+              </a>
+              {% endif %}
+              <div class="footer__recent-meta">
+                <h3 class="footer__recent-title"><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+                <time class="footer__recent-date" datetime="{{ post.date | date_to_xmlschema }}">{% assign date_format =
+                  site.minima.date_format | default: "%d %-b, %Y" %}{{ post.date | date: date_format }}</time>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        {% if site.data.settings.menu_settings.menu_items %}
+        <div class="col col-2 col-d-6 col-m-12">
+          <div class="footer-nav__left">
+            <h3 class="footer__title">Menu</h3>
+            <div class="footer-nav__list">
+              {% for item in site.data.settings.menu_settings.menu_items %}
+              {% if item.submenu %}
+              {% else %}
+              <a class="footer-nav__link" href="{{ item.url | relative_url }}">{{ item.title }}</a>
+              {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        {% assign has_submenu = false %}
+        {% for item in site.data.settings.menu_settings.menu_items %}
+        {% if item.submenu and item.submenu != empty %}
+        {% assign has_submenu = true %}
+        {% endif %}
+        {% endfor %}
+
+        {% if has_submenu %}
+        <div class="col col-2 col-d-6 col-m-12">
+          <div class="footer-nav__right">
+            {% for item in site.data.settings.menu_settings.menu_items %}
+            {% if item.submenu %}
+            <h3 class="footer__title">{{ item.title }}</h3>
+            <div class="footer-nav__list">
+              {% for submenu-item in item.submenu %}
+              <a class="footer-nav__link" href="{{ submenu-item.url | relative_url }}">{{submenu-item.title}}</a>
+              {% endfor %}
+            </div>
+            {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+      </div>
+
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col col-12">
+        <div class="copyright">{{ site.time | date: '%Y' }} &copy; <a href="/">{{ site.data.settings.title }}</a>.</div>
+      </div>
+    </div>
+  </div>
+
+</footer>
+<!-- end footer -->

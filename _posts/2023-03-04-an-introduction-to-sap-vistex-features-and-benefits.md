@@ -1,7 +1,8 @@
 ---
 title: 'An Introduction to SAP Vistex: Features and Benefits'
-layout: post-right-sidebar
+layout: post
 image: assets/images/post/vistex2.jpg
+tags: [SAP]
 categories:
 - SAP
 ---

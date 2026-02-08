@@ -1,6 +1,6 @@
 ---
 title: AI is reshaping IT industry - A Look at the 2–3 Year Roadmap
-layout: post-right-sidebar
+layout: post
 categories:
 - AI
 description: The IT sector is about to change radically. The industry has changed
@@ -8,6 +8,7 @@ description: The IT sector is about to change radically. The industry has change
   entering the age of artificial intelligence (AI). It is a structural change in how
   software is conceived, created, tested, and kept, not just a wave of automation.
 image: assets/images/post/AI reshape.jpg
+tags: [AI]
 ---
 
 The IT sector is about to change radically. The industry has changed over the past few decades from on-premise infrastructure to the cloud; now it is entering the age of artificial intelligence (AI). It is a structural change in how software is conceived, created, tested, and kept, not just a wave of automation.

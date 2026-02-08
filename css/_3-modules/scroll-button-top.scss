@@ -1,0 +1,31 @@
+/* Scroll Button Top */
+.top {
+  position: fixed;
+  bottom: 12px;
+  right: -100px;
+  z-index: 5;
+  width: 44px;
+  height: 44px;
+  font-size: 16px;
+  line-height: 44px;
+  text-align: center;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: var(--white);
+  cursor: pointer;
+  transition: all .25s ease;
+
+  &:hover {
+    opacity: .9;
+  }
+
+  &.is-active {
+    right: 12px;
+  }
+
+  @media (max-width: $tablet) {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+  }
+}

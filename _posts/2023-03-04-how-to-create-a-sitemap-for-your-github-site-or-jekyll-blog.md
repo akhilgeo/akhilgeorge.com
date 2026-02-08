@@ -1,10 +1,11 @@
 ---
 title: How to create a Sitemap for your Github Site or Jekyll blog?
-layout: post-right-sidebar
+layout: post
 categories:
 - Jekyll
 - GitHub
 image: assets/images/post/Sitemap_xml.jpg
+tags: [Jekyll,GitHub]
 ---
 
 A sitemap is an important component of any website or blog, including a Jekyll blog.  Sitemap is a valuable tool for improving the visibility, usability, and maintenance of your Jekyll blog. It can help you attract more visitors, keep them engaged, and ensure your blog is running smoothly.

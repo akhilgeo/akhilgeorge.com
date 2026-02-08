@@ -2,24 +2,57 @@
 layout: default
 ---
 
+<!-- begin page -->
+<div class="container">
+  <div class="row">
 
-<section>
-    <div class="section-title">
-        <h2><span>{{ page.title }}</span></h2>
-    </div>
-    
-    <div class="article-post">
-    {{content}}
-    </div>
-    
-    {% if page.comments == true %}
-    
-    <div id="comments" class="row mb-5">
-        <div class="col-md-8">              
-            {% include disqus.html %}                
+    <div class="col col-8 col-d-12">
+      <div class="page-head">
+
+        {% if page.video_embed %}
+        <div class="page-video">
+          <div class="page-video__wrap">
+            <iframe src="{{ page.video_embed }}" loading="lazy" width="640" height="360" frameborder="0" webkitallowfullscreen
+              mozallowfullscreen allowfullscreen></iframe>
+          </div>
         </div>
+        {% else %}
+        {% if page.image %}
+        <div class="page-image">
+          <img class="lazy" data-src="{{ page.image | relative_url }}" alt="{{ page.title }}">
+        </div>
+        {% endif %}
+        {% endif %}
+
+        <div class="page-info">
+          <h1 class="page-title">{{ page.title | escape }}</h1>
+        </div>
+
+      </div>
+
+      <article class="page">
+        <div class="page__content">
+          {% if page.toc == true %}
+          <div class="page__toc">
+            <h2 class="page__toc__title">Table of Contents</h2>
+            {% include toc.html html=content ordered=true class="page__toc__list" h_min=2 %}
+          </div>
+          {% endif %}
+
+          {{ content }}
+        </div>
+      </article>
     </div>
-    
-    {% endif %}
-    
-</section>
+
+    <div class="col col-4 col-d-12">
+      <aside class="sidebar">
+        {% include sidebar-widgets/widget-subscribe.html %}
+        {% include sidebar-widgets/widget-social.html %}
+        {% include sidebar-widgets/widget-featured-posts.html %}
+        {% include sidebar-widgets/widget-tags.html %}
+      </aside>
+    </div>
+
+  </div>
+</div>
+<!-- end page -->

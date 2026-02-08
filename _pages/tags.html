@@ -1,0 +1,62 @@
+---
+layout: default
+title: Tags
+permalink: /tags/
+---
+
+{% capture site_tags %}{% for tag in site.tags %}{{ tag | first }}{% unless forloop.last %},{% endunless %}{% endfor
+%}{% endcapture %}
+{% assign tag_words = site_tags | split:',' | sort %}
+
+<!-- begin tags -->
+<section class="section tags">
+  <div class="container">
+    <div class="row">
+
+      <div class="col col-8 col-d-12">
+        {% for item in (0..site.tags.size) %}{% unless forloop.last %}
+        {% capture this_word %}{{ tag_words[item] | strip_newlines }}{% endcapture %}
+
+        <div class="tags__inner is-hidden" id="{{ this_word | downcase | url_decode }}">
+          <div class="tag__info">
+            <div class="tag__info__box">
+              <h2 class="tag__title">{{ this_word }}</h2>
+              <p class="tag__description">A collection of <span>{{ site.tags[this_word].size }} {% if site.tags[this_word].size < 2 %}Post{% else %}Posts{% endif %}</span></p>
+              </div>
+            </div>
+            <div class="row">
+              {% for post in site.tags[this_word] %}
+              {% if post.title != null %}
+              {% include article.html class="col col-6 col-t-12 grid__post animate" %}
+              {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+
+          {% endunless %}
+          {% endfor %}
+        </div>
+
+        <div class="col col-4 col-d-12">
+          <aside class="sidebar">
+            {% include sidebar-widgets/widget-subscribe.html %}
+            {% include sidebar-widgets/widget-social.html %}
+            {% include sidebar-widgets/widget-featured-posts.html %}
+            {% include sidebar-widgets/widget-tags.html %}
+          </aside>
+        </div>
+
+      </div>
+    </div>
+</section>
+<!-- end tags -->
+
+<script>
+  var tag_name = decodeURIComponent(window.location.search.split('=')[1]);
+  if (tag_name) {
+    var el = document.getElementById(tag_name);
+    if (el) {
+      el.classList.remove("is-hidden");
+    }
+  }
+</script>

@@ -1,6 +1,6 @@
 ---
 title: 'Beyond Borders: Nammude Malayalam Cinema - A Pinnacle of Storytelling Brilliance'
-layout: post-right-sidebar
+layout: post
 categories: []
 description: For Malayalee viewers, Malayalam cinema is more than just a form of entertainment;
   it's an emotion, a connection to our roots, and a reflection of our identity. The

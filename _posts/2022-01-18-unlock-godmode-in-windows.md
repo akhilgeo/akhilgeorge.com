@@ -1,9 +1,10 @@
 ---
 title: Unlock GodMode in Windows
-layout: post-right-sidebar
+layout: post
 categories:
 - Windows
 image: assets/images/post/Godmode_h.png
+tags: [Windows]
 ---
 
 A heads up first - This is not like the other GodModes you have seen.  It doesn't unwind any new superpowers or secret features.

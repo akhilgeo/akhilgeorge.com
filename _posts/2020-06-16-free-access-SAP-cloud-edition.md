@@ -1,9 +1,10 @@
 ---
 title: How to get free access to SAP Cloud platform developer edition?
-layout: post-right-sidebar
+layout: post
 categories:
 - SAP
 image: assets/images/post/sap-cloud-platform.jpg
+tags: [SAP]
 featured: false
 ---
 

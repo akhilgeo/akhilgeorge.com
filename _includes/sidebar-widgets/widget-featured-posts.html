@@ -1,0 +1,40 @@
+{% for post in site.posts %}
+  {% if post.featured == true %}
+    {% assign is-featured = true %}
+  {% endif %}
+{% endfor %}
+
+{% if is-featured == true %}
+{% assign count = 0 %}
+{% assign featuredPosts = site.posts | where: 'featured', true %}
+<div class="widget widget-featured-posts">
+  <div class="widget-sidebar-head">
+    <h2 class="widget-sidebar-title">Featured posts</h2>
+  </div>
+  {% for fp in featuredPosts %}
+    {% if fp.url != page.url %}
+    {% assign count = count | plus:1 %}
+    <div class="post-featured-content">
+      {% if fp.image %}
+      <a href="{{ fp.url | relative_url }}" class="post-featured-image">
+        {% if fp.video_embed %}
+        <div class="video-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+            <polygon points="40,30 70,50 40,70"></polygon>
+          </svg>
+        </div>
+        {% endif %}
+        <img class="lazy" data-src="{{ fp.image | relative_url }}" alt="{{ fp.title }}">
+      </a>
+      {% endif %}
+      <div class="post-featured-meta">
+        <h3 class="post-featured-title"><a href="{{ fp.url | relative_url }}">{{ fp.title }}</a></h3>
+        <time class="post-featured-date" datetime="{{ fp.date | date_to_xmlschema }}">{% assign date_format = site.minima.date_format | default: "%d %-b, %Y" %}{{ fp.date | date: date_format }}</time>
+      </div>
+    </div>
+    {% if count == 8 %}{% break %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+</div>
+{% endif %}

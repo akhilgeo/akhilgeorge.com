@@ -1,0 +1,49 @@
+---
+layout: default
+title: Videos
+description: Commercials, Music Videos, Television, TV News, Corporate video, and everything in between.
+permalink: /videos/
+image: '/images/01.jpg'
+---
+
+<!-- begin videos-page -->
+<section class="section videos-page">
+  {% assign sorted = site.posts | where_exp: 'post', "post.video_embed != nil" %}
+  <div class="container">
+    <div class="section__inner">
+      <div class="row">
+
+        <div class="col col-8 col-d-12">
+          <section class="hero-page">
+            <div class="hero-page__inner">
+              {% if page.title %}
+              <h1 class="hero-page__title">{{ page.title }}</h1>
+              {% endif %}
+              {% if page.description %}
+              <p class="hero-page__description">{{ page.description }}</p>
+              {% endif %}
+            </div>
+          </section>
+          <div class="row">
+            {% for post in sorted %}
+            {% if post.video_embed %}
+              {% include article.html class="col col-6 col-t-12 grid__post animate" %}
+            {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="col col-4 col-d-12">
+          <aside class="sidebar">
+            {% include sidebar-widgets/widget-subscribe.html %}
+            {% include sidebar-widgets/widget-social.html %}
+            {% include sidebar-widgets/widget-featured-posts.html %}
+            {% include sidebar-widgets/widget-tags.html %}
+          </aside>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+<!-- end videos-page -->

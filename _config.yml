@@ -1,44 +1,46 @@
-# Site
-name: "Akhil Abraham George | akhil abraham george"
-title: "Akhil Abraham George | akhilgeorge.com"
-description: "Hello, my name is Akhil Abraham George. I am a blogger living in Kerala. I work as an Consultant and this is my space on Interwebs."
-meta_description: "Akhil Abraham George, akhil abraham george, Akhil George, akhilgeo, akhilgeorge, akhil george"
-logo: 'assets/images/logo.png'
-favicon: 'assets/images/favicon.ico'
-paginate: 12
-baseurl: 
-email: 'geoakhil@gmail.com'
-google_analytics: 'UA-46278016-1'
-disqus: 'akhilgeo'
-sharethis: '<script async src="https://platform-api.sharethis.com/js/sharethis.js#property=5ed541cc2978280013bc9e6b&product=sticky-share-buttons"></script>'
+#-------------------------------
+# General Site Settings
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://akhil.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+
+title: Akhil Abraham George | akhilgeorge.com
+description: "Hello, my name is Akhil Abraham George. I am a Blogger and SAP Consultant based in Kerala, India. This is my digital space on the Interwebs where I share insights on Enterprise Tech, Software Development, and Innovation."
+author: Akhil Abraham George
+email: mail@akhilgeorge.com
+github:
+  username: akhilgeo
+social:
+  name: Akhil Abraham George
+  links:
+    - https://linkedin.com/in/akhilgeorge
+    - https://facebook.com/akhilgeo
+    - https://instagram.com/akhilgeo
+    - https://github.com/akhilgeo
+
+
+#-------------------------------
+# Build Settings
+markdown: kramdown
 permalink: /:title
-
-# Authors
-
-
-# Plugins
-plugins: 
+plugins:
   - jekyll-paginate
   - jekyll-sitemap
-  - jekyll-feed
-  - jekyll-seo-tag
-  - jekyll-archives
   - jekyll-admin
-  - jekyll-loading-lazy
+  - jekyll-seo-tag
+
+paginate: 4
+paginate_path: "/page/:num"
+
+# Pages Path
+defaults:
+  - scope:
+      path: '_pages'
+    values:
+      permalink: /:basename:output_ext
 
 
-category_archive:
-  type: jekyll-archives
-  path: /categories/
-        
-# Archives
-jekyll-archives:
-  enabled:
-    - categories
-  layout: archive
-  permalinks:
-    category: '/categories/:name/'
-    
-# Other
-markdown: kramdown
-highlighter: rouge
+include:
+  - _pages
+
+sass:
+  style: compressed

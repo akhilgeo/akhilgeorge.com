@@ -1,0 +1,57 @@
+{% if site.data.settings.tags_section.enable == true and site.data.settings.tags_section.tags != null %}
+<!-- begin section-tags -->
+<section class="section section-tags">
+  <div class="section-tags__inner">
+    <div class="container">
+      <div class="row">
+        <div class="col col-12">
+
+          <div class="section__head">
+            {% if site.data.settings.tags_section.tags_section_title %}
+            <h2 class="section__title">{{ site.data.settings.tags_section.tags_section_title }}</h2>
+            {% endif %}
+          </div>
+
+          <div class="row">
+            {% assign tags = site.data.settings.tags_section.tags %}
+            {% for tag_data in tags %}
+              {% assign posts_with_tag = site.posts | where: "tags", tag_data.tag %}
+
+              {% assign tag_color = 'var(--dark-gray)' %}
+              {% for post in posts_with_tag %}
+                {% if tag_color == 'var(--dark-gray)' %}
+                  {% assign tag_color = post.tags_color | default: tag_color %}
+                {% endif %}
+              {% endfor %}
+
+              {% if posts_with_tag.size > 0 %}
+              <div class="col col-3 col-d-6 col-m-12">
+                {% if tag_data.image %}
+                <a href="{{ site.baseurl }}/tags/?tag={{ tag_data.tag | downcase | url_encode }}" class="section-tags__image" style="outline-color: {{ tag_color }};">
+                  <span class="section-tags__name" style="background: {{ tag_color }};">{{ tag_data.tag }}</span>
+                  <img class="lazy" data-src="{{ tag_data.image | relative_url }}" alt="{{ tag_data.tag }}">
+                </a>
+                {% endif %}
+
+                <div class="section-tags__content">
+                  {% assign current_tag = tag_data.tag %}
+                  {% assign posts = site.posts | where: "tags", current_tag %}
+                  {% for post in posts limit: 4 %}
+                  <h3 class="section-tags__title">
+                    <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+                  </h3>
+                  {% endfor %}
+                </div>
+              </div>
+              {% endif %}
+
+            {% endfor %}
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- end section-tags -->
+{% endif %}

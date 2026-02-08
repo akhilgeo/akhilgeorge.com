@@ -1,9 +1,11 @@
 ---
 title: Free Minimal Website Template for Developers - DeveloperFolio
-layout: post-right-sidebar
+layout: post
 categories:
 - Github
 image: assets/images/Developerfolio.jpg
+tags: [Github]
+featured: true
 ---
 
 I have just developed a new website template for developers who are looking for a clean and simple online portfolio.

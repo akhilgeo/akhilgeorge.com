@@ -1,6 +1,6 @@
 ---
 title: How to easily create SAP mockup screen for Functional Consultant?
-layout: post-right-sidebar
+layout: post
 categories:
 - SAP
 - Windows
@@ -13,6 +13,7 @@ description: One of the common challenges an SAP consultant comes across is to p
   for designing user interfaces, and these tend to end up being less than ideal—less
   than what we envision, and more importantly, what our clients are expecting.
 image: assets/images/post/SAP Mockup.jpg
+tags: [SAP,Windows]
 ---
 
 One of the common challenges an SAP consultant comes across is to provide a clear vision in front of our clients of what our proposed solution can do. A significant part of that is preparation of the mockup screens, which would give an impression of an SAP ECC environment. However, the tools at our disposal for accomplishing this job are somewhat limited. Many of us traditionally use Microsoft Excel for such mockups. While Excel is a versatile tool, it certainly isn't much of an ideal for designing user interfaces, and these tend to end up being less than ideal—less than what we envision, and more importantly, what our clients are expecting.

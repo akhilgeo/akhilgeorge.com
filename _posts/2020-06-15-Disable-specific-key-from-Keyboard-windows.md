@@ -1,9 +1,10 @@
 ---
 title: How to disable single or specific keys from laptop keyboard?
-layout: post-right-sidebar
+layout: post
 categories:
 - Windows
 image: assets/images/post/disable-keyboard.jpg
+tags: [Windows]
 featured: false
 ---
 

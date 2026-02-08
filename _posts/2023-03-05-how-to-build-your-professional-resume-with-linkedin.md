@@ -1,9 +1,10 @@
 ---
 title: How to build your professional resume with Linkedin?
-layout: post-right-sidebar
+layout: post
 categories:
 - Network
 image: assets/images/post/linkedin-resume.jpg
+tags: [Network]
 ---
 
 Building a resume with LinkedIn can be a great way to showcase your professional accomplishments, skills, and experience. With over 700 million users worldwide, LinkedIn is a valuable tool for job seekers and professionals alike. Here are some steps to follow when building a resume with LinkedIn:

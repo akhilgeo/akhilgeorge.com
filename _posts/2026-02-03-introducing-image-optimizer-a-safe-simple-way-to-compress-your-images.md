@@ -1,9 +1,11 @@
 ---
 title: 'Introducing Image Optimizer: A Safe, Simple Way to Compress Your Images'
-layout: post-right-sidebar
+layout: post
 categories:
 - Github
 image: assets/images/post/ImageOptimizer.jpg
+tags: [Github]
+featured: true
 ---
 
 I'm excited to announce the launch of Image Optimizer, a free web-based tool that makes image compression simple, fast, and completely private.

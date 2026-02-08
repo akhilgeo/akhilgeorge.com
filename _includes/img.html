@@ -1,0 +1,6 @@
+<figure class="gallery__image">
+  <img src="{{ include.src }}" loading="lazy" alt="{{ include.alt | default: '' }}">
+  {% if include.caption %}
+  <figcaption class="gallery__image__caption">{{ include.caption }}</figcaption>
+  {% endif %}
+</figure>

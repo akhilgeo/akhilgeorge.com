@@ -1,6 +1,6 @@
 ---
 title: 'ActiveControl vs Solution Manager: Which is Right for Your SAP Environment?'
-layout: post-right-sidebar
+layout: post
 categories:
 - SAP
 description: SAP systems are the backbone of many businesses, and it's essential to
@@ -9,6 +9,7 @@ description: SAP systems are the backbone of many businesses, and it's essential
   these tools offer robust change management capabilities, there are some significant
   differences between them.
 image: assets/images/post/ACvsSOLMAN.jpg
+tags: [SAP]
 ---
 
 SAP systems are the backbone of many businesses, and it's essential to have the right tools in place to manage them effectively. Two of the most popular SAP change management tools are ActiveControl and Solution Manager. While both of these tools offer robust change management capabilities, there are some significant differences between them.

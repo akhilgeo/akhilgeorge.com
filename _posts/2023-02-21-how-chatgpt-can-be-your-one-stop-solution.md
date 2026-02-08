@@ -1,6 +1,6 @@
 ---
 title: How ChatGPT can be your One-Stop Solution?
-layout: post-right-sidebar
+layout: post
 categories: []
 image: assets/images/post/Chatgpt.png
 ---

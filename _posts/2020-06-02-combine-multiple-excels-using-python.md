@@ -1,10 +1,11 @@
 ---
 title: Combine Multiple Excel into one - Python GUI Tool
-layout: post-right-sidebar
+layout: post
 categories:
 - Python
 - GitHub
 image: assets/images/excel.jpg
+tags: [Python,GitHub]
 featured: true
 ---
 

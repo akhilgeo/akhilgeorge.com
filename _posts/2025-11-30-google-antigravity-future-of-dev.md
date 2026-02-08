@@ -1,7 +1,8 @@
 ---
 title: Google Antigravity - Future of Dev?
-layout: post-right-sidebar
-image: assets/images/post/Antigravity.png
+layout: post
+image: assets/images/post/Antigravity.jpg
+tags: [AI]
 categories:
 - AI
 ---

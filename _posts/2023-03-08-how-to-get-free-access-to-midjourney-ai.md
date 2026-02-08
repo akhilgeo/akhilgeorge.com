@@ -1,9 +1,10 @@
 ---
 title: How to get free access to MidJourney AI?
-layout: post-right-sidebar
+layout: post
 categories:
 - Network
 image: assets/images/post/Midjourney_3.jpg
+tags: [Network]
 ---
 
 Midjourney is a discord based community that specializes in AI art, enabling artists to generate artwork with the assistance of artificial intelligence. By inputting prompts and allowing the algorithm to produce images based on them, artists can create unique pieces. Midjourney is among the most potent tools available for this purpose and can be compared to another renowned AI art generator, DALL-E3.

@@ -1,0 +1,12 @@
+{% if site.data.settings.social %}
+<div class="widget widget-social">
+  <ul class="widget-social__list list-reset">
+    {% for social in site.data.settings.social %}
+    <li class="widget-social__item">
+      <a class="widget-social__link" href="{{ social.link }}" target="_blank" rel="noopener"
+        aria-label="{{ social.name }} link"><i class="{{ social.icon }}"></i></a>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}

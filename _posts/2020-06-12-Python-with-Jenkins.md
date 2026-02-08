@@ -1,10 +1,11 @@
 ---
 title: How to setup Jenkins for Python unit testing?
-layout: post-right-sidebar
+layout: post
 categories:
 - Python
 - Jenkins
 image: assets/images/post/python-jenkins.png
+tags: [Python,Jenkins]
 featured: false
 ---
 

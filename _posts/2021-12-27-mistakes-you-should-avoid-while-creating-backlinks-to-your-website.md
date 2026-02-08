@@ -1,9 +1,10 @@
 ---
 title: Mistakes you should avoid while creating backlinks to your website
-layout: post-right-sidebar
+layout: post
 categories:
 - Network
 image: assets/images/post/backlink.png
+tags: [Network]
 ---
 
 Link building is one of the most effective and proven ways to optimize a website for better search engine rankings. Links can help drive traffic to your website and also plays an important part in the algorithms of major search engines such as Google, Yahoo! and Bing.

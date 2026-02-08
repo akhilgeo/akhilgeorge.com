@@ -1,0 +1,34 @@
+{% if site.data.settings.gallery_section.enable == true and site.data.settings.gallery_section.gallery != null %}
+<!-- begin section-gallery -->
+<section class="section section-gallery">
+  <div class="container">
+    <div class="row">
+      <div class="col col-12">
+
+        <div class="section__head">
+          {% if site.data.settings.gallery_section.gallery_section_title %}
+          <h2 class="section__title">{{ site.data.settings.gallery_section.gallery_section_title }}</h2>
+          {% endif %}
+        </div>
+
+        <div class="row">
+          <div class="col col-12">
+            <div class="section-gallery__inner">
+              {% for image in site.data.settings.gallery_section.gallery.gallery_images %}
+              <figure class="gallery__image">
+                <img class="lazy" data-src="{{ site.baseurl }}{{ image.url }}" alt="{{ image.alt }}">
+                {% if image.caption %}
+                <figcaption class="gallery__image__caption">{{ image.caption }}</figcaption>
+                {% endif %}
+              </figure>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+<!-- end section-tags -->
+{% endif %}

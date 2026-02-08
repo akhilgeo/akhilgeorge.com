@@ -1,10 +1,11 @@
 ---
 title: Install admin dashboard on your Jekyll blog
-layout: post-right-sidebar
+layout: post
 categories:
 - GitHub
 - Jekyll
 image: assets/images/jekyll-admin.png
+tags: [GitHub,Jekyll]
 featured: false
 ---
 

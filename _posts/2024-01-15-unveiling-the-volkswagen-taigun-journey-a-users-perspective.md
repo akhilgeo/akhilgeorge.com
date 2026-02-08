@@ -1,6 +1,6 @@
 ---
 title: Unveiling the Volkswagen Taigun Journey – A User's Perspective
-layout: post-right-sidebar
+layout: post
 categories: []
 image: assets/images/post/taigun.jpg
 ---

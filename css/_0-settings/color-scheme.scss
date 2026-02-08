@@ -1,0 +1,90 @@
+/* Color Scheme */
+// You can generate any color here - https://htmlcolorcodes.com
+
+:root {
+  --primary-color: #ae00ee;
+  --secondary-color: #60b0ba;
+  --white: #fff;
+  --light-gray: #f3f3f4;
+  --lighten-gray: #ecf0f6;
+  --lightest-gray: #f8fafc;
+  --light-blue: #e7e7e9;
+  --dark-gray: #94a3b8;
+  --blue-gray: #697585;
+  --gray: #9e9e9e;
+  --dark-blue: #10141f;
+  --rgb-color: 255, 255, 255;
+
+  --background-rgba: rgba(var(--rgb-color), 0.95);
+  --background-color: var(--white);
+  --background-alt-color: var(--lighten-gray);
+  --background-alt-color-2: var(--lightest-gray);
+
+  --text-color: var(--dark-blue);
+  --text-alt-color: var(--blue-gray);
+
+  --heading-font-color: var(--dark-blue);
+
+  --link-color: var(--dark-blue);
+  --link-color-hover: var(--dark-blue);
+
+  --button-color: var(--white);
+
+  --gradient-color: linear-gradient(90deg, #f70077 0%, #ae00ee 100%);
+  --gradient-hover: linear-gradient(180deg, #f70077 0%, #ae00ee 160%);
+
+  --border-color: var(--light-gray);
+  --border-alt-color: var(--light-blue);
+
+  --th-color: var(--light-blue);
+  --tr-color: var(--light-gray);
+
+  --callout-note: #e5f5fd;
+  --callout-tip: #e7f6e9;
+  --callout-important: #efeafb;
+  --callout-warning: #fdf3e4;
+  --callout-caution: #fae6e6;
+
+  --syntax-highlighting-background: #f3f3f3;
+}
+
+:root[dark] {
+  --primary-color: #d60067;
+  --white: #fff;
+  --light-gray: #f0f0f0;
+  --gray: #9e9e9e;
+  --dark: #0f172a;
+  --rgb-color: 15, 23, 42;
+
+  --background-rgba: rgba(var(--rgb-color), 0.85);
+  --background-color: var(--dark);
+  --background-alt-color: #2d3b4e;
+  --background-alt-color-2: #1a2334;
+
+  --text-color: var(--gray);
+  --text-alt-color: var(--gray);
+
+  --heading-font-color: var(--light-gray);
+
+  --link-color: var(--light-gray);
+  --link-color-hover: var(--light-gray);
+
+  --button-color: var(--white);
+
+  --gradient-color: linear-gradient(90deg, #d60067 0%, #8311c0 100%);
+  --gradient-hover: linear-gradient(180deg, #d60067 0%, #8311c0 160%);
+
+  --border-color: #232939;
+  --border-alt-color: #232939;
+
+  --th-color: var(--background-alt-color);
+  --tr-color: var(--background-alt-color-2);
+
+  --callout-note: #1f3962;
+  --callout-tip: #26483b;
+  --callout-important: #3f2e6d;
+  --callout-warning: #ac6f13;
+  --callout-caution: #952222;
+
+  --syntax-highlighting-background: #1e293b;
+}

@@ -1,0 +1,64 @@
+---
+layout: default
+title: Archive
+permalink: /archive/
+---
+
+<!-- begin archive-page -->
+<section class="section">
+  <div class="container">
+    <div class="row">
+      <div class="col col-12">
+
+        <div class="archive-page">
+
+          <div class="archive-page__head">
+            {% if page.title %}
+            <h1 class="archive-page__title">{{ page.title }}</h1>
+            {% endif %}
+            {% if page.description %}
+            <p class="archive-page__description">{{ page.description }}</p>
+            {% endif %}
+          </div>
+
+          <div class="archive-page__inner">
+            {% assign posts_by_year = site.posts | group_by_exp: "post", "post.date | date: '%Y'" %}
+            {% for year_group in posts_by_year %}
+            <div class="archive-page__group">
+              <h2 class="archive-page__year">{{ year_group.name }} <sup>{{ year_group.items | size }}</sup></h2>
+              <div class="archive-page__list">
+                {% assign posts_by_month = year_group.items | group_by_exp: "post", "post.date | date: '%B'" %}
+                {% for month_group in posts_by_month %}
+                <h3 class="archive-page__month">{{ month_group.name }} <sup>{{ month_group.items | size }}</sup></h3>
+                <div class="archive-page__collection">
+                  {% for post in month_group.items %}
+                  <div class="archive-article">
+                    <h3 class="archive-article__title">
+                      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+                    </h3>
+                    <div class="archive-article__meta">
+                      <time class="archive-article__date" datetime="{{ post.date | date_to_xmlschema }}">{% assign date_format = site.minima.date_format | default: "%d %-b, %Y" %}{{ post.date | date: date_format }}</time>
+                      <div class="archive-article__minutes">
+                        {% assign words = post.content | number_of_words %}
+                        {% if words < 360 %}
+                          1 min read
+                        {% else %}
+                          {{ words | divided_by:180 }} min read
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- end archive-page -->

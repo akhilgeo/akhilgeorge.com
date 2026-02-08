@@ -1,0 +1,91 @@
+/* Section Blog */
+.blog__view {
+  padding-left: 20px;
+  border-radius: 12px;
+  background: var(--background-color);
+}
+
+.blog__toggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 48px;
+  height: 48px;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--background-alt-color);
+  transition: transform 0.15s ease;
+  cursor: pointer;
+
+  @media (max-width: $tablet) {
+    display: none;
+  }
+}
+
+.dark-mode {
+  .blog__toggle {
+    background: var(--background-alt-color-2);
+  }
+}
+
+.icon-bar {
+  position: relative;
+  width: 4px;
+  height: 4px;
+  margin: 0 auto 4px auto;
+  transition: all 0.15s ease;
+  background: var(--heading-font-color);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &:before,
+  &:after {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 4px;
+    height: 4px;
+    background: var(--heading-font-color);
+    opacity: 1;
+    will-change: transform;
+    transition: all 0.15s ease;
+  }
+
+  &:before {
+    left: 0;
+    transform: translateX(-9px);
+  }
+
+  &:after {
+    right: 0;
+    transform: translateX(9px);
+  }
+}
+
+.view-list {
+  .icon-bar {
+    width: 24px;
+
+    &:before,
+    &:after {
+      opacity: 0;
+    }
+
+    &:before {
+      left: 0;
+      transform: translateX(-15px);
+    }
+
+    &:after {
+      right: 0;
+      transform: translateX(15px);
+    }
+  }
+}
+
+/* Pagination */
+.pagination {
+  text-align: center;
+}

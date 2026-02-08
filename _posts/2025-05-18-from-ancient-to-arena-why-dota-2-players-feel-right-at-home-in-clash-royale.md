@@ -1,6 +1,6 @@
 ---
 title: 'From Ancient to Arena: Why Dota 2 Players Feel Right at Home in Clash Royale'
-layout: post-right-sidebar
+layout: post
 categories:
 - Windows
 - Game
@@ -10,6 +10,7 @@ description: |-
 
   You’re used to making high-pressure decisions, quick battles, and a race to outmaneuver your opponent as a Dota 2 player. But with more to do in life or a change in gaming rig, sometimes it’s not convenient to launch a full Dota game. That’s where Clash Royale comes in — not as a substitute, but as a natural extension of the same kind of game Dota players enjoy, in a mobile-ready setting.
 image: assets/images/post/Dota to Clash Roayle.jpg
+tags: [Windows,Game,Android]
 ---
 
 Dota 2 to Clash Royale: Why It's So Natural to Make This Switch

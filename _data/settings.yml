@@ -1,0 +1,188 @@
+#-------------------------------
+# Site Settings
+title: Akhil Abraham George | akhilgeorge.com
+description: "Hello, my name is Akhil Abraham George. I am a Blogger and SAP Consultant based in Kerala, India. This is my digital space on the Interwebs where I share insights on Enterprise Tech, Software Development, and Innovation."
+logo: '/images/logo.png'
+logo_dark: '/images/logo-white.png'
+
+
+#-------------------------------
+# Color Scheme Settings
+color_scheme:
+  default: light # Default theme applied on the first visit (options: "light" or "dark")
+  toggle: true # Enable theme toggle
+
+# Enables or disables the theme toggle functionality:
+# - true: Users can switch between light and dark modes using a toggle button.
+#          The site will remember their choice for future visits.
+# - false: The theme will always use the default mode specified above,
+#          and the toggle button will not be displayed.
+
+
+#-------------------------------
+# Navigation Settings
+menu_settings:
+  menu_items:
+    - title: 'Home'
+      url: '/'
+    - title: 'About'
+      url: '/about/'
+    - title: 'Projects'
+      url: '/projects/'
+    - title: 'Archive'
+      url: '/archive/'
+    - title: 'Pages'
+      submenu:
+      - url: '/Videos/'
+        title: 'Videos'
+      - url: '/contact/'
+        title: 'Contact'
+
+
+
+#-------------------------------
+# Author Settings
+author:
+  author_name: Akhil
+  author_avatar: /images/akhil_avatar.jpg
+
+
+#-------------------------------
+# Hero Settings
+hero:
+  enable: true
+  hero_avatar: /images/akhil_avatar.jpg
+  hero_title: Hi! I’m Akhil 👋
+  hero_subtitle: Akhil, a digital explorer.
+  hero_description: |
+    I’m an SAP Consultant, coder, and tech enthusiast. This blog is my personal knowledge base on enterprise solutions, programming, and digital innovation.
+
+    Here, I share insights, tools, and experiences to help you navigate the complexities of tech while sparking your creativity. Dive in, learn something new, and let's connect!
+  hero_image: /images/banner.jpg
+  hero_image_caption: "My digital workshop, where ideas come to life"
+  hero_button_text: Let’s Work Together
+  hero_button_link: '/contact/'
+
+
+# Logos
+logos:
+  enable: true
+  logos_title: Stuff I like
+  logo_image:
+    - alt: "Code & Coffee"
+      image: "/images/code_coffee_icon.png"
+    - alt: "Linux"
+      image: "/images/tux_icon.png"
+    - alt: "Enterprise Tech"
+      image: "/images/enterprise_icon.png"
+    - alt: "Gaming"
+      image: "/images/gaming_icon.png"
+
+
+#-------------------------------
+# Section Blog Settings
+blog:
+  enable: true
+  blog_title: The Binary Journal
+
+
+#-------------------------------
+# Tags Section Settings
+tags_section:
+  enable: true
+  tags_section_title: Tech Stack
+  tags:
+    - tag: "GitHub"
+      image: "/images/Github.jpg"
+    - tag: "Python"
+      image: "/images/Python.jpg"
+    - tag: "AI"
+      image: "/images/AI.jpg"
+    - tag: "SAP"
+      image: "/images/SAP.jpg"
+
+
+#-------------------------------
+# Videos Section Settings
+videos_section:
+  enable: true
+  videos_section_title: Latest Videos
+
+
+#-------------------------------
+# Gallery Section Settings
+gallery_section:
+  enable: true
+  gallery_section_title: BetaFrames
+  gallery:
+    gallery_images:
+      - alt: 'Lotus Mahal'
+        url: '/assets/photography/lotus-mahal.jpg'
+        caption: 'Hampi - Karnataka,India'
+      - alt: 'Sunset at Hampi'
+        url: '/assets/photography/sunset-hampi.jpg'
+        caption: 'Anjeneya Temple, Hampi - Karnataka, India'
+      - alt: 'Musical Pillars'
+        url: '/assets/photography/musical-pillars.jpg'
+        caption: 'Vijaya Vittala Temple in Hampi'
+      - alt: 'The Kitten'
+        url: '/assets/photography/kitten.jpg'
+        caption: 'Kottayam, india'
+      - alt: 'Sunrise'
+        url: '/assets/photography/sunrise.jpg'
+        caption: 'Nattokam Bypass, Kottayam'
+
+
+
+#-------------------------------
+# Newsletter Settings
+mailchimp:
+  enable: true
+  mailchimp_title: Stay inspired weekly ✌️
+  mailchimp_description: Every Sunday, I deliver actionable tips for enhancing productivity, practical life advice, and top-notch insights gathered from various sources, right to your email inbox.
+  mailchimp_identifier: gmail.us21.list-manage.com/subscribe/post?u=8aeb9c31a5c97a3a5f9ff2740&amp;id=0e31fd7793&amp # Add your MailChimp form identifier. For example - gmail.us21.list-manage.com/subscribe/post?u=8aeb9c31a5c97a3a5f9ff2740&amp;id=0e31fd7793&amp
+  mailchimp_input_text: Your email address...
+  mailchimp_button_text: Join Now
+
+
+#-------------------------------
+# Footer Settings
+footer_description: Here, I share ideas, tools, and methods that help me balance productivity with creativity while keeping control over my digital world. Dive in, get inspired, and feel free to share your thoughts!
+
+
+#-------------------------------
+# Social Settings
+social:
+- {icon: "fa-brands fa-linkedin", name: "Linkedin", link: "https://linkedin.com/in/akhilgeorge"}
+- {icon: "fa-brands fa-facebook", name: "Facebook", link: "https://facebook.com/akhilgeo"}
+- {icon: "fa-brands fa-instagram", name: "Instagram", link: "https://instagram.com/akhilgeo"}
+- {icon: "fa-brands fa-steam", name: "Steam", link: "https://steamcommunity.com/id/akhilgeo"}
+- {icon: "fa-brands fa-github", name: "Github", link: "https://github.com/akhilgeo"}
+- {icon: "fa-solid fa-rss", name: "Rss", link: "/feed.xml"}
+
+# Example of adding a new link to the sidebar and footer - {icon: "fa-brands fa-youtube", name: "Youtube", link: https://youtube.com"}
+# Other icons can be found at https://fontawesome.com/icons
+
+
+#-------------------------------
+# Contact Settings
+contact:
+  form_id: mail@akhilgeorge.com # Add your form_id
+  button_text: Send Now
+
+# NOTE
+# This theme comes with a contact form built-in. You can use this form with Formspree (https://formspree.io/) service and get up to 50 submissions for free. Also, you can easily switch to another service if you want.
+
+
+#-------------------------------
+# Comment Section (Disqus)
+disqus:
+  enable: true
+  disqus_identifier: akhilgeo # Add your shortname for Disqus Comment. For example anvod-studio-test
+  disqus_title: Start the conversation
+  disqus_button_text: Show Comments
+
+
+#-------------------------------
+# Google Analytics
+google_analytics: UA-46278016-1

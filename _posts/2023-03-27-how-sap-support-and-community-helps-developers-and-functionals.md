@@ -1,12 +1,13 @@
 ---
 title: How SAP support and Community helps developers and functionals?
-layout: post-right-sidebar
+layout: post
 categories:
 - SAP
 Description: As part of its commitment to its users, SAP offers a robust support and
   community program that provides developers and functional experts with resources
   and tools to help them get the most out of SAP's products.
 image: assets/images/post/sap-community.jpg
+tags: [SAP]
 ---
 
 SAP (Systems, Applications, and Products in Data Processing) is a software company that provides enterprise-level applications to businesses and organizations. As part of its commitment to its users, SAP offers a robust support and community program that provides developers and functional experts with resources and tools to help them get the most out of SAP's products.

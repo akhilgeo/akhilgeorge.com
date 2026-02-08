@@ -1,10 +1,11 @@
 ---
 title: A Step-by-Step Guide to Remove Bloatware Apps from Android
-layout: post-right-sidebar
+layout: post
 categories:
 - Windows
 - Android
 image: assets/images/post/bloatware.jpg
+tags: [Windows,Android]
 description: How to uninstall/remove unwanted and system apps from Android phones.
   iqoo, vivo, oppo, xiaomi, Mi, Oneplus, Nokia  without root
 ---

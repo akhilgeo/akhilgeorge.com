@@ -1,6 +1,6 @@
 ---
 title: 'BDC vs LSMW: An Overview of Two Popular Data Migration Techniques in SAP'
-layout: post-right-sidebar
+layout: post
 categories:
 - SAP
 description: BDC and LSMW are two different approaches to data migration in SAP. While
@@ -12,6 +12,7 @@ description: BDC and LSMW are two different approaches to data migration in SAP.
   of these factors can help in selecting the right approach for data migration in
   SAP.
 image: assets/images/post/bdc_lsmw.jpg
+tags: [SAP]
 ---
 
 Data migration is a crucial process in any SAP implementation project. Two commonly used methods for data migration in SAP are Batch Data Communication (BDC) and Legacy System Migration Workbench (LSMW). Both methods have their own strengths and weaknesses, and the choice of method depends on various factors such as the complexity of data, data volume, and available resources. In this blog post, we will discuss the differences between BDC and LSMW.

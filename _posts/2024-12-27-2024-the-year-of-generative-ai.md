@@ -1,6 +1,6 @@
 ---
 title: '2024 : The Year of Generative AI'
-layout: post-right-sidebar
+layout: post
 description: Advancements in generative AI in 2024 have set the stage for a future
   where AI seamlessly fits into everyday life. Its potential to drive innovation,
   creativity, and efficiency is boundless, and the lessons from this year will guide

@@ -1,9 +1,10 @@
 ---
 title: 'SAP ACTIVATE: The Agile Methodology for Implementing SAP Solutions'
-layout: post-right-sidebar
+layout: post
 categories:
 - SAP
 image: assets/images/post/SAP_Activate_cover.jpg
+tags: [SAP]
 ---
 
 SAP solutions are widely used by organizations to streamline their business operations, but implementing these solutions can be a complex and time-consuming process. This is where SAP ACTIVATE comes in - a methodology designed to help organizations implement SAP solutions quickly and efficiently. 

@@ -1,0 +1,61 @@
+{% for post in site.posts %}
+  {% if post.video_embed != nil %}
+    {% assign is-video = true %}
+  {% endif %}
+{% endfor %}
+
+{% if site.data.settings.videos_section.enable == true and is-video == true %}
+<!-- begin section-videos -->
+<section class="section section-videos">
+
+  <div class="section-videos__inner">
+    <div class="container">
+      <div class="row">
+        <div class="col col-12">
+
+          <div class="section__head">
+            {% if site.data.settings.videos_section.videos_section_title %}
+            <h2 class="section__title">{{ site.data.settings.videos_section.videos_section_title }}</h2>
+            {% endif %}
+          </div>
+
+          {% assign sorted = site.posts | where_exp: 'post', "post.video_embed != nil" %}
+          <div class="row">
+            {% for post in sorted limit:3 %}
+            <div class="article col col-3 col-d-5 col-m-12 push-1 push-m-0">
+              <div class="article__inner">
+
+                {% if post.image %}
+                <div class="article__head">
+                  {% if post.video_embed %}
+                  <div class="video-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                      <polygon points="40,30 70,50 40,70"></polygon>
+                    </svg>
+                  </div>
+                  {% endif %}
+
+                  <a class="article__image" href="{{ post.url | relative_url }}">
+                    <img class="lazy" data-src="{{ post.image | relative_url }}" alt="{{ post.title }}">
+                  </a>
+                </div>
+                {% endif %}
+
+                <div class="article__content">
+                  <h2 class="article__title">
+                    <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+                  </h2>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+<!-- end section-videos -->
+{% endif %}

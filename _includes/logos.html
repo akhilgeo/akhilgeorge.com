@@ -1,0 +1,26 @@
+{% if site.data.settings.logos.logo_image and site.data.settings.logos.enable == true %}
+<!-- begin section-logos -->
+<section class="section section-logos">
+  <div class="container">
+    <div class="row">
+      <div class="col col-12">
+        {% if site.data.settings.logos.logos_title %}
+        <h2 class="logos-title">{{ site.data.settings.logos.logos_title }}</h2>
+        {% endif %}
+        <div class="logos splide">
+          <div class="splide__track">
+            <div class="logos__inner splide__list">
+              {% for logo_image in site.data.settings.logos.logo_image %}
+              <div class="logos__image splide__slide">
+                <img src="{{ logo_image.image | relative_url }}" alt="{{ logo_image.alt }}" loading="eager">
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- end section-logos -->
+{% endif %}

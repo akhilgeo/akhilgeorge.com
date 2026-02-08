@@ -1,10 +1,11 @@
 ---
 title: Create a Jekyll blog using command line on localhost server
-layout: post-right-sidebar
+layout: post
 categories:
 - GitHub
 - Jekyll
 image: assets/images/post/jeykll.png
+tags: [GitHub,Jekyll]
 featured: false
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: Why I Chose a Petrol Car Over an Electric Car?
-layout: post-right-sidebar
+layout: post
 categories: []
 description: Despite the growing popularity of electric vehicles (EVs), I found myself
   opting for a traditional petrol-powered car, and here's why.

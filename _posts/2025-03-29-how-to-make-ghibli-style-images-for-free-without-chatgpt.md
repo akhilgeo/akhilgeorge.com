@@ -1,6 +1,6 @@
 ---
 title: How to Make Ghibli-Style Images for Free Without ChatGPT?
-layout: post-right-sidebar
+layout: post
 description: One of the most popular ways people have been generating Ghibli-style
   images is through the image generation tool on ChatGPT. Although it was previously
   available only to premium users, OpenAI has started rolling it out to free users

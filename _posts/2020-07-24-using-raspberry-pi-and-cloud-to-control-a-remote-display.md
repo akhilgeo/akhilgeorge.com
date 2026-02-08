@@ -1,6 +1,6 @@
 ---
 title: Using raspberry pi and cloud to control a remote display
-layout: post-right-sidebar
+layout: post
 categories: []
 image: assets/images/post/kloudtise.jpg
 featured: false
