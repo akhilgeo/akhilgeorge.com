@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Videos
-description: Commercials, Music Videos, Television, TV News, Corporate video, and everything in between.
+description: Videos by me
 permalink: /videos/
 image: '/images/01.jpg'
 ---
@@ -27,7 +27,7 @@ image: '/images/01.jpg'
           <div class="row">
             {% for post in sorted %}
             {% if post.video_embed %}
-              {% include article.html class="col col-6 col-t-12 grid__post animate" %}
+            {% include article.html class="col col-6 col-t-12 grid__post animate" %}
             {% endif %}
             {% endfor %}
           </div>
