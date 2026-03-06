@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>B&P Gantt Timeline</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; overflow-x: hidden; }
+  #topbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; background: #1e293b; border-bottom: 1px solid #334155; }
+  #topbar .title { font-size: 20px; font-weight: 700; color: #f8fafc; letter-spacing: -0.5px; }
+  #topbar .subtitle { font-size: 12px; color: #64748b; margin-top: 3px; }
+  #topbar .actions { display: flex; gap: 10px; align-items: center; }
+  .btn { padding: 8px 18px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; font-size: 13px; font-family: inherit; transition: opacity .15s; }
+  .btn:hover { opacity: .85; }
+  .btn-blue { background: #3b82f6; color: #fff; }
+  .btn-green { background: #10b981; color: #fff; }
+  .btn-red { background: #ef4444; color: #fff; }
+  .btn-ghost { background: transparent; border: 1px solid #334155; color: #94a3b8; }
+  #export-msg { font-size: 13px; color: #10b981; }
+  #legend { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 24px; background: #1e293b; border-bottom: 1px solid #334155; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #94a3b8; }
+  .legend-swatch { width: 14px; height: 14px; border-radius: 3px; }
+  #gantt-wrap { overflow: auto; padding: 20px 24px; max-height: calc(100vh - 130px); }
+  svg text { font-family: 'DM Sans', sans-serif; }
+  /* Modal */
+  .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.55); display: flex; align-items: center; justify-content: center; z-index: 200; }
+  .modal { background: #1e293b; border-radius: 12px; padding: 28px; min-width: 340px; box-shadow: 0 25px 60px rgba(0,0,0,.5); }
+  .modal h2 { font-size: 18px; font-weight: 700; color: #f1f5f9; margin-bottom: 18px; }
+  .modal label { font-size: 12px; color: #94a3b8; display: block; margin-bottom: 6px; }
+  .modal input, .modal select { width: 100%; padding: 9px 12px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #f1f5f9; font-size: 14px; font-family: inherit; outline: none; }
+  .modal input:focus, .modal select:focus { border-color: #3b82f6; }
+  .modal .field { margin-bottom: 14px; }
+  .modal .row2 { display: flex; gap: 12px; }
+  .modal .row2 .field { flex: 1; }
+  .modal .footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; }
+  .color-preview { width: 28px; height: 18px; border-radius: 4px; display: inline-block; vertical-align: middle; margin-right: 8px; }
+  .preview-row { display: flex; align-items: center; font-size: 12px; color: #64748b; margin-bottom: 18px; }
+  #ctx-menu { position: fixed; background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 6px 0; z-index: 300; min-width: 150px; box-shadow: 0 8px 24px rgba(0,0,0,.4); display: none; }
+  #ctx-menu button { display: block; width: 100%; padding: 8px 16px; background: none; border: none; color: #f1f5f9; font-size: 13px; text-align: left; cursor: pointer; font-family: inherit; }
+  #ctx-menu button:hover { background: #334155; }
+</style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<div id="topbar">
+  <div>
+    <div class="title">📊 B&amp;P Gantt Timeline</div>
+    <div class="subtitle">Drag bars to reschedule · Resize edges · Right-click bar to delete</div>
+  </div>
+  <div class="actions">
+    <button class="btn btn-blue" onclick="openAddProject()">+ Add Project</button>
+    <button class="btn btn-green" onclick="exportXLSX()">⬇ Export XLSX</button>
+    <span id="export-msg"></span>
+  </div>
+</div>
+
+<!-- Legend -->
+<div id="legend"></div>
+
+<!-- Gantt SVG -->
+<div id="gantt-wrap"><svg id="gantt"></svg></div>
+
+<!-- Context Menu -->
+<div id="ctx-menu">
+  <button id="ctx-delete-bar">🗑 Delete Bar</button>
+  <button id="ctx-add-bar">＋ Add Bar Here</button>
+  <button id="ctx-delete-project">✕ Delete Project</button>
+</div>
+
+<!-- Add Project Modal -->
+<div class="modal-bg" id="modal-project" style="display:none">
+  <div class="modal">
+    <h2>Add New Project</h2>
+    <div class="field">
+      <label>Project Name</label>
+      <input id="new-project-name" placeholder="e.g. Pagero Germany" />
+    </div>
+    <div class="footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-project')">Cancel</button>
+      <button class="btn btn-blue" onclick="confirmAddProject()">Add Project</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Bar Modal -->
+<div class="modal-bg" id="modal-bar" style="display:none">
+  <div class="modal">
+    <h2>Add Bar — <span id="modal-bar-project" style="color:#60a5fa"></span></h2>
+    <div class="field">
+      <label>Phase</label>
+      <select id="new-bar-phase"></select>
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label>Start Week</label>
+        <input type="number" id="new-bar-start" min="1" value="1"/>
+      </div>
+      <div class="field">
+        <label>End Week</label>
+        <input type="number" id="new-bar-end" min="2" value="5"/>
+      </div>
+    </div>
+    <div class="preview-row" id="bar-preview-row">
+      <span class="color-preview" id="bar-color-preview"></span>
+      <span id="bar-preview-text"></span>
+    </div>
+    <div class="footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-bar')">Cancel</button>
+      <button class="btn btn-blue" onclick="confirmAddBar()">Add Bar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── Constants ───────────────────────────────────────────────────────────────
+const MONTHS = ["March","April","May","June","July","August","September","October"];
+const MONTH_WEEKS = [4,4,5,4,4,4,5,4];
+const TOTAL_WEEKS = MONTH_WEEKS.reduce((a,b)=>a+b,0);
+const WEEK_W = 38, ROW_H = 34, LABEL_W = 180, HEADER_H = 72;
+const MONTH_COLORS = ["#b45309","#92400e","#1d4ed8","#065f46","#7c3aed","#0f766e","#9d174d","#c2410c"];
+
+const PHASES = {
+  "Intake & Design":    { bg:"#f4a261", bd:"#e76f51", tx:"#fff" },
+  "Dev & Unit Testing": { bg:"#e9c46a", bd:"#f4a261", tx:"#333" },
+  "In-Sprint QA":       { bg:"#a8dadc", bd:"#457b9d", tx:"#333" },
+  "Additional Dev":     { bg:"#90e0ef", bd:"#0096c7", tx:"#333" },
+  "SIT":                { bg:"#06d6a0", bd:"#028a6b", tx:"#fff" },
+  "SIT Window":         { bg:"#4cc9f0", bd:"#4361ee", tx:"#fff" },
+  "UAT":                { bg:"#f9c74f", bd:"#f3722c", tx:"#333" },
+  "Regression":         { bg:"#f4a261", bd:"#e63946", tx:"#fff" },
+  "Final Build":        { bg:"#b5838d", bd:"#6d2b3d", tx:"#fff" },
+  "ELS":                { bg:"#ffe66d", bd:"#f7c948", tx:"#333" },
+  "Analysis & Mapping": { bg:"#c8b6ff", bd:"#7b2d8b", tx:"#333" },
+  "Development":        { bg:"#e9c46a", bd:"#f4a261", tx:"#333" },
+};
+const PHASE_NAMES = Object.keys(PHASES);
+
+// ─── State ────────────────────────────────────────────────────────────────────
+let projects = [
+  { id:1, name:"Pagero Canada", bars:[
+    {id:1,  phase:"Intake & Design",    s:0,  e:6  },
+    {id:2,  phase:"Dev & Unit Testing", s:4,  e:16 },
+    {id:3,  phase:"In-Sprint QA",       s:4,  e:16 },
+    {id:4,  phase:"Additional Dev",     s:14, e:18 },
+    {id:5,  phase:"SIT",                s:15, e:19 },
+    {id:6,  phase:"SIT Window",         s:18, e:22 },
+    {id:7,  phase:"UAT",                s:20, e:24 },
+    {id:8,  phase:"Regression",         s:23, e:26 },
+    {id:9,  phase:"Final Build",        s:26, e:29 },
+    {id:10, phase:"ELS",                s:29, e:31 },
+  ]},
+  { id:2, name:"Pagero ANZ", bars:[
+    {id:1, phase:"Analysis & Mapping", s:20, e:27},
+    {id:2, phase:"Development",        s:26, e:33},
+  ]},
+  { id:3, name:"TRPUK 3101 VAT", bars:[] },
+  { id:4, name:"Late Fee UK\n(Feb Semi-Monthly)", bars:[] },
+];
+let nextPid = 10, nextBid = 100;
+
+// ─── Week starts ──────────────────────────────────────────────────────────────
+const WEEK_MONTH = [];
+for (let m=0;m<MONTHS.length;m++) for (let i=0;i<MONTH_WEEKS[m];i++) WEEK_MONTH.push(m);
+
+// ─── Drag / resize state ──────────────────────────────────────────────────────
+let drag = null;   // {pid, bid, startX, os, oe}
+let rsz  = null;   // {pid, bid, edge, startX, os, oe}
+let ctxTarget = null; // {pid, bid|null}
+
+// ─── SVG helpers ──────────────────────────────────────────────────────────────
+const SVG_NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs={}, parent=null) {
+  const e = document.createElementNS(SVG_NS, tag);
+  for (const [k,v] of Object.entries(attrs)) e.setAttribute(k,v);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function svgText(txt, attrs={}, parent=null) {
+  const e = el("text", attrs, parent);
+  e.textContent = txt;
+  return e;
+}
+
+// ─── Row Y ────────────────────────────────────────────────────────────────────
+function rowY(pIdx) { return HEADER_H + pIdx*(ROW_H*3+12); }
+function totalH()   { return HEADER_H + projects.length*(ROW_H*3+12)+20; }
+function totalW()   { return LABEL_W + TOTAL_WEEKS*WEEK_W; }
+
+// ─── Row-packing for bar overlap ──────────────────────────────────────────────
+function assignRows(bars) {
+  const assign=[], ends=[];
+  for (const bar of bars) {
+    let placed=false;
+    for (let r=0;r<ends.length;r++) {
+      if (bar.s >= ends[r]) { assign.push(r); ends[r]=bar.e; placed=true; break; }
+    }
+    if (!placed) { assign.push(ends.length); ends.push(bar.e); }
+  }
+  return assign;
+}
+
+// ─── Main render ──────────────────────────────────────────────────────────────
+function render() {
+  const svg = document.getElementById("gantt");
+  svg.innerHTML = "";
+  const W = totalW(), H = totalH();
+  svg.setAttribute("width", W);
+  svg.setAttribute("height", H);
+  svg.setAttribute("style","display:block;user-select:none");
+
+  // defs
+  const defs = el("defs",{},svg);
+  const pat = el("pattern",{id:"hatch",patternUnits:"userSpaceOnUse",width:"6",height:"6",patternTransform:"rotate(45)"},defs);
+  el("line",{x1:"0",y1:"0",x2:"0",y2:"6",stroke:"#fff","stroke-width":"2"},pat);
+
+  // BG
+  el("rect",{width:W,height:H,fill:"#0f172a"},svg);
+
+  // Month column backgrounds
+  let mx = LABEL_W;
+  for (let m=0;m<MONTHS.length;m++) {
+    const mw = MONTH_WEEKS[m]*WEEK_W;
+    el("rect",{x:mx,y:0,width:mw,height:H,fill:m%2===0?"#1e293b":"#162032"},svg);
+    mx+=mw;
+  }
+
+  // Week grid lines
+  for (let w=0;w<TOTAL_WEEKS;w++)
+    el("line",{x1:LABEL_W+w*WEEK_W,y1:0,x2:LABEL_W+w*WEEK_W,y2:H,stroke:"#334155","stroke-width":"0.5"},svg);
+  el("line",{x1:LABEL_W+TOTAL_WEEKS*WEEK_W,y1:0,x2:LABEL_W+TOTAL_WEEKS*WEEK_W,y2:H,stroke:"#334155","stroke-width":"0.5"},svg);
+
+  // Month headers
+  mx = LABEL_W;
+  for (let m=0;m<MONTHS.length;m++) {
+    const mw = MONTH_WEEKS[m]*WEEK_W;
+    el("rect",{x:mx,y:0,width:mw,height:32,fill:MONTH_COLORS[m]},svg);
+    svgText(MONTHS[m],{x:mx+mw/2,y:20,"text-anchor":"middle",fill:"#fff","font-size":"13","font-weight":"700"},svg);
+    mx+=mw;
+  }
+
+  // Week number row
+  for (let w=0;w<TOTAL_WEEKS;w++) {
+    const wx = LABEL_W+w*WEEK_W;
+    el("rect",{x:wx,y:32,width:WEEK_W,height:22,fill:WEEK_MONTH[w]%2===0?"#1e3a5f":"#172554"},svg);
+    svgText("W"+(w+1),{x:wx+WEEK_W/2,y:47,"text-anchor":"middle",fill:"#94a3b8","font-size":"10","font-weight":"500"},svg);
+  }
+
+  // Today marker (week 1)
+  el("line",{x1:LABEL_W+WEEK_W,y1:0,x2:LABEL_W+WEEK_W,y2:H,stroke:"#ef4444","stroke-width":"2","stroke-dasharray":"4,3",opacity:"0.7"},svg);
+
+  // Horizontal separator
+  el("line",{x1:0,y1:HEADER_H,x2:W,y2:HEADER_H,stroke:"#475569","stroke-width":"1"},svg);
+
+  // Projects
+  projects.forEach((proj, pIdx) => {
+    const ry = rowY(pIdx);
+    const rh = ROW_H*3+10;
+
+    // Row bg
+    el("rect",{x:0,y:ry,width:W,height:rh,fill:pIdx%2===0?"#1e293b18":"transparent"},svg);
+    el("line",{x1:0,y1:ry+rh,x2:W,y2:ry+rh,stroke:"#334155","stroke-width":"0.5"},svg);
+
+    // Label bg
+    el("rect",{x:0,y:ry,width:LABEL_W-4,height:rh,fill:"#1e293b",rx:"4"},svg);
+
+    // Label text (handle newline)
+    const lines = proj.name.split("\n");
+    lines.forEach((line,li) => {
+      svgText(line.length>22?line.slice(0,21)+"…":line,
+        {x:12,y:ry+rh/2+(li-(lines.length-1)/2)*16,fill:"#f1f5f9","font-size":"12","font-weight":"600","dominant-baseline":"middle"},svg);
+    });
+
+    // "+ Add Bar" button
+    const addG = el("g",{style:"cursor:pointer",class:"add-bar-btn"},svg);
+    addG.dataset.pid = proj.id;
+    el("rect",{x:8,y:ry+rh-18,width:64,height:15,rx:"3",fill:"#3b82f6",opacity:"0.85"},addG);
+    svgText("+ Add Bar",{x:40,y:ry+rh-8,"text-anchor":"middle",fill:"#fff","font-size":"9","font-weight":"600"},addG);
+    addG.addEventListener("click", ()=>openAddBar(proj.id));
+
+    // "Remove" button
+    const delG = el("g",{style:"cursor:pointer"},svg);
+    el("rect",{x:78,y:ry+rh-18,width:52,height:15,rx:"3",fill:"#ef4444",opacity:"0.65"},delG);
+    svgText("✕ Remove",{x:104,y:ry+rh-8,"text-anchor":"middle",fill:"#fff","font-size":"9","font-weight":"600"},delG);
+    delG.addEventListener("click", ()=>{ deleteProject(proj.id); });
+
+    // Bars
+    const rowAssign = assignRows(proj.bars);
+    proj.bars.forEach((bar, bIdx) => {
+      const r = rowAssign[bIdx]??0;
+      const bx = LABEL_W + bar.s*WEEK_W + 2;
+      const bw = Math.max(8,(bar.e-bar.s)*WEEK_W-4);
+      const by = ry + 4 + r*(ROW_H+2);
+      const bh = ROW_H-4;
+      const c  = PHASES[bar.phase]??{bg:"#64748b",bd:"#475569",tx:"#fff"};
+
+      const g = el("g",{style:"cursor:grab"},svg);
+      g.dataset.pid = proj.id;
+      g.dataset.bid = bar.id;
+
+      // shadow
+      el("rect",{x:bx+2,y:by+3,width:bw,height:bh,rx:"5",fill:"#00000044"},g);
+      // fill
+      const fillRect = el("rect",{x:bx,y:by,width:bw,height:bh,rx:"5",fill:c.bg,stroke:c.bd,"stroke-width":"1.5"},g);
+      // hatch
+      el("rect",{x:bx,y:by,width:bw,height:bh,rx:"5",fill:"url(#hatch)",opacity:"0.15","pointer-events":"none"},g);
+      // label
+      if (bw>28) {
+        const label = bw<80 ? bar.phase.split(" ")[0] : bar.phase;
+        svgText(label,{x:bx+6,y:by+bh/2,fill:c.tx,"font-size":"10","font-weight":"600","dominant-baseline":"middle","pointer-events":"none"},g);
+      }
+      // resize left
+      const rl = el("rect",{x:bx,y:by+2,width:7,height:bh-4,rx:"3",fill:c.bd,opacity:"0.75",style:"cursor:ew-resize"},g);
+      // resize right
+      const rr = el("rect",{x:bx+bw-7,y:by+2,width:7,height:bh-4,rx:"3",fill:c.bd,opacity:"0.75",style:"cursor:ew-resize"},g);
+
+      // drag
+      g.addEventListener("mousedown", e=>{
+        if (e.target===rl) {
+          e.stopPropagation();
+          rsz = {pid:proj.id,bid:bar.id,edge:"left",startX:e.clientX,os:bar.s,oe:bar.e};
+        } else if (e.target===rr) {
+          e.stopPropagation();
+          rsz = {pid:proj.id,bid:bar.id,edge:"right",startX:e.clientX,os:bar.s,oe:bar.e};
+        } else {
+          e.stopPropagation();
+          drag = {pid:proj.id,bid:bar.id,startX:e.clientX,os:bar.s,oe:bar.e};
+        }
+      });
+
+      // right-click context
+      g.addEventListener("contextmenu", e=>{
+        e.preventDefault();
+        ctxTarget = {pid:proj.id,bid:bar.id};
+        showCtxMenu(e.clientX,e.clientY,true);
+      });
+    });
+  });
+}
+
+// ─── Mouse events ─────────────────────────────────────────────────────────────
+document.addEventListener("mousemove", e=>{
+  if (drag) {
+    const dx = Math.round((e.clientX-drag.startX)/WEEK_W);
+    const dur = drag.oe-drag.os;
+    let ns = Math.max(0,drag.os+dx);
+    let ne = Math.min(TOTAL_WEEKS,ns+dur);
+    ns = ne-dur;
+    mutateBar(drag.pid,drag.bid,b=>{b.s=ns;b.e=ne;});
+  }
+  if (rsz) {
+    const dx = Math.round((e.clientX-rsz.startX)/WEEK_W);
+    mutateBar(rsz.pid,rsz.bid,b=>{
+      if (rsz.edge==="left")  b.s = Math.max(0,Math.min(rsz.oe-1,rsz.os+dx));
+      else                    b.e = Math.min(TOTAL_WEEKS,Math.max(rsz.os+1,rsz.oe+dx));
+    });
+  }
+});
+document.addEventListener("mouseup", ()=>{ drag=null; rsz=null; });
+document.addEventListener("click", ()=>hideCtxMenu());
+
+// ─── Mutation helpers ─────────────────────────────────────────────────────────
+function mutateBar(pid,bid,fn) {
+  const proj = projects.find(p=>p.id===pid);
+  if (!proj) return;
+  const bar = proj.bars.find(b=>b.id===bid);
+  if (!bar) return;
+  fn(bar);
+  render();
+}
+function deleteBar(pid,bid) {
+  const proj = projects.find(p=>p.id===pid);
+  if (!proj) return;
+  proj.bars = proj.bars.filter(b=>b.id!==bid);
+  render();
+}
+function deleteProject(pid) {
+  projects = projects.filter(p=>p.id!==pid);
+  render();
+}
+
+// ─── Context menu ─────────────────────────────────────────────────────────────
+function showCtxMenu(x,y,hasBar) {
+  const m = document.getElementById("ctx-menu");
+  document.getElementById("ctx-delete-bar").style.display = hasBar?"block":"none";
+  m.style.left = x+"px"; m.style.top = y+"px"; m.style.display="block";
+}
+function hideCtxMenu() { document.getElementById("ctx-menu").style.display="none"; }
+document.getElementById("ctx-delete-bar").onclick = ()=>{ if(ctxTarget?.bid!=null) deleteBar(ctxTarget.pid,ctxTarget.bid); hideCtxMenu(); };
+document.getElementById("ctx-add-bar").onclick    = ()=>{ if(ctxTarget) openAddBar(ctxTarget.pid); hideCtxMenu(); };
+document.getElementById("ctx-delete-project").onclick = ()=>{ if(ctxTarget) deleteProject(ctxTarget.pid); hideCtxMenu(); };
+
+// ─── Modals ───────────────────────────────────────────────────────────────────
+function openModal(id)  { document.getElementById(id).style.display="flex"; }
+function closeModal(id) { document.getElementById(id).style.display="none"; }
+
+// Add Project
+function openAddProject() {
+  document.getElementById("new-project-name").value="";
+  openModal("modal-project");
+  setTimeout(()=>document.getElementById("new-project-name").focus(),50);
+}
+function confirmAddProject() {
+  const name = document.getElementById("new-project-name").value.trim();
+  if (!name) return;
+  projects.push({id:nextPid++,name,bars:[]});
+  render(); closeModal("modal-project");
+}
+document.getElementById("new-project-name").addEventListener("keydown",e=>{ if(e.key==="Enter") confirmAddProject(); });
+
+// Add Bar
+let addBarPid = null;
+function openAddBar(pid) {
+  addBarPid = pid;
+  const proj = projects.find(p=>p.id===pid);
+  document.getElementById("modal-bar-project").textContent = proj?.name??"";
+  // populate phase select
+  const sel = document.getElementById("new-bar-phase");
+  sel.innerHTML = PHASE_NAMES.map(p=>`<option>${p}</option>`).join("");
+  document.getElementById("new-bar-start").value = 1;
+  document.getElementById("new-bar-end").value   = 5;
+  document.getElementById("new-bar-end").max     = TOTAL_WEEKS;
+  document.getElementById("new-bar-start").max   = TOTAL_WEEKS;
+  updateBarPreview();
+  openModal("modal-bar");
+}
+function updateBarPreview() {
+  const phase = document.getElementById("new-bar-phase").value;
+  const s = parseInt(document.getElementById("new-bar-start").value)||1;
+  const e = parseInt(document.getElementById("new-bar-end").value)||5;
+  const c = PHASES[phase]??{bg:"#64748b",bd:"#475569"};
+  document.getElementById("bar-color-preview").style.cssText = `background:${c.bg};border:1px solid ${c.bd};`;
+  document.getElementById("bar-preview-text").textContent = `Weeks ${s}–${e} (${Math.max(0,e-s)} weeks)`;
+}
+document.getElementById("new-bar-phase").addEventListener("change",updateBarPreview);
+document.getElementById("new-bar-start").addEventListener("input",updateBarPreview);
+document.getElementById("new-bar-end").addEventListener("input",updateBarPreview);
+
+function confirmAddBar() {
+  const phase = document.getElementById("new-bar-phase").value;
+  const s = Math.max(0,(parseInt(document.getElementById("new-bar-start").value)||1)-1);
+  const e = Math.min(TOTAL_WEEKS,parseInt(document.getElementById("new-bar-end").value)||5);
+  if (e<=s) { alert("End week must be greater than start week."); return; }
+  const proj = projects.find(p=>p.id===addBarPid);
+  if (!proj) return;
+  proj.bars.push({id:nextBid++,phase,s,e});
+  render(); closeModal("modal-bar");
+}
+
+// Close modals on bg click
+document.getElementById("modal-project").addEventListener("click",e=>{ if(e.target===e.currentTarget) closeModal("modal-project"); });
+document.getElementById("modal-bar").addEventListener("click",e=>{ if(e.target===e.currentTarget) closeModal("modal-bar"); });
+
+// ─── Legend ───────────────────────────────────────────────────────────────────
+function buildLegend() {
+  const leg = document.getElementById("legend");
+  for (const [name,c] of Object.entries(PHASES)) {
+    const div = document.createElement("div");
+    div.className="legend-item";
+    div.innerHTML=`<div class="legend-swatch" style="background:${c.bg};border:1px solid ${c.bd}"></div>${name}`;
+    leg.appendChild(div);
+  }
+}
+
+// ─── XLSX Export (pure JS, no libraries) ─────────────────────────────────────
+
+function exportXLSX() {
+
+  // ── helpers ──
+  function xmlEsc(s) {
+    return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+  function colName(idx) {
+    var s = "", n = idx + 1;
+    while (n > 0) { s = String.fromCharCode(64 + (n % 26 || 26)) + s; n = Math.floor((n - 1) / 26); }
+    return s;
+  }
+  function strToU8(s) {
+    var b = new Uint8Array(s.length);
+    for (var i = 0; i < s.length; i++) b[i] = s.charCodeAt(i) & 0xFF;
+    return b;
+  }
+  function concatU8(arrays) {
+    var len = 0;
+    for (var i = 0; i < arrays.length; i++) len += arrays[i].length;
+    var out = new Uint8Array(len), pos = 0;
+    for (var i = 0; i < arrays.length; i++) { out.set(arrays[i], pos); pos += arrays[i].length; }
+    return out;
+  }
+  function u16LE(n) { return new Uint8Array([n & 0xFF, (n >> 8) & 0xFF]); }
+  function u32LE(n) { return new Uint8Array([n & 0xFF, (n >> 8) & 0xFF, (n >> 16) & 0xFF, (n >> 24) & 0xFF]); }
+
+  // ── CRC32 ──
+  var crcTable = (function() {
+    var t = [];
+    for (var n = 0; n < 256; n++) {
+      var c = n;
+      for (var k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      t[n] = c;
+    }
+    return t;
+  })();
+  function crc32(buf) {
+    var c = 0xFFFFFFFF;
+    for (var i = 0; i < buf.length; i++) c = crcTable[(c ^ buf[i]) & 0xFF] ^ (c >>> 8);
+    return (c ^ 0xFFFFFFFF) >>> 0;
+  }
+
+  // ── ZIP builder (store, no compression) ──
+  function buildZip(files) {
+    var localParts = [], centralParts = [], offset = 0;
+    for (var fi = 0; fi < files.length; fi++) {
+      var name = files[fi].name;
+      var data = files[fi].data;
+      var nameU8 = strToU8(name);
+      var crc = crc32(data);
+      var sz = data.length;
+
+      // local file header
+      var lh = concatU8([
+        new Uint8Array([0x50,0x4B,0x03,0x04]), // sig
+        u16LE(20), u16LE(0), u16LE(0),         // ver, flag, method(store)
+        u16LE(0), u16LE(0),                    // mod time, date
+        u32LE(crc), u32LE(sz), u32LE(sz),
+        u16LE(nameU8.length), u16LE(0),        // name len, extra len
+        nameU8, data
+      ]);
+      localParts.push(lh);
+
+      // central dir entry
+      var cd = concatU8([
+        new Uint8Array([0x50,0x4B,0x01,0x02]), // sig
+        u16LE(20), u16LE(20), u16LE(0), u16LE(0), // ver made, ver need, flag, method
+        u16LE(0), u16LE(0),                    // mod time, date
+        u32LE(crc), u32LE(sz), u32LE(sz),
+        u16LE(nameU8.length), u16LE(0), u16LE(0), // name, extra, comment
+        u16LE(0), u16LE(0), u32LE(0),          // disk, int attr, ext attr
+        u32LE(offset),
+        nameU8
+      ]);
+      centralParts.push(cd);
+      offset += lh.length;
+    }
+
+    var cdData = concatU8(centralParts);
+    var eocd = concatU8([
+      new Uint8Array([0x50,0x4B,0x05,0x06]),
+      u16LE(0), u16LE(0),
+      u16LE(files.length), u16LE(files.length),
+      u32LE(cdData.length), u32LE(offset),
+      u16LE(0)
+    ]);
+    return concatU8(localParts.concat([cdData, eocd]));
+  }
+
+  // ── Build shared strings + sheet XML ──
+  var ssArr = [], ssMap = {};
+  function ss(v) {
+    var k = String(v == null ? "" : v);
+    if (ssMap[k] === undefined) { ssMap[k] = ssArr.length; ssArr.push(k); }
+    return ssMap[k];
+  }
+
+  function sheetXML(rows) {
+    var xml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            + '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+            + '<sheetData>';
+    for (var r = 0; r < rows.length; r++) {
+      var row = rows[r];
+      if (!row || !row.length) { xml += '<row r="' + (r+1) + '"/>'; continue; }
+      xml += '<row r="' + (r+1) + '">';
+      for (var c = 0; c < row.length; c++) {
+        var cell = row[c];
+        if (!cell) continue;
+        var ref = colName(c) + (r+1);
+        var sAttr = (cell.s != null) ? ' s="' + cell.s + '"' : '';
+        if (cell.t === 'n') {
+          xml += '<c r="' + ref + '"' + sAttr + '><v>' + cell.v + '</v></c>';
+        } else {
+          xml += '<c r="' + ref + '" t="s"' + sAttr + '><v>' + ss(cell.v) + '</v></c>';
+        }
+      }
+      xml += '</row>';
+    }
+    xml += '</sheetData></worksheet>';
+    return xml;
+  }
+
+  // ── Data sheet rows ──
+  var dataRows = [[
+    {v:"Project",t:'s',s:1},{v:"Phase",t:'s',s:1},{v:"Start Week",t:'s',s:1},
+    {v:"End Week",t:'s',s:1},{v:"Duration (weeks)",t:'s',s:1},{v:"Start Month",t:'s',s:1}
+  ]];
+  for (var i = 0; i < projects.length; i++) {
+    var proj = projects[i];
+    for (var j = 0; j < proj.bars.length; j++) {
+      var bar = proj.bars[j];
+      var mi = WEEK_MONTH[bar.s] != null ? WEEK_MONTH[bar.s] : 0;
+      dataRows.push([
+        {v:proj.name,t:'s'}, {v:bar.phase,t:'s'},
+        {v:bar.s+1,t:'n'},   {v:bar.e,t:'n'},
+        {v:bar.e-bar.s,t:'n'}, {v:MONTHS[mi],t:'s'}
+      ]);
+    }
+  }
+
+  // ── Gantt grid rows ──
+  var phaseNames = Object.keys(PHASES);
+  var ganttRows = [];
+  var mhdr = [{v:"Project / Phase", t:'s', s:1}];
+  for (var m = 0; m < MONTHS.length; m++) {
+    mhdr.push({v:MONTHS[m], t:'s', s:1});
+    for (var w = 1; w < MONTH_WEEKS[m]; w++) mhdr.push(null);
+  }
+  ganttRows.push(mhdr);
+  var whdr = [{v:"", t:'s'}];
+  for (var w = 0; w < TOTAL_WEEKS; w++) whdr.push({v:"W"+(w+1), t:'s', s:2});
+  ganttRows.push(whdr);
+
+  for (var i = 0; i < projects.length; i++) {
+    var proj = projects[i];
+    var prow = [{v:proj.name, t:'s', s:1}];
+    for (var w = 0; w < TOTAL_WEEKS; w++) prow.push(null);
+    ganttRows.push(prow);
+    for (var j = 0; j < proj.bars.length; j++) {
+      var bar = proj.bars[j];
+      var pi = phaseNames.indexOf(bar.phase);
+      var brow = [{v:bar.phase, t:'s'}];
+      for (var w = 0; w < TOTAL_WEEKS; w++) {
+        brow.push((w >= bar.s && w < bar.e) ? {v:"", t:'s', s: 3 + (pi < 0 ? 0 : pi)} : null);
+      }
+      ganttRows.push(brow);
+    }
+    ganttRows.push([]);
+  }
+
+  // ── Generate sheet XMLs (builds shared strings) ──
+  var s1xml = sheetXML(dataRows);
+  var s2xml = sheetXML(ganttRows);
+
+  // ── Shared strings XML ──
+  var ssXml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            + '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="'
+            + ssArr.length + '" uniqueCount="' + ssArr.length + '">';
+  for (var i = 0; i < ssArr.length; i++) ssXml += '<si><t xml:space="preserve">' + xmlEsc(ssArr[i]) + '</t></si>';
+  ssXml += '</sst>';
+
+  // ── Styles XML ──
+  var fills = [
+    '<fill><patternFill patternType="none"/></fill>',
+    '<fill><patternFill patternType="gray125"/></fill>'
+  ];
+  for (var pi = 0; pi < phaseNames.length; pi++) {
+    var hex = PHASES[phaseNames[pi]].bg.replace("#","");
+    fills.push('<fill><patternFill patternType="solid"><fgColor rgb="FF'+hex+'"/><bgColor indexed="64"/></patternFill></fill>');
+  }
+  var xfs = [
+    '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>',
+    '<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0"/>',
+    '<xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0"/>'
+  ];
+  for (var pi = 0; pi < phaseNames.length; pi++) {
+    xfs.push('<xf numFmtId="0" fontId="0" fillId="'+(2+pi)+'" borderId="1" xfId="0"/>');
+  }
+  var stylesXml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+    + '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+    + '<fonts count="3">'
+    + '<font><sz val="11"/><name val="Calibri"/></font>'
+    + '<font><sz val="11"/><b/><name val="Calibri"/></font>'
+    + '<font><sz val="9"/><name val="Calibri"/></font>'
+    + '</fonts>'
+    + '<fills count="'+fills.length+'">'+fills.join("")+'</fills>'
+    + '<borders count="2">'
+    + '<border><left/><right/><top/><bottom/><diagonal/></border>'
+    + '<border><left style="thin"><color rgb="FF999999"/></left><right style="thin"><color rgb="FF999999"/></right><top style="thin"><color rgb="FF999999"/></top><bottom style="thin"><color rgb="FF999999"/></bottom><diagonal/></border>'
+    + '</borders>'
+    + '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>'
+    + '<cellXfs count="'+xfs.length+'">'+xfs.join("")+'</cellXfs>'
+    + '</styleSheet>';
+
+  // ── Workbook + relationships ──
+  var wbXml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+    + '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
+    + '<sheets>'
+    + '<sheet name="Gantt Data" sheetId="1" r:id="rId1"/>'
+    + '<sheet name="Gantt Chart" sheetId="2" r:id="rId2"/>'
+    + '</sheets></workbook>';
+
+  var wbRels = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+    + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+    + '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>'
+    + '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet2.xml"/>'
+    + '<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings" Target="sharedStrings.xml"/>'
+    + '<Relationship Id="rId4" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>'
+    + '</Relationships>';
+
+  var pkgRels = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+    + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+    + '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>'
+    + '</Relationships>';
+
+  var contentTypes = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+    + '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
+    + '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'
+    + '<Default Extension="xml" ContentType="application/xml"/>'
+    + '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>'
+    + '<Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>'
+    + '<Override PartName="/xl/worksheets/sheet2.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>'
+    + '<Override PartName="/xl/sharedStrings.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml"/>'
+    + '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>'
+    + '</Types>';
+
+  // ── Assemble ZIP and download ──
+  var zipData = buildZip([
+    {name:"[Content_Types].xml",        data:strToU8(contentTypes)},
+    {name:"_rels/.rels",                data:strToU8(pkgRels)},
+    {name:"xl/workbook.xml",            data:strToU8(wbXml)},
+    {name:"xl/_rels/workbook.xml.rels", data:strToU8(wbRels)},
+    {name:"xl/worksheets/sheet1.xml",   data:strToU8(s1xml)},
+    {name:"xl/worksheets/sheet2.xml",   data:strToU8(s2xml)},
+    {name:"xl/sharedStrings.xml",       data:strToU8(ssXml)},
+    {name:"xl/styles.xml",              data:strToU8(stylesXml)}
+  ]);
+
+  var blob = new Blob([zipData], {type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url;
+  a.setAttribute("download","GanttChart.xlsx");
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+  var msg = document.getElementById("export-msg");
+  msg.textContent = "✓ GanttChart.xlsx downloaded!";
+  setTimeout(function(){ msg.textContent = ""; }, 4000);
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+buildLegend();
+render();
+</script>
+</body>
+</html>
