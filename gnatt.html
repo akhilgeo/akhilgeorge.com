@@ -53,6 +53,7 @@
   <div class="actions">
     <button class="btn btn-blue" onclick="openAddProject()">+ Add Project</button>
     <button class="btn btn-green" onclick="exportXLSX()">⬇ Export XLSX</button>
+    <button class="btn btn-blue" onclick="saveAsHTML()" style="background:#7c3aed;">💾 Save as HTML</button>
     <span id="export-msg"></span>
   </div>
 </div>
@@ -852,6 +853,43 @@ function exportXLSX() {
   var msg = document.getElementById("export-msg");
   msg.textContent = "✓ GanttChart.xlsx downloaded!";
   setTimeout(function(){ msg.textContent = ""; }, 4000);
+}
+
+// ─── Save as HTML ─────────────────────────────────────────────────────────────
+function saveAsHTML() {
+  var src = document.documentElement.outerHTML;
+
+  // Remove any previously injected saved-state block
+  var startTag = '<scr' + 'ipt id="saved-state">';
+  var endTag   = '<\/scr' + 'ipt>';
+  var si = src.indexOf(startTag);
+  if (si !== -1) {
+    var ei = src.indexOf(endTag, si) + endTag.length;
+    src = src.slice(0, si) + src.slice(ei);
+  }
+
+  // Build injection block with current live data
+  var stateBlock = '<scr' + 'ipt id="saved-state">\n'
+    + 'projects = ' + JSON.stringify(projects) + ';\n'
+    + 'nextPid = ' + nextPid + ';\n'
+    + 'nextBid = ' + nextBid + ';\n'
+    + '<\/scr' + 'ipt>';
+
+  // Insert just before </body>
+  src = src.replace('<\/body>', stateBlock + '\n<\/body>');
+
+  var blob = new Blob([src], {type: 'text/html;charset=utf-8'});
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  a.href   = url;
+  a.setAttribute('download', 'GanttChart.html');
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+  var msg = document.getElementById('export-msg');
+  msg.textContent = '✓ Saved! Re-open GanttChart.html to continue.';
+  setTimeout(function(){ msg.textContent = ''; }, 5000);
 }
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
