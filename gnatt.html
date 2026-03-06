@@ -116,11 +116,47 @@
 
 <script>
 // ─── Constants ───────────────────────────────────────────────────────────────
-const MONTHS = ["March","April","May","June","July","August","September","October"];
-const MONTH_WEEKS = [4,4,5,4,4,4,5,4];
-const TOTAL_WEEKS = MONTH_WEEKS.reduce((a,b)=>a+b,0);
-const WEEK_W = 38, ROW_H = 34, LABEL_W = 180, HEADER_H = 72;
-const MONTH_COLORS = ["#b45309","#92400e","#1d4ed8","#065f46","#7c3aed","#0f766e","#9d174d","#c2410c"];
+// Week 1 = Dec 31, each week is 7 days, Sprint = 2 weeks
+const TOTAL_WEEKS = 34;
+const WEEK_W = 42, ROW_H = 34, LABEL_W = 180, HEADER_H = 114;
+
+// Build week data from Dec 31 base
+(function() {
+  var base = new Date(2024, 11, 31); // Dec 31 2024
+  window.WEEK_DATA = [];
+  for (var i = 0; i < TOTAL_WEEKS; i++) {
+    var ws = new Date(base.getTime() + i * 7 * 86400000);
+    var we = new Date(ws.getTime() + 6 * 86400000);
+    var fmt = function(d) {
+      return d.toLocaleDateString('en-US',{month:'short',day:'2-digit'});
+    };
+    window.WEEK_DATA.push({
+      startDate: fmt(ws),
+      endDate:   fmt(we),
+      month:     ws.toLocaleDateString('en-US',{month:'long'}),
+      sprint:    'Sprint-' + (Math.floor(i/2)+1),
+      weekNum:   i+1
+    });
+  }
+  // Build month groups (consecutive same-month weeks)
+  window.MONTH_GROUPS = [];
+  var cur = null;
+  for (var i = 0; i < window.WEEK_DATA.length; i++) {
+    var m = window.WEEK_DATA[i].month;
+    if (!cur || cur.month !== m) {
+      if (cur) window.MONTH_GROUPS.push(cur);
+      cur = {month: m, start: i, end: i};
+    } else { cur.end = i; }
+  }
+  if (cur) window.MONTH_GROUPS.push(cur);
+  // WEEK_MONTH: week index -> month group index
+  window.WEEK_MONTH_IDX = [];
+  for (var gi = 0; gi < window.MONTH_GROUPS.length; gi++)
+    for (var w = window.MONTH_GROUPS[gi].start; w <= window.MONTH_GROUPS[gi].end; w++)
+      window.WEEK_MONTH_IDX[w] = gi;
+})();
+
+const MONTH_COLORS = ["#4a1942","#b45309","#92400e","#1d4ed8","#065f46","#7c3aed","#0f766e","#9d174d","#c2410c"];
 
 const PHASES = {
   "Intake & Design":    { bg:"#f4a261", bd:"#e76f51", tx:"#fff" },
@@ -161,9 +197,7 @@ let projects = [
 ];
 let nextPid = 10, nextBid = 100;
 
-// ─── Week starts ──────────────────────────────────────────────────────────────
-const WEEK_MONTH = [];
-for (let m=0;m<MONTHS.length;m++) for (let i=0;i<MONTH_WEEKS[m];i++) WEEK_MONTH.push(m);
+// WEEK_MONTH_IDX is built inside the IIFE above using WEEK_DATA
 
 // ─── Drag / resize state ──────────────────────────────────────────────────────
 let drag = null;   // {pid, bid, startX, os, oe}
@@ -219,39 +253,72 @@ function render() {
   // BG
   el("rect",{width:W,height:H,fill:"#0f172a"},svg);
 
-  // Month column backgrounds
-  let mx = LABEL_W;
-  for (let m=0;m<MONTHS.length;m++) {
-    const mw = MONTH_WEEKS[m]*WEEK_W;
-    el("rect",{x:mx,y:0,width:mw,height:H,fill:m%2===0?"#1e293b":"#162032"},svg);
-    mx+=mw;
-  }
-
-  // Week grid lines
-  for (let w=0;w<TOTAL_WEEKS;w++)
-    el("line",{x1:LABEL_W+w*WEEK_W,y1:0,x2:LABEL_W+w*WEEK_W,y2:H,stroke:"#334155","stroke-width":"0.5"},svg);
-  el("line",{x1:LABEL_W+TOTAL_WEEKS*WEEK_W,y1:0,x2:LABEL_W+TOTAL_WEEKS*WEEK_W,y2:H,stroke:"#334155","stroke-width":"0.5"},svg);
-
-  // Month headers
-  mx = LABEL_W;
-  for (let m=0;m<MONTHS.length;m++) {
-    const mw = MONTH_WEEKS[m]*WEEK_W;
-    el("rect",{x:mx,y:0,width:mw,height:32,fill:MONTH_COLORS[m]},svg);
-    svgText(MONTHS[m],{x:mx+mw/2,y:20,"text-anchor":"middle",fill:"#fff","font-size":"13","font-weight":"700"},svg);
-    mx+=mw;
-  }
-
-  // Week number row
+  // ── Column BG (alternating by month group) ──
   for (let w=0;w<TOTAL_WEEKS;w++) {
-    const wx = LABEL_W+w*WEEK_W;
-    el("rect",{x:wx,y:32,width:WEEK_W,height:22,fill:WEEK_MONTH[w]%2===0?"#1e3a5f":"#172554"},svg);
-    svgText("W"+(w+1),{x:wx+WEEK_W/2,y:47,"text-anchor":"middle",fill:"#94a3b8","font-size":"10","font-weight":"500"},svg);
+    const gi = WEEK_MONTH_IDX[w]??0;
+    el("rect",{x:LABEL_W+w*WEEK_W,y:0,width:WEEK_W,height:H,fill:gi%2===0?"#1e293b":"#162032"},svg);
   }
 
-  // Today marker (week 1)
-  el("line",{x1:LABEL_W+WEEK_W,y1:0,x2:LABEL_W+WEEK_W,y2:H,stroke:"#ef4444","stroke-width":"2","stroke-dasharray":"4,3",opacity:"0.7"},svg);
+  // ── Week grid lines ──
+  for (let w=0;w<=TOTAL_WEEKS;w++)
+    el("line",{x1:LABEL_W+w*WEEK_W,y1:0,x2:LABEL_W+w*WEEK_W,y2:H,stroke:"#334155","stroke-width":"0.5"},svg);
 
-  // Horizontal separator
+  // Row y positions for 5 header rows
+  const H_MONTH=22, H_SDATE=18, H_EDATE=18, H_WEEK=18, H_SPRINT=18;
+  const Y_MONTH=0, Y_SDATE=H_MONTH, Y_EDATE=H_MONTH+H_SDATE, Y_WEEK=H_MONTH+H_SDATE+H_EDATE, Y_SPRINT=H_MONTH+H_SDATE+H_EDATE+H_WEEK;
+
+  // Row 1: Month headers (merged spans)
+  for (let gi=0;gi<MONTH_GROUPS.length;gi++) {
+    const mg = MONTH_GROUPS[gi];
+    const mx = LABEL_W + mg.start*WEEK_W;
+    const mw = (mg.end-mg.start+1)*WEEK_W;
+    el("rect",{x:mx,y:Y_MONTH,width:mw,height:H_MONTH,fill:MONTH_COLORS[gi%MONTH_COLORS.length]},svg);
+    svgText(mg.month,{x:mx+mw/2,y:Y_MONTH+14,"text-anchor":"middle",fill:"#fff","font-size":"12","font-weight":"700"},svg);
+  }
+  el("rect",{x:0,y:Y_MONTH,width:LABEL_W-4,height:H_MONTH,fill:"#0f172a"},svg);
+  svgText("Month",{x:10,y:Y_MONTH+14,fill:"#94a3b8","font-size":"10","font-weight":"600"},svg);
+
+  // Row 2: Start Date
+  el("rect",{x:0,y:Y_SDATE,width:LABEL_W-4,height:H_SDATE,fill:"#1e293b"},svg);
+  svgText("Start Date",{x:10,y:Y_SDATE+12,fill:"#94a3b8","font-size":"9","font-weight":"600"},svg);
+  for (let w=0;w<TOTAL_WEEKS;w++) {
+    const wx=LABEL_W+w*WEEK_W;
+    el("rect",{x:wx,y:Y_SDATE,width:WEEK_W,height:H_SDATE,fill:WEEK_MONTH_IDX[w]%2===0?"#1e3a5f22":"#17255422","stroke":"#334155","stroke-width":"0.3"},svg);
+    svgText(WEEK_DATA[w].startDate,{x:wx+WEEK_W/2,y:Y_SDATE+12,"text-anchor":"middle",fill:"#cbd5e1","font-size":"8"},svg);
+  }
+
+  // Row 3: End Date
+  el("rect",{x:0,y:Y_EDATE,width:LABEL_W-4,height:H_EDATE,fill:"#1e293b"},svg);
+  svgText("End Date",{x:10,y:Y_EDATE+12,fill:"#94a3b8","font-size":"9","font-weight":"600"},svg);
+  for (let w=0;w<TOTAL_WEEKS;w++) {
+    const wx=LABEL_W+w*WEEK_W;
+    el("rect",{x:wx,y:Y_EDATE,width:WEEK_W,height:H_EDATE,fill:WEEK_MONTH_IDX[w]%2===0?"#1e3a5f22":"#17255422","stroke":"#334155","stroke-width":"0.3"},svg);
+    svgText(WEEK_DATA[w].endDate,{x:wx+WEEK_W/2,y:Y_EDATE+12,"text-anchor":"middle",fill:"#cbd5e1","font-size":"8"},svg);
+  }
+
+  // Row 4: Week numbers
+  el("rect",{x:0,y:Y_WEEK,width:LABEL_W-4,height:H_WEEK,fill:"#1e293b"},svg);
+  svgText("Week",{x:10,y:Y_WEEK+12,fill:"#94a3b8","font-size":"9","font-weight":"600"},svg);
+  for (let w=0;w<TOTAL_WEEKS;w++) {
+    const wx=LABEL_W+w*WEEK_W;
+    el("rect",{x:wx,y:Y_WEEK,width:WEEK_W,height:H_WEEK,fill:WEEK_MONTH_IDX[w]%2===0?"#1e3a5f":"#172554"},svg);
+    svgText("W"+WEEK_DATA[w].weekNum,{x:wx+WEEK_W/2,y:Y_WEEK+12,"text-anchor":"middle",fill:"#94a3b8","font-size":"9","font-weight":"600"},svg);
+  }
+
+  // Row 5: Sprint (each sprint = 2 weeks)
+  el("rect",{x:0,y:Y_SPRINT,width:LABEL_W-4,height:H_SPRINT,fill:"#1e293b"},svg);
+  svgText("Sprints",{x:10,y:Y_SPRINT+12,fill:"#60a5fa","font-size":"9","font-weight":"700"},svg);
+  const totalSprints = Math.ceil(TOTAL_WEEKS/2);
+  for (let sp=0;sp<totalSprints;sp++) {
+    const sw=sp*2, spWeeks=Math.min(2,TOTAL_WEEKS-sw);
+    const sx=LABEL_W+sw*WEEK_W, spw=spWeeks*WEEK_W;
+    el("rect",{x:sx,y:Y_SPRINT,width:spw,height:H_SPRINT,
+      fill:sp%2===0?"#1e3a5f":"#0f2744",stroke:"#334155","stroke-width":"0.5"},svg);
+    svgText(WEEK_DATA[sw].sprint,{x:sx+spw/2,y:Y_SPRINT+12,"text-anchor":"middle",
+      fill:"#60a5fa","font-size":"9","font-weight":"700"},svg);
+  }
+
+  // Horizontal separator under header
   el("line",{x1:0,y1:HEADER_H,x2:W,y2:HEADER_H,stroke:"#475569","stroke-width":"1"},svg);
 
   // Projects
@@ -563,7 +630,8 @@ function exportXLSX() {
     return ssMap[k];
   }
 
-  function sheetXML(rows) {
+  // merges: array of {r1,c1,r2,c2} (0-indexed)
+  function sheetXML(rows, merges) {
     var xml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
             + '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
             + '<sheetData>';
@@ -584,7 +652,16 @@ function exportXLSX() {
       }
       xml += '</row>';
     }
-    xml += '</sheetData></worksheet>';
+    xml += '</sheetData>';
+    if (merges && merges.length) {
+      xml += '<mergeCells count="' + merges.length + '">';
+      for (var mi = 0; mi < merges.length; mi++) {
+        var mg = merges[mi];
+        xml += '<mergeCell ref="' + colName(mg.c1) + (mg.r1+1) + ':' + colName(mg.c2) + (mg.r2+1) + '"/>';
+      }
+      xml += '</mergeCells>';
+    }
+    xml += '</worksheet>';
     return xml;
   }
 
@@ -597,27 +674,49 @@ function exportXLSX() {
     var proj = projects[i];
     for (var j = 0; j < proj.bars.length; j++) {
       var bar = proj.bars[j];
-      var mi = WEEK_MONTH[bar.s] != null ? WEEK_MONTH[bar.s] : 0;
       dataRows.push([
         {v:proj.name,t:'s'}, {v:bar.phase,t:'s'},
         {v:bar.s+1,t:'n'},   {v:bar.e,t:'n'},
-        {v:bar.e-bar.s,t:'n'}, {v:MONTHS[mi],t:'s'}
+        {v:bar.e-bar.s,t:'n'}, {v:WEEK_DATA[bar.s].month,t:'s'}
       ]);
     }
   }
 
-  // ── Gantt grid rows ──
+  // ── Gantt grid rows (5 header rows matching visual) ──
   var phaseNames = Object.keys(PHASES);
   var ganttRows = [];
-  var mhdr = [{v:"Project / Phase", t:'s', s:1}];
-  for (var m = 0; m < MONTHS.length; m++) {
-    mhdr.push({v:MONTHS[m], t:'s', s:1});
-    for (var w = 1; w < MONTH_WEEKS[m]; w++) mhdr.push(null);
+
+  // Row 1: Month header (first week of each month group gets the name, rest null for merge)
+  var mhdr = [{v:"Month", t:'s', s:1}];
+  for (var gi = 0; gi < MONTH_GROUPS.length; gi++) {
+    var mg = MONTH_GROUPS[gi];
+    mhdr.push({v: mg.month, t:'s', s:1});
+    for (var w = mg.start+1; w <= mg.end; w++) mhdr.push(null);
   }
   ganttRows.push(mhdr);
-  var whdr = [{v:"", t:'s'}];
+
+  // Row 2: Start Date
+  var sdhdr = [{v:"Start Date", t:'s', s:1}];
+  for (var w = 0; w < TOTAL_WEEKS; w++) sdhdr.push({v: WEEK_DATA[w].startDate, t:'s', s:2});
+  ganttRows.push(sdhdr);
+
+  // Row 3: End Date
+  var edhdr = [{v:"End Date", t:'s', s:1}];
+  for (var w = 0; w < TOTAL_WEEKS; w++) edhdr.push({v: WEEK_DATA[w].endDate, t:'s', s:2});
+  ganttRows.push(edhdr);
+
+  // Row 4: Week numbers
+  var whdr = [{v:"Week", t:'s', s:1}];
   for (var w = 0; w < TOTAL_WEEKS; w++) whdr.push({v:"W"+(w+1), t:'s', s:2});
   ganttRows.push(whdr);
+
+  // Row 5: Sprint labels (first week of each sprint gets label, second null for merge)
+  var sprhdr = [{v:"Sprints", t:'s', s:4}];
+  for (var w = 0; w < TOTAL_WEEKS; w++) {
+    if (w % 2 === 0) sprhdr.push({v: WEEK_DATA[w].sprint, t:'s', s:4});
+    else sprhdr.push(null);
+  }
+  ganttRows.push(sprhdr);
 
   for (var i = 0; i < projects.length; i++) {
     var proj = projects[i];
@@ -629,7 +728,7 @@ function exportXLSX() {
       var pi = phaseNames.indexOf(bar.phase);
       var brow = [{v:bar.phase, t:'s'}];
       for (var w = 0; w < TOTAL_WEEKS; w++) {
-        brow.push((w >= bar.s && w < bar.e) ? {v:"", t:'s', s: 3 + (pi < 0 ? 0 : pi)} : null);
+        brow.push((w >= bar.s && w < bar.e) ? {v:"", t:'s', s: 4 + (pi < 0 ? 0 : pi)} : null);
       }
       ganttRows.push(brow);
     }
@@ -637,8 +736,22 @@ function exportXLSX() {
   }
 
   // ── Generate sheet XMLs (builds shared strings) ──
-  var s1xml = sheetXML(dataRows);
-  var s2xml = sheetXML(ganttRows);
+  // Build merge cells for XLSX: month header row (row 0) + sprint row (row 4)
+  var xlsxMerges = [];
+  // Month merges (row 0): merge all weeks of each month group
+  for (var gi = 0; gi < MONTH_GROUPS.length; gi++) {
+    var mg = MONTH_GROUPS[gi];
+    if (mg.end > mg.start)
+      xlsxMerges.push({r1:0, c1:mg.start+1, r2:0, c2:mg.end+1});
+  }
+  // Sprint merges (row 4): merge every 2 weeks
+  for (var sp = 0; sp < Math.ceil(TOTAL_WEEKS / 2); sp++) {
+    var c1 = 1 + sp*2;
+    var c2 = Math.min(c1+1, TOTAL_WEEKS);
+    if (c2 > c1) xlsxMerges.push({r1:4, c1:c1, r2:4, c2:c2});
+  }
+  var s1xml = sheetXML(dataRows, null);
+  var s2xml = sheetXML(ganttRows, xlsxMerges);
 
   // ── Shared strings XML ──
   var ssXml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
@@ -657,19 +770,22 @@ function exportXLSX() {
     fills.push('<fill><patternFill patternType="solid"><fgColor rgb="FF'+hex+'"/><bgColor indexed="64"/></patternFill></fill>');
   }
   var xfs = [
-    '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>',
-    '<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0"/>',
-    '<xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0"/>'
+    '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>',          // 0 default
+    '<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0"/>',          // 1 bold header
+    '<xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0"/>',          // 2 small week
+    '<xf numFmtId="0" fontId="3" fillId="1" borderId="1" xfId="0"><alignment horizontal="center"/></xf>' // 3 sprint (blue text, border)
   ];
+  // NOTE: phase fills start at xfId 4 now (shifted by 1 for sprint style)
   for (var pi = 0; pi < phaseNames.length; pi++) {
     xfs.push('<xf numFmtId="0" fontId="0" fillId="'+(2+pi)+'" borderId="1" xfId="0"/>');
   }
   var stylesXml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
     + '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
-    + '<fonts count="3">'
+    + '<fonts count="4">'
     + '<font><sz val="11"/><name val="Calibri"/></font>'
     + '<font><sz val="11"/><b/><name val="Calibri"/></font>'
     + '<font><sz val="9"/><name val="Calibri"/></font>'
+    + '<font><sz val="9"/><b/><color rgb="FF2563EB"/><name val="Calibri"/></font>'
     + '</fonts>'
     + '<fills count="'+fills.length+'">'+fills.join("")+'</fills>'
     + '<borders count="2">'
