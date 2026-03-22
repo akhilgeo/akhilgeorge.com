@@ -7,7 +7,7 @@ image: '/images/Akhil.jpg'
 
 Hi there! My name is **Akhil Abraham George**, and I'm an **SAP Consultant** at **TCS**.
 
-I’m part Consultant, part digital explorer, and a full-time lover of all things tech. My journey into the world of technology began with a simple curiosity for how things work, which eventually led me to pursue a degree in **Computer Science and Engineering**. Originally from the beautiful state of **Kerala, India**, I currently reside in **Kottayam**, where I balance my professional career with my passion for coding and continuous learning.
+I’m part Consultant, part digital explorer, and a full-time lover of all things tech. My journey into the world of technology began with a simple curiosity for how things work, which eventually led me to pursue a degree in **Computer Science and Engineering** and complete the **Executive Leadership Programme** from **London Business School**. Originally from the beautiful state of **Kerala, India**, I currently reside in **Kottayam**, where I balance my professional career with my passion for coding and continuous learning.
 
 > Turning complex business challenges into elegant technical solutions. Bridging the world of SAP with the spirit of open-source innovation.
 
