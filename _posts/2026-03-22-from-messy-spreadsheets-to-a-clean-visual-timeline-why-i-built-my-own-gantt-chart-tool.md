@@ -1,19 +1,26 @@
 ---
-title: "From Messy Spreadsheets to a Clean Visual Timeline: Why I Built My Own Gantt Chart Tool"
+title: 'From Messy Spreadsheets to a Clean Visual Timeline: Why I Built My Own Gantt
+  Chart Tool'
 layout: post
 tags:
 - General
+image: assets/images/post/gantt_cover.png
 ---
 
 If you've ever managed a software delivery alongside a scrum team, you already know the pain. Someone builds a timeline in Excel. Someone else edits it on a different machine. The formatting breaks. The sprint labels are wrong. Half the team can't even open the file. And before long, nobody trusts the plan because nobody's quite sure which version is the right one.
 
 I've been there more times than I'd like to admit. So I decided to build something better — and I want to share it with you.
 
+> You can try it live and download the HTML here:  
+> <a href="https://akhilgeorge.com/projects/Gnatt.html" target="_blank">https://akhilgeorge.com/projects/Gnatt.html</a>
+
 ### What I Built
 
 I created a fully interactive Gantt chart tool that runs entirely in a single HTML file. No installation. No login. No subscription. Just open the file in your browser and start planning.
 
 Here's what it looks like out of the box:
+
+![]({{ 'assets/images/post/gnatt.jpg' | relative_url }})
 
 *   A colour-coded timeline showing features, phases, sprints, weeks, and dates — all in one view
 *   Drag-and-drop bars to reschedule phases instantly
@@ -101,7 +108,7 @@ No more copying dates from one tool into another. No more timelines that are out
 
 Getting started takes about thirty seconds:
 
-1.  Download the HTML file
+1.  Download the HTML file from <a href="https://akhilgeorge.com/projects/Gnatt.html" target="_blank">here</a>
 2.  Open it in Chrome, Firefox, Edge, or Safari
 3.  Click ⚙ **Settings** to set your start date, sprint length, and configure phases
 4.  Add your features and drag bars to match your plan
