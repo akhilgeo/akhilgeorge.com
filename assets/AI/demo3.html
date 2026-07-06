@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Agent Memory — Interactive Demo</title>
+<style>
+  :root {
+    --surface-2: #ffffff;
+    --surface-1: #f4f3ee;
+    --surface-0: #eceae2;
+    --text-primary: #1a1a18;
+    --text-secondary: #5f5e5a;
+    --text-muted: #888780;
+    --text-accent: #185fa5;
+    --border: #dedcd2;
+    --border-strong: #c7c5b9;
+    --border-stronger: #a8a69a;
+    --teal-50: #E1F5EE; --teal-800: #085041;
+    --amber-50: #FAEEDA; --amber-800: #633806;
+    --gray-50: #F1EFE8; --gray-800: #444441;
+    --radius: 8px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --surface-2: #2a2a28;
+      --surface-1: #333330;
+      --surface-0: #1f1f1d;
+      --text-primary: #f0efe9;
+      --text-secondary: #c2c0b6;
+      --text-muted: #928f83;
+      --text-accent: #85b7eb;
+      --border: #45443f;
+      --border-strong: #55534c;
+      --border-stronger: #6b6960;
+      --teal-50: #04342C; --teal-800: #9FE1CB;
+      --amber-50: #412402; --amber-800: #FAC775;
+      --gray-50: #2C2C2A; --gray-800: #D3D1C7;
+    }
+  }
+  body { background: var(--surface-0); color: var(--text-primary); margin: 0; padding: 2rem 1rem; }
+  .wrap {
+    max-width: 680px; margin: 0 auto;
+    background: var(--surface-2); border-radius: 16px;
+    padding: 1.75rem; border: 0.5px solid var(--border);
+  }
+  h1 { font-size: 20px; font-weight: 500; margin: 0 0 4px; }
+  .subtitle { font-size: 14px; color: var(--text-secondary); margin: 0 0 1.5rem; line-height: 1.6; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+  #tabs { display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap; }
+  #tabs button {
+    flex: 1; min-width: 120px; font-size: 13px; padding: 8px 10px;
+    background: transparent; border: 0.5px solid var(--border-strong);
+    border-radius: var(--radius); color: var(--text-primary);
+    cursor: pointer; transition: background 0.15s, border-color 0.15s;
+  }
+  #tabs button:hover { background: var(--surface-1); }
+
+  #card { background: var(--surface-1); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; }
+  #card p { margin: 0; line-height: 1.6; }
+  .card-title { font-weight: 500; font-size: 15px; margin-bottom: 6px !important; }
+  .card-desc { font-size: 14px; color: var(--text-secondary); margin-bottom: 12px !important; }
+  .card-divider { border-top: 0.5px solid var(--border); padding-top: 10px; }
+  .card-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px !important; }
+  .card-example { font-size: 14px; }
+
+  .try-section { border-top: 0.5px solid var(--border); padding-top: 1.25rem; margin-bottom: 1rem; }
+  .try-title { font-size: 14px; font-weight: 500; margin: 0 0 8px; }
+
+  #chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  #chips button {
+    font-size: 12px; padding: 6px 10px; border-radius: var(--radius);
+    border: 0.5px solid var(--border-strong); background: var(--surface-2);
+    color: var(--text-primary); cursor: pointer;
+  }
+  #chips button:hover { background: var(--surface-1); }
+
+  .query-row { display: flex; gap: 8px; margin-bottom: 12px; }
+  input[type=text] {
+    flex: 1; font-size: 14px; padding: 8px 10px; border-radius: var(--radius);
+    border: 0.5px solid var(--border-strong); background: var(--surface-2); color: var(--text-primary);
+  }
+  input[type=text]:focus { outline: none; box-shadow: 0 0 0 2px var(--text-accent); }
+
+  .budget-row { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
+  .budget-row label { font-size: 13px; color: var(--text-secondary); white-space: nowrap; }
+  input[type=range] { flex: 1; }
+  #budget-out { font-size: 13px; min-width: 32px; text-align: right; }
+
+  #bar-track { height: 6px; border-radius: 3px; background: var(--surface-1); overflow: hidden; margin-bottom: 1rem; }
+  #bar { height: 100%; width: 0%; background: var(--text-accent); transition: width 0.3s ease; }
+
+  #result-title { font-size: 14px; font-weight: 500; margin: 0 0 10px; }
+  #result-title span { font-weight: 400; color: var(--text-secondary); }
+  .chunk { border-radius: 8px; padding: 8px 12px; margin-bottom: 8px; animation: fadeIn .25s ease; }
+  .chunk-head { display: flex; justify-content: space-between; align-items: baseline; }
+  .chunk-type { font-size: 13px; font-weight: 500; }
+  .chunk-status { font-size: 12px; }
+  .chunk-text { font-size: 13px; margin: 4px 0 0; line-height: 1.5; }
+  .chunk-reason { font-size: 12px; margin: 4px 0 0; opacity: 0.75; }
+  .dim { opacity: 0.6; }
+
+  .c-teal { background: var(--teal-50); color: var(--teal-800); }
+  .c-amber { background: var(--amber-50); color: var(--amber-800); }
+  .c-gray { background: var(--gray-50); color: var(--gray-800); }
+
+  @keyframes fadeIn { from { opacity:0; transform: translateY(-4px); } to { opacity:1; transform: translateY(0); } }
+  @media (prefers-reduced-motion: reduce) { .chunk { animation: none; } #bar { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h2 class="sr-only">Interactive demo of AI agent memory types and context assembly, with keyword-based retrieval across a travel-planning assistant example</h2>
+  <h1>AI agent memory, in action</h1>
+  <p class="subtitle">Click through the memory types, then type any request and watch which memories actually get retrieved.</p>
+
+  <div id="tabs"></div>
+  <div id="card"></div>
+
+  <div class="try-section">
+    <p class="try-title">Try it: type any request</p>
+    <div id="chips"></div>
+    <div class="query-row">
+      <input id="query" type="text" value="Plan a trip to Rome for June" oninput="assemble()">
+    </div>
+    <div class="budget-row">
+      <label for="budget">Token budget</label>
+      <input type="range" min="40" max="220" step="10" value="140" id="budget" oninput="document.getElementById('budget-out').textContent=this.value; assemble()">
+      <span id="budget-out">140</span>
+    </div>
+  </div>
+
+  <div id="bar-track"><div id="bar"></div></div>
+
+  <div id="result"></div>
+</div>
+
+<script>
+const chunks = [
+  {id:'short', type:'Short-term / working', tokens:55, always:true, keywords:[],
+   full:'User: "[[QUERY]]" Assistant: "Got it — let me check what I know before responding."',
+   compact:'Current turn: user request logged.'},
+  {id:'episodic', type:'Episodic', tokens:70, keywords:['japan','flight','before','again','last','previous','time'],
+   full:'March 2025 trip: booked JAL flights, stayed in Shibuya, used the bullet train between cities, ran 2 days over budget.',
+   compact:'Past trip: Japan, booked via JAL, ran over budget.'},
+  {id:'semantic', type:'Semantic / long-term', tokens:45, keywords:['prefer','preference','preferences','seat','vegetarian','vegan','hotel','window','food','meal','budget'],
+   full:'Traveler profile: prefers window seats, vegetarian meals, mid-range hotels, avoids red-eye flights.',
+   compact:'Profile: window seat, vegetarian, mid-range, no red-eyes.'},
+  {id:'procedural', type:'Procedural', tokens:50, keywords:['book','booking','plan','trip','itinerary','confirm'],
+   full:'Booking steps: 1) confirm dates 2) search flights and hotels matching profile 3) present 2-3 options 4) confirm and issue booking.',
+   compact:'Procedure: confirm dates → search → present options → book.'}
+];
+
+const cards = [
+  {label:'Short-term', desc:'The active context window — current conversation, recent tool results, scratch notes for the task at hand.',
+   example:'Whatever request is typed below — it always stays loaded for the current turn.'},
+  {label:'Episodic', desc:'Records of past interactions or task runs — what happened last time — used to inform similar future situations.',
+   example:'"Booked JAL flights for Japan in March 2025, ran over budget." Only surfaces when a request echoes a past trip.'},
+  {label:'Semantic', desc:'Durable facts and knowledge — user preferences, domain knowledge — typically stored outside the model in a retrievable store.',
+   example:'"Prefers window seats, vegetarian, mid-range hotels." Surfaces when the request touches preferences.'},
+  {label:'Procedural', desc:'Learned or defined patterns of behavior — how to perform a task — often encoded as instructions, tools, or fine-tuning.',
+   example:'The booking checklist — surfaces whenever the request is actually asking to book or plan something.'}
+];
+
+const chipOptions = ['Plan a trip to Rome for June', 'Book another flight like my Japan trip', 'What are my seat and food preferences?', 'Just tell me a fun fact about Rome'];
+const chipsEl = document.getElementById('chips');
+chipOptions.forEach(c=>{
+  const b = document.createElement('button');
+  b.textContent = c.length > 28 ? c.slice(0,26)+'…' : c;
+  b.title = c;
+  b.onclick = ()=>{ document.getElementById('query').value = c; assemble(); };
+  chipsEl.appendChild(b);
+});
+
+let active = 0;
+const tabsEl = document.getElementById('tabs');
+cards.forEach((c,i)=>{
+  const b = document.createElement('button');
+  b.textContent = c.label;
+  b.onclick = ()=>{active=i; render();};
+  b.id = 'tab-'+i;
+  tabsEl.appendChild(b);
+});
+
+function render(){
+  cards.forEach((c,i)=>{
+    const b = document.getElementById('tab-'+i);
+    b.style.background = i===active ? 'var(--surface-1)' : 'transparent';
+    b.style.borderColor = i===active ? 'var(--border-stronger)' : 'var(--border-strong)';
+  });
+  const c = cards[active];
+  document.getElementById('card').innerHTML =
+    '<p class="card-title">'+c.label+' memory</p>'+
+    '<p class="card-desc">'+c.desc+'</p>'+
+    '<div class="card-divider">'+
+    '<p class="card-label">In our travel assistant</p>'+
+    '<p class="card-example">'+c.example+'</p></div>';
+}
+render();
+
+function assemble(){
+  const raw = document.getElementById('query').value || '';
+  const q = raw.toLowerCase();
+  const budget = parseInt(document.getElementById('budget').value);
+  let total = 0;
+  let log = [];
+
+  chunks.forEach(ch=>{
+    const matched = ch.keywords.filter(k=>q.includes(k));
+    const relevant = ch.always || matched.length>0;
+    if(!relevant){ log.push({ch, status:'skipped', reason:'no keyword match — nothing retrieved from this store'}); return; }
+
+    let useCompact = (total + ch.tokens) > budget;
+    let cost = useCompact ? Math.round(ch.tokens*0.4) : ch.tokens;
+    if(total + cost > budget){ log.push({ch, status:'excluded', reason:'over budget even after compaction'}); return; }
+
+    total += cost;
+    let reason = ch.always ? 'always loaded (current turn)' : 'retrieved: matches "'+matched[0]+'"';
+    if(useCompact) reason += ' — summarized to fit budget';
+    log.push({ch, status: useCompact ? 'compacted' : 'included', reason});
+  });
+
+  document.getElementById('bar').style.width = Math.min(100, Math.round(total/budget*100))+'%';
+
+  let rows = log.map(l=>{
+    const colorMap = {included:'c-teal', compacted:'c-amber', skipped:'c-gray', excluded:'c-gray'};
+    const cls = colorMap[l.status];
+    let text = l.status==='compacted' ? l.ch.compact : l.ch.full;
+    text = text.replace('[[QUERY]]', raw.replace(/</g,'&lt;'));
+    const dim = (l.status==='skipped'||l.status==='excluded') ? 'dim' : '';
+    return '<div class="chunk '+cls+'">'+
+      '<div class="chunk-head">'+
+      '<span class="chunk-type">'+l.ch.type+'</span>'+
+      '<span class="chunk-status">'+l.status+'</span></div>'+
+      '<p class="chunk-text '+dim+'">'+text+'</p>'+
+      '<p class="chunk-reason">'+l.reason+'</p>'+
+      '</div>';
+  }).join('');
+
+  document.getElementById('result').innerHTML =
+    '<p id="result-title">Assembled context window <span>('+total+' / '+budget+' tokens)</span></p>'+
+    rows;
+}
+assemble();
+</script>
+</body>
+</html>
