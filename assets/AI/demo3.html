@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Agent Memory — Interactive Demo</title>
+<title>AI Agent Memory — SAP SD Example</title>
 <style>
   :root {
     --surface-2: #ffffff;
@@ -112,18 +112,18 @@
 </head>
 <body>
 <div class="wrap">
-  <h2 class="sr-only">Interactive demo of AI agent memory types and context assembly, with keyword-based retrieval across a travel-planning assistant example</h2>
-  <h1>AI agent memory, in action</h1>
-  <p class="subtitle">Click through the memory types, then type any request and watch which memories actually get retrieved.</p>
+  <h2 class="sr-only">Interactive demo of AI agent memory types and context assembly, using an SAP Sales and Distribution order-processing example</h2>
+  <h1>AI agent memory, in action — SAP SD example</h1>
+  <p class="subtitle">Click through the memory types, then type any request to a sales-order agent and watch which memories actually get retrieved.</p>
 
   <div id="tabs"></div>
   <div id="card"></div>
 
   <div class="try-section">
-    <p class="try-title">Try it: type any request</p>
+    <p class="try-title">Try it: type any request to the SD agent</p>
     <div id="chips"></div>
     <div class="query-row">
-      <input id="query" type="text" value="Plan a trip to Rome for June" oninput="assemble()">
+      <input id="query" type="text" value="Create a sales order for customer 100234" oninput="assemble()">
     </div>
     <div class="budget-row">
       <label for="budget">Token budget</label>
@@ -140,35 +140,35 @@
 <script>
 const chunks = [
   {id:'short', type:'Short-term / working', tokens:55, always:true, keywords:[],
-   full:'User: "[[QUERY]]" Assistant: "Got it — let me check what I know before responding."',
+   full:'User: "[[QUERY]]" Assistant: "Got it — checking master data and history before I respond."',
    compact:'Current turn: user request logged.'},
-  {id:'episodic', type:'Episodic', tokens:70, keywords:['japan','flight','before','again','last','previous','time'],
-   full:'March 2025 trip: booked JAL flights, stayed in Shibuya, used the bullet train between cities, ran 2 days over budget.',
-   compact:'Past trip: Japan, booked via JAL, ran over budget.'},
-  {id:'semantic', type:'Semantic / long-term', tokens:45, keywords:['prefer','preference','preferences','seat','vegetarian','vegan','hotel','window','food','meal','budget'],
-   full:'Traveler profile: prefers window seats, vegetarian meals, mid-range hotels, avoids red-eye flights.',
-   compact:'Profile: window seat, vegetarian, mid-range, no red-eyes.'},
-  {id:'procedural', type:'Procedural', tokens:50, keywords:['book','booking','plan','trip','itinerary','confirm'],
-   full:'Booking steps: 1) confirm dates 2) search flights and hotels matching profile 3) present 2-3 options 4) confirm and issue booking.',
-   compact:'Procedure: confirm dates → search → present options → book.'}
+  {id:'episodic', type:'Episodic', tokens:75, keywords:['blocked','last','before','again','previous','history','hold'],
+   full:'Sales order 4500123 for customer 100234 (Sep 2025) was blocked at save — credit limit of $50,000 exceeded by $6,200. Released manually by finance after 2 days.',
+   compact:'Last order for this customer was credit-blocked, released manually.'},
+  {id:'semantic', type:'Semantic / long-term', tokens:60, keywords:['customer','payment','terms','credit','price','pricing','discount','master','account'],
+   full:'Customer 100234 master: sales org 1000, distribution channel 10, payment terms NT30, credit limit $50,000, price group 02, ships from plant 1200.',
+   compact:'Customer 100234: NT30 terms, $50k credit limit, price group 02.'},
+  {id:'procedural', type:'Procedural', tokens:65, keywords:['create','order','process','steps','va01','delivery','billing','check','atp'],
+   full:'Order creation (VA01): 1) verify customer/material master 2) pricing determination via condition records 3) ATP availability check 4) credit check against open exposure 5) save order.',
+   compact:'VA01 flow: master check → pricing → ATP → credit check → save.'}
 ];
 
 const cards = [
   {label:'Short-term', desc:'The active context window — current conversation, recent tool results, scratch notes for the task at hand.',
-   example:'Whatever request is typed below — it always stays loaded for the current turn.'},
+   example:'Whatever the user just typed to the SD agent — stays loaded only for this turn.'},
   {label:'Episodic', desc:'Records of past interactions or task runs — what happened last time — used to inform similar future situations.',
-   example:'"Booked JAL flights for Japan in March 2025, ran over budget." Only surfaces when a request echoes a past trip.'},
+   example:'"This customer\'s last order was credit-blocked and needed manual release." Surfaces only when the request echoes a past issue.'},
   {label:'Semantic', desc:'Durable facts and knowledge — user preferences, domain knowledge — typically stored outside the model in a retrievable store.',
-   example:'"Prefers window seats, vegetarian, mid-range hotels." Surfaces when the request touches preferences.'},
+   example:'Customer master data: payment terms, credit limit, price group, sales org — pulled from tables like KNA1/KNVV, not re-derived each time.'},
   {label:'Procedural', desc:'Learned or defined patterns of behavior — how to perform a task — often encoded as instructions, tools, or fine-tuning.',
-   example:'The booking checklist — surfaces whenever the request is actually asking to book or plan something.'}
+   example:'The fixed VA01 order-creation sequence: master check, pricing, ATP, credit check, save — the agent always follows this when actually creating an order.'}
 ];
 
-const chipOptions = ['Plan a trip to Rome for June', 'Book another flight like my Japan trip', 'What are my seat and food preferences?', 'Just tell me a fun fact about Rome'];
+const chipOptions = ['Create a sales order for customer 100234', 'Why was the last order blocked?', "What are this customer's payment terms?", 'What does an ATP check even mean?'];
 const chipsEl = document.getElementById('chips');
 chipOptions.forEach(c=>{
   const b = document.createElement('button');
-  b.textContent = c.length > 28 ? c.slice(0,26)+'…' : c;
+  b.textContent = c.length > 30 ? c.slice(0,28)+'…' : c;
   b.title = c;
   b.onclick = ()=>{ document.getElementById('query').value = c; assemble(); };
   chipsEl.appendChild(b);
@@ -195,7 +195,7 @@ function render(){
     '<p class="card-title">'+c.label+' memory</p>'+
     '<p class="card-desc">'+c.desc+'</p>'+
     '<div class="card-divider">'+
-    '<p class="card-label">In our travel assistant</p>'+
+    '<p class="card-label">In our SAP SD agent</p>'+
     '<p class="card-example">'+c.example+'</p></div>';
 }
 render();
