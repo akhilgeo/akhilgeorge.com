@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Orchestration layer — SAP financial collections demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14213D; --paper:#F3F4EF; --panel:#FFFFFF; --line:#DBDFDD; --muted:#66707A;
+    --blue:#2A66DE; --blue-bg:#E7EEFC;
+    --green:#1E8F63; --green-bg:#E5F5ED;
+    --amber:#B5730E; --amber-bg:#FBF0DC;
+    --red:#B93A2C; --red-bg:#FBEAE7;
+    --mono:'IBM Plex Mono',monospace; --sans:'IBM Plex Sans',sans-serif;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);font-family:var(--sans);color:var(--ink);}
+  .app{max-width:760px;margin:0 auto;padding:32px 24px 56px;}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 6px;}
+  h1{font-size:22px;font-weight:600;margin:0 0 18px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
+  .chip{font-family:var(--mono);font-size:12px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:5px 12px;color:var(--ink);}
+  .chip b{font-weight:500;}
+  .controls{display:flex;gap:10px;margin-bottom:28px;}
+  button{font-family:var(--sans);font-size:14px;font-weight:500;border-radius:8px;padding:9px 16px;cursor:pointer;border:1px solid var(--line);background:var(--panel);color:var(--ink);}
+  button.primary{background:var(--ink);color:#fff;border-color:var(--ink);}
+  button.primary:disabled{opacity:.4;cursor:default;}
+  button.small{padding:6px 12px;font-size:13px;}
+  button.approve{background:var(--green);border-color:var(--green);color:#fff;}
+  button.reject{background:var(--red);border-color:var(--red);color:#fff;}
+  button.ghost{background:transparent;}
+
+  .pipeline{position:relative;}
+  .step{display:flex;gap:14px;position:relative;}
+  .rail{width:20px;display:flex;flex-direction:column;align-items:center;flex-shrink:0;}
+  .rail-line{width:1px;flex:1;background:var(--line);}
+  .dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--line);background:var(--panel);flex-shrink:0;margin-top:14px;position:relative;}
+  .step[data-status="running"] .dot{border-color:var(--blue);background:var(--blue);animation:pulse 1.1s ease-in-out infinite;}
+  .step[data-status="done"] .dot{border-color:var(--green);background:var(--green);}
+  .step[data-status="waiting"] .dot{border-color:var(--amber);background:var(--amber);animation:pulse 1.4s ease-in-out infinite;}
+  .step[data-status="escalated"] .dot{border-color:var(--red);background:var(--red);}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(1.2);}}
+
+  .step-body{flex:1;padding-bottom:22px;min-width:0;}
+  .step-head{display:flex;align-items:baseline;gap:10px;cursor:pointer;padding-top:8px;flex-wrap:wrap;}
+  .agent-badge{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.04em;padding:2px 8px;border-radius:5px;background:var(--panel);border:1px solid var(--line);color:var(--muted);}
+  .step[data-status="running"] .agent-badge{background:var(--blue-bg);color:var(--blue);border-color:var(--blue-bg);}
+  .step[data-status="done"] .agent-badge{background:var(--green-bg);color:var(--green);border-color:var(--green-bg);}
+  .step[data-status="waiting"] .agent-badge{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-bg);}
+  .step[data-status="escalated"] .agent-badge{background:var(--red-bg);color:var(--red);border-color:var(--red-bg);}
+  .step-title{font-size:14.5px;font-weight:500;}
+  .step-summary{font-size:13px;color:var(--muted);margin:3px 0 0;}
+  .step-time{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--muted);}
+  .step-detail{margin-top:10px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;}
+  .log{font-family:var(--mono);font-size:12.5px;line-height:1.7;color:var(--ink);margin:0;white-space:pre-wrap;}
+  .log-line{opacity:0;animation:fadeIn .25s forwards;}
+  @keyframes fadeIn{to{opacity:1;}}
+
+  .draft-card{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:10px 0;font-size:13px;}
+  .draft-card .subj{font-weight:500;margin-bottom:4px;}
+  textarea{width:100%;font-family:var(--sans);font-size:13px;border:1px solid var(--line);border-radius:8px;padding:8px;margin:8px 0;min-height:70px;}
+  .decision-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+
+  .stack-footer{margin-top:8px;border-top:1px solid var(--line);padding-top:16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+  .stack-footer .label{font-size:12px;color:var(--muted);margin-right:4px;}
+  .stack-chip{font-family:var(--mono);font-size:11.5px;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:4px 9px;color:var(--muted);}
+  [hidden]{display:none !important;}
+</style>
+</head>
+<body>
+<div class="app">
+  <p class="eyebrow">Orchestration layer demo</p>
+  <h1>SAP financial collections — invoice/payment-risk agent</h1>
+
+  <div class="chips">
+    <span class="chip">Invoice <b>INV-2024-88421</b></span>
+    <span class="chip">Customer <b>Nordholm Industries GmbH</b></span>
+    <span class="chip">Amount <b>€128,450.00</b></span>
+    <span class="chip">47 days overdue</span>
+    <span class="chip">Scenario <b>FIN_COL_RSK_LTE_PMNT</b></span>
+  </div>
+
+  <div class="controls">
+    <button class="primary" id="runBtn" onclick="runPipeline()">Run pipeline</button>
+    <button id="resetBtn" onclick="resetPipeline()">Reset</button>
+  </div>
+
+  <div class="pipeline" id="pipeline"></div>
+
+  <div class="stack-footer">
+    <span class="label">Stack</span>
+    <span class="stack-chip">Claude API</span>
+    <span class="stack-chip">LangGraph orchestrator</span>
+    <span class="stack-chip">SAP AI Core / GenAI Hub</span>
+    <span class="stack-chip">Human-in-the-loop gate</span>
+  </div>
+</div>
+
+<script>
+const steps = [
+  {
+    agent: 'Orchestrator', title: 'Event received: overdue invoice trigger',
+    summary: 'SAP collections worklist fired an overdue-invoice event for INV-2024-88421.',
+    log: [
+      '> event.source = SAP S/4HANA Collections Worklist',
+      '> event.type  = FIN_COL_RSK_LTE_PMNT',
+      '> invoice = INV-2024-88421 | customer = Nordholm Industries GmbH',
+      '> orchestrator.plan() → dispatch [data_retrieval_agent, risk_scoring_agent] in parallel'
+    ]
+  },
+  {
+    agent: 'Data retrieval agent', title: 'Pulling payment history from SAP',
+    summary: 'Queried OData services for open items, payment history and dispute status.',
+    log: [
+      '> tool_call: sap.odata.get(open_items, customer=NORD-4471)',
+      '> tool_call: sap.odata.get(payment_history, months=6)',
+      '> result: 3 late payments in last 6 months, 0 active disputes',
+      '> result: credit limit utilization = 92%'
+    ]
+  },
+  {
+    agent: 'Risk scoring agent', title: 'Scoring payment risk (parallel)',
+    summary: 'Applied an ISLM-based scoring model via SAP AI Core / GenAI Hub.',
+    log: [
+      '> tool_call: ai_core.invoke(model=islm_risk_v3, features={...})',
+      '> result: risk_score = 78 / 100 (high)',
+      '> drivers: DSO +12 days QoQ, sector volatility index 0.71'
+    ]
+  },
+  {
+    agent: 'Orchestrator', title: 'Evaluating risk, routing decision',
+    summary: 'Risk score 78 exceeds the threshold of 70 → routes to the communication draft agent.',
+    log: [
+      '> policy.threshold_check(risk_score=78, threshold=70) → true',
+      '> orchestrator.route(next=communication_draft_agent)'
+    ]
+  },
+  {
+    agent: 'Communication draft agent', title: 'Drafting collector outreach',
+    summary: 'Generated a dunning email and payment-plan talking points for phone follow-up.',
+    log: [
+      '> tool_call: llm.generate(template=dunning_tier2, tone=firm_professional)',
+      '> draft.subject = "Payment overdue — INV-2024-88421"',
+      '> draft.offers_payment_plan = true'
+    ]
+  },
+  {
+    agent: 'Orchestrator', title: 'Human-in-the-loop gate', gate: true,
+    summary: 'Execution paused. Awaiting collector approval before anything is sent.',
+    log: []
+  },
+  {
+    agent: 'Action agent', title: 'Awaiting decision', outcome: true,
+    summary: '', log: []
+  }
+];
+
+let idx = 0;
+let running = false;
+
+function iconFor(status){ return ''; }
+
+function render(){
+  const el = document.getElementById('pipeline');
+  el.innerHTML = '';
+  steps.forEach((s, i) => {
+    const row = document.createElement('div');
+    row.className = 'step';
+    row.dataset.status = s.status || 'pending';
+    row.id = 'step-' + i;
+    const isLast = i === steps.length - 1;
+    row.innerHTML = `
+      <div class="rail"><div class="dot"></div>${isLast ? '' : '<div class="rail-line"></div>'}</div>
+      <div class="step-body">
+        <div class="step-head" onclick="toggleDetail(${i})">
+          <span class="agent-badge">${s.agent}</span>
+          <span class="step-title">${s.title}</span>
+          <span class="step-time">${s.time || ''}</span>
+        </div>
+        <p class="step-summary">${s.summary || ''}</p>
+        <div class="step-detail" id="detail-${i}" hidden></div>
+      </div>`;
+    el.appendChild(row);
+  });
+}
+
+function toggleDetail(i){
+  const d = document.getElementById('detail-' + i);
+  if (!d) return;
+  if (!d.hasChildNodes() || d.hidden === undefined) {}
+  d.hidden = !d.hidden;
+}
+
+function setStatus(i, status, time){
+  const s = steps[i];
+  s.status = status;
+  if (time) s.time = time;
+  const row = document.getElementById('step-' + i);
+  if (row) row.dataset.status = status;
+  const timeEl = row?.querySelector('.step-time');
+  if (timeEl && time) timeEl.textContent = time;
+}
+
+function writeLog(i, extraLines, cb){
+  const d = document.getElementById('detail-' + i);
+  d.hidden = false;
+  const pre = document.createElement('pre');
+  pre.className = 'log';
+  d.appendChild(pre);
+  const lines = extraLines || steps[i].log;
+  let li = 0;
+  function next(){
+    if (li >= lines.length){ if (cb) cb(); return; }
+    const span = document.createElement('div');
+    span.className = 'log-line';
+    span.textContent = lines[li];
+    pre.appendChild(span);
+    li++;
+    setTimeout(next, 180);
+  }
+  next();
+}
+
+function randTime(){ return (0.6 + Math.random()*1.4).toFixed(1) + 's'; }
+
+function runStep(i, cb){
+  setStatus(i, 'running');
+  const startDelay = 500 + Math.random()*400;
+  setTimeout(() => {
+    writeLog(i, null, () => {
+      setStatus(i, 'done', randTime());
+      cb();
+    });
+  }, startDelay);
+}
+
+function runPipeline(){
+  if (running) return;
+  running = true;
+  document.getElementById('runBtn').disabled = true;
+  resetPipeline(false);
+  let i = 0;
+  function step(){
+    if (i >= 5){ openGate(); return; }
+    runStep(i, () => { i++; setTimeout(step, 250); });
+  }
+  step();
+}
+
+function openGate(){
+  setStatus(5, 'waiting');
+  const d = document.getElementById('detail-5');
+  d.hidden = false;
+  d.innerHTML = `
+    <div class="draft-card">
+      <div class="subj">Subject: Payment overdue — INV-2024-88421</div>
+      <div id="draftBody">Hi Nordholm accounts payable team,<br><br>
+      Invoice INV-2024-88421 (€128,450.00) is now 47 days past due. Given your account history, I'd like
+      to offer a short payment plan to bring this current, or confirm a payment date this week.<br><br>
+      Risk assessment: high (78/100) — DSO trending up, credit limit 92% utilized.</div>
+    </div>
+    <div class="decision-row">
+      <button class="approve small" onclick="decide('approve')">Approve and send</button>
+      <button class="small" onclick="editDraft()">Edit draft</button>
+      <button class="reject small" onclick="decide('reject')">Reject, send to manual review</button>
+    </div>
+    <div id="editArea" hidden>
+      <textarea id="editText"></textarea>
+      <div class="decision-row">
+        <button class="approve small" onclick="decide('approve', true)">Send edited version</button>
+        <button class="ghost small" onclick="document.getElementById('editArea').hidden=true">Cancel</button>
+      </div>
+    </div>`;
+}
+
+function editDraft(){
+  const area = document.getElementById('editArea');
+  const text = document.getElementById('draftBody').innerText;
+  document.getElementById('editText').value = text;
+  area.hidden = false;
+}
+
+function decide(choice, edited){
+  setStatus(5, 'done', 'decision recorded');
+  const gateDetail = document.getElementById('detail-5');
+  const controls = gateDetail.querySelectorAll('.decision-row, #editArea');
+  controls.forEach(c => c.remove());
+
+  const outcomeRow = document.getElementById('step-6');
+  const titleEl = outcomeRow.querySelector('.step-title');
+  const summaryEl = outcomeRow.querySelector('.step-summary');
+
+  if (choice === 'approve'){
+    titleEl.textContent = edited ? 'Sending edited communication' : 'Sending communication + updating SAP worklist';
+    summaryEl.textContent = 'Collector approved. Action agent sends the email and writes back to SAP.';
+    runStep(6, () => {}); // fires log with default lines below
+    steps[6].log = [
+      '> tool_call: sap.odata.post(collector_worklist, action=email_sent)',
+      '> tool_call: email.send(to=ar@nordholm.example)',
+      '> audit.log(task_id=ORCH-88421, outcome=approved_and_sent)'
+    ];
+    setTimeout(() => { setStatus(6, 'running'); writeLog(6, steps[6].log, () => setStatus(6, 'done', randTime())); }, 400);
+  } else {
+    titleEl.textContent = 'Returning task to manual queue';
+    summaryEl.textContent = 'Collector rejected the draft. Task escalated for manual handling.';
+    steps[6].log = [
+      '> sap.odata.post(collector_worklist, action=manual_review)',
+      '> audit.log(task_id=ORCH-88421, outcome=escalated_manual)'
+    ];
+    setTimeout(() => { setStatus(6, 'escalated'); writeLog(6, steps[6].log, () => setStatus(6, 'escalated', randTime())); }, 400);
+  }
+  running = false;
+  document.getElementById('runBtn').disabled = false;
+}
+
+function resetPipeline(reenable){
+  steps.forEach(s => { s.status = 'pending'; s.time = ''; });
+  steps[6].title = 'Awaiting decision';
+  steps[6].summary = '';
+  render();
+  if (reenable !== false){
+    running = false;
+    document.getElementById('runBtn').disabled = false;
+  }
+}
+
+render();
+</script>
+</body>
+</html>
