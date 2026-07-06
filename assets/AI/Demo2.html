@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Multi-Agent Workflow Patterns</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f6f7fb;
+    --card:#eef1f8;
+    --card-line:#dfe4f2;
+    --ink:#10142b;
+    --navy:#0c1130;
+    --slate:#5a6178;
+    --cyan:#1fc2d8;
+    --cyan-glow:#7be9f5;
+    --indigo:#4b4de0;
+    --indigo-soft:#6668ea;
+    --amber:#e0a53f;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding:56px 24px 90px;
+  }
+  .wrap{max-width:1180px;margin:0 auto;}
+
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-weight:500;
+    letter-spacing:.22em;
+    font-size:12.5px;
+    color:var(--indigo);
+    text-transform:uppercase;
+    margin:0 0 14px;
+  }
+  h1{
+    font-family:'Fraunces',serif;
+    font-weight:700;
+    font-size:clamp(34px,5vw,58px);
+    line-height:1.03;
+    letter-spacing:-.01em;
+    margin:0 0 12px;
+    color:var(--navy);
+  }
+  .sub{
+    max-width:640px;
+    color:var(--slate);
+    font-size:16.5px;
+    line-height:1.6;
+    margin:0 0 46px;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:26px;
+  }
+  @media (max-width:880px){ .grid{grid-template-columns:1fr;} }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--card-line);
+    border-radius:22px;
+    padding:30px 30px 26px;
+    box-shadow:0 1px 2px rgba(16,20,43,.04);
+  }
+  .card-head{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    margin-bottom:6px;
+  }
+  .icon{
+    flex:0 0 auto;
+    width:56px;height:56px;border-radius:50%;
+    background:var(--navy);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .icon svg{width:26px;height:26px;stroke:var(--cyan);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+  .card h2{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:22px;
+    margin:0;
+    color:var(--navy);
+  }
+
+  .example{
+    font-family:'JetBrains Mono',monospace;
+    font-style:italic;
+    font-size:14px;
+    color:var(--indigo-soft);
+    margin:14px 0 4px;
+  }
+  .desc{
+    color:var(--slate);
+    font-size:14.5px;
+    line-height:1.55;
+    margin:2px 0 22px;
+  }
+
+  .stage{
+    position:relative;
+    background:#fff;
+    border:1px solid var(--card-line);
+    border-radius:14px;
+    height:210px;
+    overflow:hidden;
+  }
+
+  .node{
+    position:absolute;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    width:74px;height:74px;
+    border-radius:50%;
+    background:var(--navy);
+    color:#fff;
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:11px;
+    text-align:center;
+    line-height:1.25;
+    transition:box-shadow .25s ease, transform .25s ease, background .25s ease;
+    z-index:2;
+  }
+  .node.active{
+    background:#101a44;
+    box-shadow:0 0 0 5px rgba(31,194,216,.22), 0 0 22px rgba(31,194,216,.55);
+    transform:scale(1.07);
+  }
+  .node.judged{
+    background:var(--amber);
+    color:var(--navy);
+    box-shadow:0 0 0 5px rgba(224,165,63,.25), 0 0 22px rgba(224,165,63,.55);
+  }
+  .node .tag{
+    font-family:'JetBrains Mono',monospace;
+    font-weight:400;
+    font-size:9px;
+    color:var(--cyan-glow);
+    margin-top:2px;
+  }
+
+  svg.paths{position:absolute;inset:0;width:100%;height:100%;z-index:1;}
+  .path-line{
+    fill:none;
+    stroke:#c7cde3;
+    stroke-width:2;
+  }
+  .dot{
+    fill:var(--cyan);
+    filter:drop-shadow(0 0 4px rgba(31,194,216,.8));
+    opacity:0;
+  }
+
+  .controls{
+    display:flex;align-items:center;gap:14px;
+    margin-top:18px;
+  }
+  .run-btn{
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:13.5px;
+    color:#fff;
+    background:var(--navy);
+    border:none;
+    padding:10px 20px;
+    border-radius:100px;
+    cursor:pointer;
+    transition:background .2s ease, transform .1s ease;
+  }
+  .run-btn:hover{background:#181f4d;}
+  .run-btn:active{transform:scale(.97);}
+  .run-btn:disabled{opacity:.5;cursor:default;}
+  .status{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12.5px;
+    color:var(--slate);
+    min-height:16px;
+  }
+  .status b{color:var(--navy);}
+
+  .ticket-chip{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12.5px;
+    color:var(--navy);
+    background:#fff;
+    border:1px solid var(--card-line);
+    border-radius:10px;
+    padding:9px 13px;
+    margin:0 0 16px;
+    display:inline-block;
+  }
+  .ticket-chip b{color:var(--indigo-soft);}
+  .ticket-chip .code{color:var(--cyan);font-weight:600;}
+
+  footer{
+    max-width:640px;
+    margin:56px auto 0;
+    text-align:center;
+    color:var(--slate);
+    font-size:13px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">SAP SD &middot; Order-to-Cash &middot; Live Demo</p>
+  <h1>Multi-Agent Workflow Patterns</h1>
+  <p class="sub">Four ways to wire agents together, shown against SAP Sales &amp; Distribution processes. Press <b>Run</b> on any card to watch a sales document move through that pattern.</p>
+
+  <div class="grid">
+
+    <!-- SEQUENTIAL HANDOFF -->
+    <div class="card">
+      <div class="card-head">
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M5 19l4-4M5 19l6 1-1-6M19 5l-4 4M19 5l-6-1 1 6"/><circle cx="12" cy="12" r="2.2"/></svg></div>
+        <h2>Sequential Handoff</h2>
+      </div>
+      <p class="example">Sales Order agent &rarr; Delivery agent &rarr; Billing agent</p>
+      <p class="desc">Each agent completes its SD document and hands the structured output to the next stage &mdash; order creation, outbound delivery, then invoice &mdash; mirroring the standard Order-to-Cash document flow (VA01 &rarr; VL01N &rarr; VF01).</p>
+      <div class="stage" id="seq-stage">
+        <svg class="paths" viewBox="0 0 460 210">
+          <path class="path-line" d="M95,105 L230,105"/>
+          <path class="path-line" d="M230,105 L365,105"/>
+          <circle class="dot" id="seq-dot1" r="6" cx="95" cy="105"/>
+          <circle class="dot" id="seq-dot2" r="6" cx="230" cy="105"/>
+        </svg>
+        <div class="node" id="seq-n1" style="left:58px; top:68px;">Sales Order<span class="tag">VA01</span></div>
+        <div class="node" id="seq-n2" style="left:193px; top:68px;">Delivery<span class="tag">VL01N</span></div>
+        <div class="node" id="seq-n3" style="left:328px; top:68px;">Billing<span class="tag">VF01</span></div>
+      </div>
+      <div class="controls">
+        <button class="run-btn" onclick="runSequential()">Run demo</button>
+        <span class="status" id="seq-status">Ready.</span>
+      </div>
+    </div>
+
+    <!-- PARALLEL FAN-OUT / FAN-IN -->
+    <div class="card">
+      <div class="card-head">
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></div>
+        <h2>Parallel Fan-Out / Fan-In</h2>
+      </div>
+      <p class="example">Credit, ATP, and tax agents check the order at once &rarr; release agent merges</p>
+      <p class="desc">Three checks that don't depend on each other &mdash; credit exposure, stock availability, and tax determination &mdash; run simultaneously the moment a sales order is saved; a release agent merges the results and confirms or blocks it.</p>
+      <div class="stage" id="par-stage">
+        <svg class="paths" viewBox="0 0 460 210">
+          <path class="path-line" d="M95,105 L230,35"/>
+          <path class="path-line" d="M95,105 L230,105"/>
+          <path class="path-line" d="M95,105 L230,175"/>
+          <path class="path-line" d="M230,35 L365,105"/>
+          <path class="path-line" d="M230,105 L365,105"/>
+          <path class="path-line" d="M230,175 L365,105"/>
+          <circle class="dot" id="par-out1" r="6"/>
+          <circle class="dot" id="par-out2" r="6"/>
+          <circle class="dot" id="par-out3" r="6"/>
+          <circle class="dot" id="par-in1" r="6"/>
+          <circle class="dot" id="par-in2" r="6"/>
+          <circle class="dot" id="par-in3" r="6"/>
+        </svg>
+        <div class="node" id="par-src" style="left:58px; top:68px;">Sales Order</div>
+        <div class="node" id="par-a" style="left:197px; top:2px; width:66px;height:66px;">Credit<span class="tag">check</span></div>
+        <div class="node" id="par-b" style="left:197px; top:72px; width:66px;height:66px;">ATP<span class="tag">avail.</span></div>
+        <div class="node" id="par-c" style="left:197px; top:142px; width:66px;height:66px;">Tax<span class="tag">determ.</span></div>
+        <div class="node" id="par-agg" style="left:328px; top:68px;">Order<span class="tag">release</span></div>
+      </div>
+      <div class="controls">
+        <button class="run-btn" onclick="runParallel()">Run demo</button>
+        <span class="status" id="par-status">Ready.</span>
+      </div>
+    </div>
+
+    <!-- MANAGER-WORKER DELEGATION -->
+    <div class="card">
+      <div class="card-head">
+        <div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><path d="M12 7v5M12 12L5 17M12 12v5M12 12l7 5"/></svg></div>
+        <h2>Manager&ndash;Worker Delegation</h2>
+      </div>
+      <p class="example">Order Processing Manager routes incoming SD documents by type</p>
+      <p class="desc">A manager agent reads the incoming document type and dynamically routes it to the specialist worker built for that flow &mdash; standard order, return, or credit memo &mdash; based on current load, not a fixed rule.</p>
+      <div class="ticket-chip" id="mgr-ticket">Loading queue&hellip;</div>
+      <div class="stage" id="mgr-stage">
+        <svg class="paths" viewBox="0 0 460 210">
+          <path class="path-line" d="M230,45 L110,165"/>
+          <path class="path-line" d="M230,45 L230,165"/>
+          <path class="path-line" d="M230,45 L350,165"/>
+          <circle class="dot" id="mgr-dot" r="6"/>
+        </svg>
+        <div class="node" id="mgr-boss" style="left:193px; top:8px;">Order Mgr<span class="tag">router</span></div>
+        <div class="node" id="mgr-w1" style="left:73px; top:128px;">Std Order<span class="tag">OR</span></div>
+        <div class="node" id="mgr-w2" style="left:193px; top:128px;">Returns<span class="tag">RE</span></div>
+        <div class="node" id="mgr-w3" style="left:313px; top:128px;">Credit Memo<span class="tag">CR</span></div>
+      </div>
+      <div class="controls">
+        <button class="run-btn" onclick="runManager()">Assign next ticket</button>
+        <span class="status" id="mgr-status">Ready.</span>
+      </div>
+    </div>
+
+    <!-- DEBATE & CONSENSUS -->
+    <div class="card">
+      <div class="card-head">
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 3v18M4 8l-2 5a3.5 3.5 0 0 0 7 0l-2-5M20 8l-2 5a3.5 3.5 0 0 0 7 0l-2-5M2 8h4M18 8h4M7 21h10"/></svg></div>
+        <h2>Debate &amp; Consensus</h2>
+      </div>
+      <p class="example">Warranty and fraud-signal agents assess independently &rarr; RMA judge decides</p>
+      <p class="desc">Two agents evaluate the same return request from different angles &mdash; warranty policy compliance and fraud/abuse signals &mdash; then a judge agent approves or denies the return material authorization (RE &rarr; CR).</p>
+      <div class="stage" id="dbt-stage">
+        <svg class="paths" viewBox="0 0 460 210">
+          <path class="path-line" d="M120,60 L230,140"/>
+          <path class="path-line" d="M340,60 L230,140"/>
+          <circle class="dot" id="dbt-dot1" r="6"/>
+          <circle class="dot" id="dbt-dot2" r="6"/>
+        </svg>
+        <div class="node" id="dbt-a" style="left:83px; top:23px;">Warranty<span class="tag">policy</span></div>
+        <div class="node" id="dbt-b" style="left:303px; top:23px;">Fraud Signal<span class="tag">detection</span></div>
+        <div class="node" id="dbt-judge" style="left:193px; top:103px;">RMA<span class="tag">decision</span></div>
+      </div>
+      <div class="controls">
+        <button class="run-btn" onclick="runDebate()">Run demo</button>
+        <span class="status" id="dbt-status">Ready.</span>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>Each pattern trades off speed, cost, and reliability differently &mdash; sequential mirrors the standard O2C document flow, parallel speeds up order validation, manager&ndash;worker adapts to document type and load, and debate&amp;consensus spends extra compute to reconcile a disputed return decision.</footer>
+</div>
+
+<script>
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+function moveDot(dot, x1,y1,x2,y2, duration){
+  return new Promise(resolve=>{
+    dot.setAttribute('cx', x1); dot.setAttribute('cy', y1);
+    dot.style.opacity = 1;
+    const start = performance.now();
+    function frame(t){
+      const p = Math.min((t-start)/duration, 1);
+      const ease = p<.5 ? 2*p*p : 1-Math.pow(-2*p+2,2)/2;
+      dot.setAttribute('cx', x1 + (x2-x1)*ease);
+      dot.setAttribute('cy', y1 + (y2-y1)*ease);
+      if(p<1){ requestAnimationFrame(frame); } else { dot.style.opacity = 0; resolve(); }
+    }
+    requestAnimationFrame(frame);
+  });
+}
+
+function setBtnState(id, disabled){ document.querySelector(id+' + span').disabled = disabled; }
+
+async function runSequential(){
+  const btn = event.currentTarget; btn.disabled = true;
+  const status = document.getElementById('seq-status');
+  const n1=document.getElementById('seq-n1'), n2=document.getElementById('seq-n2'), n3=document.getElementById('seq-n3');
+  [n1,n2,n3].forEach(n=>n.classList.remove('active'));
+  status.innerHTML = '<b>Sales Order agent</b> creating order, checking ATP&hellip;';
+  n1.classList.add('active');
+  await sleep(1200);
+  await moveDot(document.getElementById('seq-dot1'), 95,105,230,105,1100);
+  n1.classList.remove('active'); n2.classList.add('active');
+  status.innerHTML = '<b>Delivery agent</b> picking, packing, posting goods issue&hellip;';
+  await sleep(1200);
+  await moveDot(document.getElementById('seq-dot2'), 230,105,365,105,1100);
+  n2.classList.remove('active'); n3.classList.add('active');
+  status.innerHTML = '<b>Billing agent</b> generating invoice&hellip;';
+  await sleep(1400);
+  n3.classList.remove('active');
+  status.innerHTML = 'Done &mdash; order-to-cash cycle complete.';
+  btn.disabled = false;
+}
+
+async function runParallel(){
+  const btn = event.currentTarget; btn.disabled = true;
+  const status = document.getElementById('par-status');
+  const src=document.getElementById('par-src'), a=document.getElementById('par-a'), b=document.getElementById('par-b'), c=document.getElementById('par-c'), agg=document.getElementById('par-agg');
+  [src,a,b,c,agg].forEach(n=>n.classList.remove('active'));
+  status.textContent = 'Order saved \u2014 fanning out to 3 checks\u2026';
+  src.classList.add('active');
+  await sleep(1000);
+  await Promise.all([
+    moveDot(document.getElementById('par-out1'), 95,105,230,35,1000),
+    moveDot(document.getElementById('par-out2'), 95,105,230,105,1000),
+    moveDot(document.getElementById('par-out3'), 95,105,230,175,1000),
+  ]);
+  src.classList.remove('active');
+  [a,b,c].forEach(n=>n.classList.add('active'));
+  status.textContent = 'Credit, ATP, and tax agents checking in parallel\u2026';
+  await sleep(1500);
+  await Promise.all([
+    moveDot(document.getElementById('par-in1'), 230,35,365,105,1000),
+    moveDot(document.getElementById('par-in2'), 230,105,365,105,1000),
+    moveDot(document.getElementById('par-in3'), 230,175,365,105,1000),
+  ]);
+  [a,b,c].forEach(n=>n.classList.remove('active'));
+  agg.classList.add('active');
+  status.textContent = 'Release agent merging all 3 results\u2026';
+  await sleep(1300);
+  agg.classList.remove('active');
+  status.textContent = 'Done \u2014 order confirmed in one round trip.';
+  btn.disabled = false;
+}
+
+const mgrQueue = [
+  {type:'Standard Order', code:'OR', id:'4507000512', workerIdx:0, workerName:'Std Order agent'},
+  {type:'Return', code:'RE', id:'5007000098', workerIdx:1, workerName:'Returns agent'},
+  {type:'Credit Memo Request', code:'CR', id:'6007000045', workerIdx:2, workerName:'Credit Memo agent'},
+  {type:'Standard Order', code:'OR', id:'4507000513', workerIdx:0, workerName:'Std Order agent'},
+  {type:'Return', code:'RE', id:'5007000099', workerIdx:1, workerName:'Returns agent'},
+  {type:'Credit Memo Request', code:'CR', id:'6007000046', workerIdx:2, workerName:'Credit Memo agent'},
+];
+let mgrPtr = 0;
+function renderMgrTicket(){
+  const t = mgrQueue[mgrPtr];
+  document.getElementById('mgr-ticket').innerHTML =
+    'Next ticket: <b>'+t.type+'</b> <span class="code">'+t.code+'</span> &middot; #'+t.id;
+}
+renderMgrTicket();
+
+async function runManager(){
+  const btn = event.currentTarget; btn.disabled = true;
+  const status = document.getElementById('mgr-status');
+  const boss=document.getElementById('mgr-boss');
+  const workers=[document.getElementById('mgr-w1'), document.getElementById('mgr-w2'), document.getElementById('mgr-w3')];
+  const targets=[[110,165],[230,165],[350,165]];
+  workers.forEach(w=>w.classList.remove('active'));
+  boss.classList.remove('active');
+  const t = mgrQueue[mgrPtr];
+  const pick = t.workerIdx;
+  status.innerHTML = 'Manager reading ticket <b>#'+t.id+'</b> (a '+t.type+')\u2026';
+  boss.classList.add('active');
+  await sleep(1300);
+  status.innerHTML = 'Routing to <b>'+t.workerName+'</b>\u2026';
+  await moveDot(document.getElementById('mgr-dot'), 230,45, targets[pick][0], targets[pick][1], 1000);
+  boss.classList.remove('active');
+  workers[pick].classList.add('active');
+  await sleep(1400);
+  workers[pick].classList.remove('active');
+  status.innerHTML = 'Done \u2014 ticket <b>#'+t.id+'</b> handled by the right specialist.';
+  mgrPtr = (mgrPtr+1) % mgrQueue.length;
+  renderMgrTicket();
+  btn.disabled = false;
+}
+
+async function runDebate(){
+  const btn = event.currentTarget; btn.disabled = true;
+  const status = document.getElementById('dbt-status');
+  const a=document.getElementById('dbt-a'), b=document.getElementById('dbt-b'), judge=document.getElementById('dbt-judge');
+  [a,b,judge].forEach(n=>{n.classList.remove('active'); n.classList.remove('judged');});
+  status.textContent = 'Warranty and fraud-signal agents assessing the return independently\u2026';
+  a.classList.add('active'); b.classList.add('active');
+  await sleep(1200);
+  await Promise.all([
+    moveDot(document.getElementById('dbt-dot1'), 120,60,230,140,1100),
+    moveDot(document.getElementById('dbt-dot2'), 340,60,230,140,1100),
+  ]);
+  a.classList.remove('active'); b.classList.remove('active');
+  judge.classList.add('active');
+  status.textContent = 'Judge weighing warranty status against fraud signals\u2026';
+  await sleep(1400);
+  judge.classList.remove('active');
+  judge.classList.add('judged');
+  status.textContent = 'Done \u2014 judge approved the RMA and issued the credit memo.';
+  await sleep(1600);
+  judge.classList.remove('judged');
+  btn.disabled = false;
+}
+</script>
+</body>
+</html>
