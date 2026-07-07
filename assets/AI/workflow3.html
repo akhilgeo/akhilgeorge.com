@@ -1,0 +1,61 @@
+
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<title>03 Manager Worker - SAP SD Helpdesk</title>
+<style>
+body{font-family:Segoe UI;background:#0b1020;color:white;padding:20px}
+select,button{padding:10px;font-size:15px}button{margin-left:8px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:20px}
+.card{background:#182033;border:2px solid #334;border-radius:8px;padding:12px;min-height:260px}
+.active{border-color:#22c55e;box-shadow:0 0 10px #22c55e}.done{border-color:#3b82f6}
+pre{white-space:pre-wrap;color:#9df}
+#workers{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:15px}
+.worker{background:#182033;border:2px solid #334;padding:10px;border-radius:8px;min-height:120px}
+#log{background:#111827;height:180px;overflow:auto;padding:10px;margin-top:15px}
+</style></head><body>
+<h2>Manager-Worker Pattern - SAP SD AI Helpdesk</h2>
+<select id=ticket>
+<option>Pricing is incorrect for Customer ABC</option>
+<option>Invoice is not generated after delivery</option>
+<option>Unable to create Delivery</option>
+<option>Customer credit limit exceeded</option>
+<option>Sales Order creation error</option>
+</select><button id=run>Run Workflow</button>
+<div class=grid>
+<div id=manager class=card><h3>🎯 Manager Agent</h3><pre id=mt></pre></div>
+<div id=result class=card><h3>Resolution</h3><pre id=rt></pre></div></div>
+<div id=workers>
+<div id=sales class=worker>🛒 Sales Order Expert</div>
+<div id=price class=worker>💲 Pricing Expert</div>
+<div id=delivery class=worker>📦 Delivery Expert</div>
+<div id=billing class=worker>🧾 Billing Expert</div>
+<div id=credit class=worker>💳 Credit Expert</div>
+</div>
+<div id=log></div>
+<script>
+const sleep=m=>new Promise(r=>setTimeout(r,m));
+function lg(t){log.innerHTML+="🕒 "+new Date().toLocaleTimeString()+" - "+t+"<br>";log.scrollTop=log.scrollHeight;}
+async function type(el,msg){el.textContent+=msg+"\n";lg(msg);await sleep(1400);}
+async function run(){
+mt.textContent="";rt.textContent="";log.innerHTML="";
+document.querySelectorAll('.worker').forEach(w=>w.className='worker');
+manager.className='card active';
+let txt=ticket.value;
+await type(mt,"Received Ticket");
+await type(mt,"Analyzing request...");
+let worker,id,res=[];
+if(txt.includes("Pricing")){worker="Pricing Expert";id=price;res=["Checking VK11","Checking pricing procedure","Condition record missing","Suggested fix: Maintain PR00"];}
+else if(txt.includes("Invoice")){worker="Billing Expert";id=billing;res=["Checking VF01","Delivery not PGI","Complete PGI then bill"];}
+else if(txt.includes("Delivery")){worker="Delivery Expert";id=delivery;res=["Checking ATP","Shipping point missing","Maintain shipping point"];}
+else if(txt.includes("credit")){worker="Credit Expert";id=credit;res=["Checking FD32","Credit exceeded","Release credit block"];}
+else {worker="Sales Order Expert";id=sales;res=["Checking VA01","Missing Sold-to Party","Correct customer master"];}
+await type(mt,"Intent: "+worker);
+await type(mt,"Assigning ticket to "+worker);
+manager.className='card done';
+id.classList.add('active');
+for(let s of res){id.innerHTML+="<br>"+s;lg(worker+": "+s);await sleep(1400);}
+id.className='worker done';
+rt.textContent="Manager received worker response.\nTicket Resolved by "+worker+".";
+}
+document.getElementById('run').addEventListener('click', run);
+</script>
+</body></html>

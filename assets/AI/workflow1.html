@@ -1,0 +1,145 @@
+
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<title>SAP SD Sequential Handoff Demo</title>
+<style>
+body{margin:0;font-family:Segoe UI;background:#0b1020;color:#fff}
+header{background:#182848;padding:15px;text-align:center}
+main{padding:20px}
+input{width:70%;padding:10px}button{padding:10px 18px;margin-left:8px;background:#2e7df6;color:#fff;border:none;border-radius:6px;cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-top:20px}
+.card{background:#182033;border:2px solid #334;padding:15px;border-radius:10px;min-height:280px;transition:.3s}
+.active{border-color:#00d084;box-shadow:0 0 15px #00d084}
+.done{border-color:#3b82f6}
+.status{font-weight:bold}
+pre{white-space:pre-wrap;color:#9df}
+#log{margin-top:20px;background:#111827;height:180px;overflow:auto;padding:10px;border-radius:8px}
+#final{display:none;margin-top:20px;background:#0d3b2e;padding:15px;border-radius:10px}
+.progress{height:8px;background:#333;border-radius:5px;overflow:hidden}
+.bar{height:100%;width:0;background:#00d084;transition:width .5s}
+</style></head>
+<body>
+<header><h1>AI Agent Orchestration - Sequential Handoff (SAP SD)</h1></header>
+<main>
+<b>Business Prompt</b><br><br>
+<input id="prompt" value="Create a Sales Order for Customer ABC for 100 Laptops. Check stock, pricing, credit limit and delivery schedule.">
+<button id="run">▶ Run Workflow</button>
+
+<div class="grid">
+<div id="orch" class="card">
+<h3>🎯 Orchestrator</h3>
+<div class="status" id="os">Waiting...</div>
+<div class="progress"><div id="op" class="bar"></div></div>
+<pre id="ot"></pre>
+</div>
+
+<div id="research" class="card">
+<h3>📊 Validation Agent</h3>
+<div class="status" id="rs">Idle</div>
+<div class="progress"><div id="rp" class="bar"></div></div>
+<pre id="rt"></pre>
+</div>
+
+<div id="writer" class="card">
+<h3>📝 SAP SD Processing Agent</h3>
+<div class="status" id="ws">Idle</div>
+<div class="progress"><div id="wp" class="bar"></div></div>
+<pre id="wt"></pre>
+</div>
+
+<div id="editor" class="card">
+<h3>✅ Review Agent</h3>
+<div class="status" id="es">Idle</div>
+<div class="progress"><div id="ep" class="bar"></div></div>
+<pre id="et"></pre>
+</div>
+</div>
+
+<div id="log"></div>
+
+<div id="final">
+<h2>Final AI Response</h2>
+<div id="answer"></div>
+</div>
+</main>
+
+<script>
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const log=t=>{logDiv.innerHTML+="🕒 "+new Date().toLocaleTimeString()+" - "+t+"<br>";logDiv.scrollTop=logDiv.scrollHeight;}
+const logDiv=document.getElementById("log");
+
+async function type(el,text){
+el.textContent+=text+"\n";
+await sleep(700);
+}
+
+async function run(){
+logDiv.innerHTML="";
+final.style.display="none";
+document.querySelectorAll(".card").forEach(c=>c.className="card");
+document.querySelectorAll("pre").forEach(p=>p.textContent="");
+["op","rp","wp","ep"].forEach(x=>document.getElementById(x).style.width="0%");
+os.textContent="Thinking...";
+orch.classList.add("active");
+
+let o=[
+"Received user prompt",
+"Classifying request...",
+"Detected SAP SD Sales Order Creation",
+"Selecting Sequential Workflow",
+"Assigning Validation Agent"
+];
+for(let i=0;i<o.length;i++){
+await type(ot,o[i]);op.style.width=((i+1)/o.length*100)+"%";log(o[i]);
+}
+orch.className="card done";os.textContent="Completed";
+
+research.classList.add("active");rs.textContent="Running";
+let r=[
+"Reading customer master (XD03)",
+"Checking Material Master",
+"Checking Stock (MM)",
+"Calling Pricing Engine (VK11)",
+"Checking Credit Limit (FD32)",
+"Output sent to SAP SD Processing Agent"
+];
+for(let i=0;i<r.length;i++){
+await type(rt,r[i]);rp.style.width=((i+1)/r.length*100)+"%";log(r[i]);
+}
+research.className="card done";rs.textContent="Completed";
+
+writer.classList.add("active");ws.textContent="Processing";
+let w=[
+"Creating Sales Order (VA01)",
+"Customer: ABC",
+"Material: Laptop",
+"Qty:100",
+"Price: $900 each",
+"Stock Available",
+"Delivery Date: 15-Jul",
+"Saving Sales Order..."
+];
+for(let i=0;i<w.length;i++){
+await type(wt,w[i]);wp.style.width=((i+1)/w.length*100)+"%";log(w[i]);
+}
+writer.className="card done";ws.textContent="Completed";
+
+editor.classList.add("active");es.textContent="Reviewing";
+let e=[
+"Checking mandatory fields",
+"Checking pricing",
+"Checking ATP",
+"Checking credit block",
+"No errors found",
+"Approving response"
+];
+for(let i=0;i<e.length;i++){
+await type(et,e[i]);ep.style.width=((i+1)/e.length*100)+"%";log(e[i]);
+}
+editor.className="card done";es.textContent="Completed";
+
+answer.innerHTML="<b>Sales Order Successfully Created</b><hr>Sales Order: <b>50001234</b><br>Customer: ABC<br>Material: Laptop<br>Quantity:100<br>Net Value: $90,000<br>Delivery Date: 15-Jul<br>Status: Ready for Delivery.";
+final.style.display="block";
+}
+document.getElementById("run").addEventListener("click",run);
+</script>
+</body></html>

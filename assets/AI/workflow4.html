@@ -1,0 +1,80 @@
+
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<title>04 Debate Consensus - SAP SD</title>
+<style>
+body{font-family:Segoe UI;background:#0b1020;color:#fff;padding:20px}
+button{padding:10px 18px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-top:20px}
+.card{background:#182033;border:2px solid #334;border-radius:8px;padding:12px;min-height:260px}
+.active{border-color:#22c55e;box-shadow:0 0 12px #22c55e}.done{border-color:#3b82f6}
+pre{white-space:pre-wrap;color:#9df}
+#log{background:#111827;height:180px;overflow:auto;padding:10px;margin-top:15px}
+#final{display:none;background:#0d3b2e;padding:12px;margin-top:15px}
+</style></head>
+<body>
+<h2>04 - Debate & Consensus Pattern (SAP SD)</h2>
+<p><b>Business Question:</b> Should the company enable automatic credit release for high-value sales orders?</p>
+<button id="runBtn">Run Workflow</button>
+
+<div class="grid">
+<div id="o" class="card"><h3>🎯 Orchestrator</h3><pre id="ot"></pre></div>
+<div id="a1" class="card"><h3>👍 Business Agent</h3><pre id="t1"></pre></div>
+<div id="a2" class="card"><h3>⚠️ Risk Agent</h3><pre id="t2"></pre></div>
+<div id="j" class="card"><h3>⚖️ Judge Agent</h3><pre id="jt"></pre></div>
+</div>
+
+<div id="log"></div>
+<div id="final"><h3>Consensus Decision</h3><div id="ans"></div></div>
+
+<script>
+const sleep=m=>new Promise(r=>setTimeout(r,m));
+function lg(t){document.getElementById("log").innerHTML+="🕒 "+new Date().toLocaleTimeString()+" - "+t+"<br>";}
+async function show(pre,card,title,steps){
+card.classList.add("active");
+for(let s of steps){
+pre.textContent+=s+"\n";
+lg(title+": "+s);
+await sleep(1400);
+}
+card.className="card done";
+}
+async function run(){
+document.getElementById("log").innerHTML="";
+document.getElementById("final").style.display="none";
+["o","a1","a2","j"].forEach(id=>document.getElementById(id).className="card");
+["ot","t1","t2","jt"].forEach(id=>document.getElementById(id).textContent="");
+
+await show(ot,o,"Orchestrator",[
+"Received business question",
+"Selecting Debate workflow",
+"Launching two independent reasoning agents"
+]);
+
+await Promise.all([
+show(t1,a1,"Business Agent",[
+"Automatic release improves order processing",
+"Reduces manual effort",
+"Faster customer delivery",
+"Improves customer satisfaction"
+]),
+show(t2,a2,"Risk Agent",[
+"High credit exposure",
+"Possibility of bad debt",
+"Compliance concerns",
+"Recommend manual approval"
+])
+]);
+
+await show(jt,j,"Judge Agent",[
+"Comparing both viewpoints",
+"Evaluating business risk",
+"Finding balanced recommendation",
+"Consensus reached"
+]);
+
+document.getElementById("ans").innerHTML="<b>Decision:</b><br>Enable automatic credit release only for customers with Low Risk and orders below $50,000. High-risk customers and high-value orders should continue with manual approval.";
+document.getElementById("final").style.display="block";
+}
+document.getElementById("runBtn").addEventListener("click",run);
+</script>
+</body></html>

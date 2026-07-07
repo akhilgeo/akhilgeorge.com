@@ -1,0 +1,42 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>Parallel Fan-Out SAP SD</title>
+<style>
+body{font-family:Segoe UI;background:#0b1020;color:#fff;margin:0;padding:20px}
+input{width:70%;padding:10px}button{padding:10px 18px}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:20px}
+.card{background:#182033;border:2px solid #334;border-radius:8px;padding:10px;min-height:220px}
+.active{border-color:#22c55e;box-shadow:0 0 10px #22c55e}.done{border-color:#3b82f6}
+pre{white-space:pre-wrap;color:#9df}#log{margin-top:15px;height:180px;overflow:auto;background:#111827;padding:10px}#final{display:none;background:#0d3b2e;padding:10px;margin-top:15px}
+</style></head><body>
+<h2>02 - Parallel Fan-Out / Fan-In (SAP SD)</h2>
+<input value="Create Sales Order for Customer ABC. Validate pricing, stock and credit simultaneously before creating the order."><button id='run'>Run Workflow</button>
+<div class='grid'>
+<div id=o class='card'><h3>🎯 Orchestrator</h3><pre id=ot></pre></div>
+<div id=p class='card'><h3>💲Pricing Agent</h3><pre id=pt></pre></div>
+<div id=s class='card'><h3>📦Stock Agent</h3><pre id=st></pre></div>
+<div id=c class='card'><h3>💳Credit Agent</h3><pre id=ct></pre></div>
+<div id=a class='card'><h3>🧩Aggregator</h3><pre id=at></pre></div>
+</div>
+<div id=log></div><div id=final><div id=ans></div></div>
+<script>
+const sl=m=>new Promise(r=>setTimeout(r,m));
+const lg=t=>{const tm=new Date().toLocaleTimeString();log.innerHTML+="🕒 "+tm+" - "+t+"<br>";log.scrollTop=log.scrollHeight;}
+async function fill(pre,card,title,steps){
+card.classList.add('active');
+for(let x of steps){pre.textContent+=x+"\n";lg(title+": "+x);await sl(1400+Math.random()*1200);}
+card.className='card done';
+}
+async function run(){
+[o,p,s,c,a].forEach(x=>x.className='card');
+[ot,pt,st,ct,at].forEach(x=>x.textContent='');final.style.display='none';log.innerHTML='';
+await fill(ot,o,"Orchestrator",["Received prompt","Launching Pricing, Stock and Credit agents in parallel"]);
+await Promise.all([
+fill(pt,p,"Pricing",["Read VK11","Customer pricing","Discounts applied","Net Price=$900"]),
+fill(st,s,"Stock",["Read inventory","ATP Check","100 Available"]),
+fill(ct,c,"Credit",["Read FD32","Credit Exposure","Credit Approved"])
+]);
+await fill(at,a,"Aggregator",["Collecting outputs","All validations successful","Trigger VA01","Sales Order Created"]);
+ans.innerHTML="<h3>Sales Order 50001234 Created</h3><ul><li>Pricing ✓</li><li>Stock ✓</li><li>Credit ✓</li><li>Delivery confirmed</li></ul>";
+final.style.display='block';
+}
+document.getElementById('run').onclick=run;
+</script></body></html>
